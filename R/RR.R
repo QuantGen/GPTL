@@ -10,7 +10,7 @@
       Xy=Xy+lambda*lambda0*b0
     }
     
-    ans<-fitSYS(XX, Xy, b, active, RSS, maxIter, tol)[[1]] 
+    ans<-fitLSYS(XX, Xy, b, active, RSS, maxIter, tol)[[1]] 
    
     return(ans)
  }
