@@ -39,8 +39,8 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
  	
 for(i in 1:nIter){
  
-	 ## Future C code
-	 b=sample_effects(C,rhs,d,b,B0,varE,varB)
+	 ## Future C code 
+	    b=sample_effects(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB)
 	 ## End of C-code
  
 	 postMeanB=postMeanB+b/nIter
