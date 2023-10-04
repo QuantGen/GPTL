@@ -53,7 +53,7 @@ SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP va
     double rhs_offset;
     double lhs;
     double sol;
-    //double z;
+    double z;
      
     for (int j = 0; j < p; j++) { // loop effects
        Cjj = pC[j * (p + 1)];
@@ -71,6 +71,6 @@ SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP va
 
     PutRNGstate();
       
-    UNPROTECT(6); // b, d
+    UNPROTECT(6);
     return b;
 }
