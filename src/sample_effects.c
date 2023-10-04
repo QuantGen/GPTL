@@ -60,7 +60,7 @@ SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP va
        offset = F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc);
        offset -= Cjj * pb[j];
        rhs_offset = prhs[j] - offset;
-       rhs_offset=(rhs_offset/VARE)+pB0[(p*pd[j] + j)]/varB[pd[j]];
+       rhs_offset=(rhs_offset/VARE)+pB0[(p*pd[j] + j)]/pvarB[pd[j]];
        lhs=Cjj/VARE+1/varB[d[j]];
        sol=rhs_offset/lhs;
        //z=norm_rand()*sqrt(1/lhs);
