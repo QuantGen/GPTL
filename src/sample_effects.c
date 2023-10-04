@@ -31,8 +31,8 @@ SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP va
 
     PROTECT(C=AS_NUMERIC(C));
     double *pC=NUMERIC_POINTER(C); 
-  
-    PROTECT(b=AS_NUMERIC(b));
+
+    PROTECT(b=AS_NUMERIC(Rf_duplicate(b)));
     double *pb=NUMERIC_POINTER(b); 
 
     PROTECT(varB=AS_NUMERIC(varB));
