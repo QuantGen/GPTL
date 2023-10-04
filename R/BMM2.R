@@ -36,22 +36,27 @@ BMM2=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50
 	
  PROBS=matrix(nrow=p,ncol=nComp)
  	
- 	
+ timeEffects=0
+ timeProb=0
 for(i in 1:nIter){
- 
+         
 	 ## Future C code 
-	    b=sample_effects(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB)
-	 ## End of C-code
+	 timeIn=proc.time()[3]
+	  b=sample_effects(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB)
+	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
+	## End of C-code
  
 	 postMeanB=postMeanB+b/nIter
- 
+
+	 timeIn=proc.time()[3]
 	 ## Sampling mixture components 
 	 for(k in 1:nComp){
 		 PROBS[,k]=dnorm(b,mean=B0[,k],sd=sqrt(varB[k]))#*compProb[k]	
 	 }
  
 	 d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
-
+         timeProb=timeProb+(proc.time()[3]-timeIn)
+	
 	 ## Sampling the variance and the prior probabilities of the mixture components
 	 for(k in 1:nComp){
 		 tmp=(d==k)
@@ -83,7 +88,8 @@ for(i in 1:nIter){
 	 # we also need to add prior probabilities for the mixtures...
 	 if(verbose){ print(i) }
   } 
-
+   message('Time Effects= ', timeEffects)
+   message('Time Prob= ', timeProb)
    return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb))
 }
 ## A function to sample from a Dirichlet
