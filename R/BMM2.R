@@ -38,6 +38,7 @@ BMM2=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50
  	
  timeEffects=0
  timeProb=0
+ timeApply=0
 for(i in 1:nIter){
          
 	 ## Future C code 
@@ -54,8 +55,9 @@ for(i in 1:nIter){
 		 PROBS[,k]=dnorm(b,mean=B0[,k],sd=sqrt(varB[k]))#*compProb[k]	
 	 }
  	timeProb=timeProb+(proc.time()[3]-timeIn)
-	 d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
-         
+	tiemIn=proc.time()[3] 
+	d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
+        timeApply=timeApply+(proc.time()[3]-timeIn) 
 	
 	 ## Sampling the variance and the prior probabilities of the mixture components
 	 for(k in 1:nComp){
