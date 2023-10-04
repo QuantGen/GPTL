@@ -53,9 +53,9 @@ for(i in 1:nIter){
 	 for(k in 1:nComp){
 		 PROBS[,k]=dnorm(b,mean=B0[,k],sd=sqrt(varB[k]))#*compProb[k]	
 	 }
- 
+ 	timeProb=timeProb+(proc.time()[3]-timeIn)
 	 d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
-         timeProb=timeProb+(proc.time()[3]-timeIn)
+         
 	
 	 ## Sampling the variance and the prior probabilities of the mixture components
 	 for(k in 1:nComp){
