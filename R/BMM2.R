@@ -92,7 +92,7 @@ for(i in 1:nIter){
   } 
    message('Time Effects= ', timeEffects)
    message('Time Prob= ', timeProb)
-  message('Time Apply= ', timeProb)
+  message('Time Apply= ', timeApply)
    return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb))
 }
 ## A function to sample from a Dirichlet
