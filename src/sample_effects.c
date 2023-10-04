@@ -63,7 +63,7 @@ SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP va
        rhs_offset=(rhs_offset/VARE)+pB0[(p*pd[j] + j)]/pvarB[pd[j]];
        lhs=Cjj/VARE+1/pvarB[pd[j]];
        sol=rhs_offset/lhs;
-       z=norm_rand()*sqrt(1/lhs);
+       z=norm_rand();//*sqrt(1/lhs);
        Rprintf("Z=%d\n",z);
        pb[j]=sol;//+z;
     }
