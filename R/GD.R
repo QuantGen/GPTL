@@ -16,5 +16,7 @@ GD<- function(XX,Xy,b=rep(0,ncol(XX)),active=1:ncol(XX), RSS=1,nIter=10,learning
     }else{
          B <- .Call("GRAD_DESC",XX, Xy, b, active, nIter, learning_rate)[[1]]
     }
+    rownames(B)=rownames(XX)
+    colnames(B)=paste0('iter_',0:(nIter-1))
     return(B)
 }
