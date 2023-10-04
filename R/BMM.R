@@ -32,7 +32,7 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
  postProb=rep(0,nComp)
 
  varE=S0.E/df0.E 
- counts=priorCounts/nComp
+ counts=priorCounts/as.vector(nComp)
 	
  PROBS=matrix(nrow=p,ncol=nComp)
  	
