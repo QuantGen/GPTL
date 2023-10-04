@@ -59,6 +59,7 @@ for(i in 1:nIter){
 	d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
         timeApply=timeApply+(proc.time()[3]-timeIn) 
 	
+	
 	 ## Sampling the variance and the prior probabilities of the mixture components
 	 for(k in 1:nComp){
 		 tmp=(d==k)
