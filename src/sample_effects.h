@@ -2,5 +2,4 @@
 
 #include <Rinternals.h>
 
-SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP active, SEXP RSS, SEXP maxIter, SEXP tolerance);
-
+SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP varB) ;
