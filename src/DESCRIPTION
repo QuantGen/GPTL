@@ -1,0 +1,7 @@
+Package: GPTL
+Version: 0.0.1
+License: MIT + file LICENSE
+Title: Genomic Prediction using Transfer Learning
+Authors@R: person("Gustavo", "de los Campos", email = "gdeloscampos@gmail.com", role = c("aut", "cre"))
+Depends:
+    R (>= 3.0.0)
