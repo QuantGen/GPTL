@@ -1,0 +1,4 @@
+export(fitSYS)
+export(GD)
+export(RR)
+useDynLib(GPTL, .registration = TRUE, .fixes = "C_")
