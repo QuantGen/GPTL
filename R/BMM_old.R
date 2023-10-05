@@ -41,7 +41,6 @@ for(i in 1:nIter){
  
 	 ## Future C code
 	 for(j in 1:p){
-	
 		offset=sum(C[j,-j]*b[-j])
 		rhs_j=(rhs[j]-offset)/varE
 		rhs_j=rhs_j+B0[j,d[j]]/varB[d[j]]
@@ -56,7 +55,7 @@ for(i in 1:nIter){
  
 	 ## Sampling mixture components 
 	 for(k in 1:nComp){
-		 PROBS[,k]=dnorm(b,mean=B0[,k],sd=sqrt(varB[k]))#*compProb[k]	
+	     PROBS[,k]=dnorm(b,mean=B0[,k],sd=sqrt(varB[k]))#*compProb[k]	
 	 }
  
 	 d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
