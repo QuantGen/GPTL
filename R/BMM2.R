@@ -57,7 +57,7 @@ for(i in 1:nIter){
  	timeProb=timeProb+(proc.time()[3]-timeIn)
 	tiemIn=proc.time()[3] 
 	  #d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
-	  d=sampleComp=function(PROB)
+	  d=sampleComp(PROB)
         timeApply=timeApply+(proc.time()[3]-timeIn) 
 	
 	
