@@ -16,7 +16,7 @@ SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP active, SEXP nIter, SEXP learning_
         
         for (int j = 0; j < nActive; j++) { // loop over active predictors
             int k = pactive[j];
-            double Ckk = pC[k * (p + 1)];
+            //double Ckk = pC[k * (p + 1)];
             double offset = 0;      
             
             for (int m = 0; m < nActive; m++) {
