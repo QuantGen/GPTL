@@ -56,7 +56,8 @@ for(i in 1:nIter){
 	 }
  	timeProb=timeProb+(proc.time()[3]-timeIn)
 	tiemIn=proc.time()[3] 
-	d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
+	  d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
+	  #d=sampleComp=function(PROB)
         timeApply=timeApply+(proc.time()[3]-timeIn) 
 	
 	
@@ -103,3 +104,17 @@ rDirichlet=function(counts){
 	return(x/sum(x))
 }
 
+## Two functions to sample integers with pre-specified probabilities
+which.first=function(x){
+	which(x)[1]
+}
+
+sampleComp=function(PROB){
+ n=nrow(PROB)
+ rSum=rowSums(PROB)
+ PROB=apply(FUN=cumsum,X=PROB,MARGIN=1)
+ PROB=sweep(PROB,FUN='/',MARGIN=2,STAT=rSum)
+ u=runif(n)
+ PROB=sweep(PROB,FUN='>',MARGIN=2,STAT=u)
+ apply(FUN=which.first,X=PROB,MARGIN=2)
+}
