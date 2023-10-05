@@ -1,4 +1,10 @@
 #include "GRAD_DESC.h"
+#include <R.h>
+#include <Rmath.h>
+#include <Rinternals.h>
+#include <Rdefines.h>
+#include <Rconfig.h>
+#include <R_ext/Lapack.h>
 
 SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nIter, SEXP learning_rate) {
 
