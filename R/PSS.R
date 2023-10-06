@@ -11,12 +11,27 @@ PSS=function(SSList,weights){
   if(any(weights<=0)){ 
     stop('All weights must be greater than 0') 
   }
+  
+  N_sample=numeric(length(SSList))
+  wXX=list()
+  xXy=list()
+  wmy=numeric(length(SSList))
+  wvy=numeric(length(SSList))
 
-  p1=ncol(SSList[[1]]$XX)
-  p2=length(SSList[[1]]$Xy)
+  for (i in 1:length(SSList)) {
+    N_sample[i]=SSList[[i]]$n
+    wXX[[i]]=SSList[[i]]$XX*weights[i]
+    wXy[[i]]=SSList[[i]]$Xy*weights[i]
+    wmy[i]=SSList[[i]]$my*weights[i]
+    wvy[i]=SSList[[i]]$vy*weights[i]
+  }
 
-  # Complete code here
+  ESS=sum(N_sample*weights)^2/sum(N_sample*weights^2)
+  XX=ESS*Reduce("+", wXX)
+  Xy=ESS*Reduce("+", wXy)
+  my=sum(wmy)
+  vy=sum(wvy)
 
-  #return(list(XX=XX,Xy=Xy,my=my,vy=vy,ESS=ESS)) # ESS is the effective sample size
+  return(list(XX=XX,Xy=Xy,my=my,vy=vy,ESS=ESS)) # ESS is the effective sample size
 }
 }
