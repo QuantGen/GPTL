@@ -4,7 +4,6 @@
 GD<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
     
     diag(XX)=diag(XX)+lambda
-    learning_rate=learning_rate
     Xy=Xy+lambda*lambda0*b0
     if(returnPath){
      B=matrix(nrow=ncol(XX),ncol=nIter+1,NA)
