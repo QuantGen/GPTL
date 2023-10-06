@@ -9,7 +9,7 @@ PSS=function(SSList,weights){
   if(any(weights<=0)){ stop('All weights must be greater than 0') }
 
   p1=ncol(SSList[[1]]$XX)
-  p2=length(SSList[[1]]$Xy
+  p2=length(SSList[[1]]$Xy)
 
   # Complete code here
 
