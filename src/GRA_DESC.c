@@ -6,14 +6,14 @@
 #include <Rconfig.h>
 #include <R_ext/Lapack.h>
 
-SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP p, SEXP nIter, SEXP learning_rate) {
+SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_rate) {
 
-    int inc, nIter, j, p;
+    int inc, j;
     double offset, Cjj, gradient, sol, LR, C, rhs, b;
     double *pC, *prhs, pb;
     
-    p=INTEGER_VALUE(p);
-    nIter=INTEGER_VALUE(nIter);
+    p=INTEGER_VALUE(nCol);
+    iter=INTEGER_VALUE(nIter);
     
     LR =NUMERIC_VALUE(learning_rate);
     
