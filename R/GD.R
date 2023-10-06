@@ -1,7 +1,7 @@
 
 # A wrapper to the C-function that performs Gradient Descent in a system of linear equations
 
-GD<- function(XX,Xy,p=ncol(XX),b=rep(0,p), RSS=1,nIter=10,learning_rate=1/5,lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
+GD<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/5,lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
     
     diag(XX)=diag(XX)+lambda
     learning_rate=learning_rate/mean(diag(XX))
