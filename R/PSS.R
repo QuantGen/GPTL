@@ -11,7 +11,7 @@ PSS=function(SSList,weights){
   p1=ncol(SSList[[1]]$XX)
   p2=length(SSList[[1]]$Xy
 
-  #....  
+  # Complete code here
 
   #return(list(XX=XX,Xy=Xy,my=my,vy=vy,ESS=ESS)) # ESS is the effective sample size
 }
