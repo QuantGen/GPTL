@@ -18,7 +18,7 @@ PSS=function(SSList,weights){
   
   N_sample=numeric(length(SSList))
   wXX=list()
-  xXy=list()
+  wXy=list()
   wmy=numeric(length(SSList))
   wvy=numeric(length(SSList))
 
