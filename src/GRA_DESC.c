@@ -11,6 +11,7 @@ SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_ra
     int inc=1;
     int j;
     int p; 
+    int iter;
     int niter;
     double offset;
     double Cjj;
