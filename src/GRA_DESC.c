@@ -43,7 +43,7 @@ SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_ra
             offset=0;//F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc);
             gradient=2*Ckk*pb[j] - (prhs[j]-offset);
             sol=pb[j]-LR*gradient ;
-            pb[k] = sol;
+            pb[j] = sol;
         }
     }
     
