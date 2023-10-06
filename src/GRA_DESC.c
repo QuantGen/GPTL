@@ -8,7 +8,7 @@
 
 SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP p, SEXP nIter, SEXP learning_rate) {
 
-    int inc=1, iter,j;
+    int inc, iter,j;
     double offset, Cjj, gradient, sol,LR;
     double *pC, *prhs, pb;
     
@@ -25,7 +25,9 @@ SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP p, SEXP nIter, SEXP learning_rate)
 
     PROTECT(b=AS_NUMERIC(b));
     pb=NUMERIC_POINTER(b);
-  
+
+    inc=1;
+    
     for (iter = 0; iter < nIter; iter++) {       
         for (j = 0; j < p; j++) { // loop over predictors
             Cjj = pC[j * (p + 1)]; 
