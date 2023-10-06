@@ -42,7 +42,7 @@ SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_ra
             Cjj = pC[j * (p + 1)]; 
             offset=F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc);
             gradient= - (prhs[j]-offset);
-            sol=pb[j]-LR*gradient ;
+            sol=pb[j]-LR*gradient/Cjj ; // dividing by Cjj (the 2nd derivative) makes step smaller when the function has more curvature
             pb[j] = sol;
         }
     }
