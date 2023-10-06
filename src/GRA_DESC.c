@@ -11,7 +11,6 @@ SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_ra
     int inc=1;
     int j;
     int p; 
-    int iter;
     int niter;
     double offset;
     double Cjj;
@@ -38,7 +37,7 @@ SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_ra
 
     inc=1;
     
-    for (iter = 0; iter < niter; iter++) {       
+    for (int iter = 0; iter < niter; iter++) {       
         for (j = 0; j < p; j++) { // loop over predictors
             Cjj = pC[j * (p + 1)]; 
             offset=0;//F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc);
