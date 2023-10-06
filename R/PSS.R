@@ -7,6 +7,10 @@ PSS=function(SSList,weights){
   # Value: a list with the pooled sufficient staitistics XX, Xy, my, vy, and the estimated effective sample size (see https://www.jepusto.com/effective-sample-size-aggregation/)
 
   weights=weights/sum(weightS)
+
+  if(length(weights) != length(SSList)){ 
+    stop('SSList and weights must have the same length') 
+  }
   
   if(any(weights<=0)){ 
     stop('All weights must be greater than 0') 
