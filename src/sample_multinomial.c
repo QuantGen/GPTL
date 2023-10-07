@@ -6,7 +6,7 @@
 #include <Rconfig.h>
 
 
-SEXP sample_multinomial(SEXP PROB, SEXP n, SEXP p, SEXP prob) {
+SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p, SEXP prob) {
     SEXP samples;
     
     int i, j, nSamples, nCat;
