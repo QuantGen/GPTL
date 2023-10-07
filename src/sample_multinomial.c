@@ -24,7 +24,7 @@ SEXP sample_multinomial(SEXP PROB, SEXP n, SEXP p, SEXP prob) {
     p_prob=NUMERIC_POINTER(prob);
 
     PROTECT(samples = NEW_INTEGER(nCat)); 
-    pSamples = INTEGER_POINTER(samples); 
+    p_samples = INTEGER_POINTER(samples); 
 
     GetRNGstate();
     
@@ -51,7 +51,7 @@ SEXP sample_multinomial(SEXP PROB, SEXP n, SEXP p, SEXP prob) {
      for (j = 0; j < nCat; j++) { 
          if(u<p_cumProb[j]) break;
      }
-     sSamples[i]=j;
+     p_samples[i]=j;
     }
     PutRNGstate();
 
