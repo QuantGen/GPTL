@@ -6,8 +6,9 @@
 #include <Rconfig.h>
 
 
-SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p, SEXP prob) {
+SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
     SEXP samples;
+    SEXP prob;
     
     int i, j, nSamples, nCat;
     double sumProb, cumProb, u;
@@ -20,7 +21,7 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p, SEXP prob) {
     PROTECT(PROB=AS_NUMERIC(PROB));
     p_PROB=NUMERIC_POINTER(PROB);
         
-    PROTECT(prob=AS_NUMERIC(prob));
+    PROTECT(prob=NEW_NUMERIC(prob));
     p_prob=NUMERIC_POINTER(prob);
 
     PROTECT(samples = NEW_INTEGER(nCat)); 
