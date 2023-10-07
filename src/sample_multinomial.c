@@ -6,11 +6,12 @@
 #include <Rconfig.h>
 
 
-SEXP r_multinom(SEXP PORB, SEXP n, SEXP p, SEXP prob) {
+SEXP r_multinom(SEXP PORB, SEXP n, SEXP p, SEXP prob, SEX samples) {
 
     int i, j, nSamples, nCat, ans;
     double sumProb, cumProb, u;
     double *p_PROB, *p_prob, *p_cumProb;
+    int *p_samples;
     
     nSamples=INTEGER_VALUE(n);
     nCat=INTEGER_VALUE(p);
@@ -46,7 +47,7 @@ SEXP r_multinom(SEXP PORB, SEXP n, SEXP p, SEXP prob) {
      for (j = 0; j < nCat; j++) { 
          if(u<p_cumProb[j]) break;
      }
-     ans=j;
+     ans[i]=j;
     }
     PutRNGstate();
 
