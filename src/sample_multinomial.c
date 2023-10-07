@@ -8,9 +8,9 @@
 
 SEXP sample_multinomial(SEXP PROB, SEXP n, SEXP p, SEXP prob, SEXP samples) {
 
-    int i, j, nSamples, nCat, ans;
+    int i, j, nSamples, nCat;
     double sumProb, cumProb, u;
-    double *p_PROB, *p_prob, *p_cumProb;
+    double *p_PROB, *p_prob, *p_cumProb, *pAns;
     int *p_samples;
     
     nSamples=INTEGER_VALUE(n);
@@ -21,6 +21,9 @@ SEXP sample_multinomial(SEXP PROB, SEXP n, SEXP p, SEXP prob, SEXP samples) {
         
     PROTECT(prob=AS_NUMERIC(prob));
     p_prob=NUMERIC_POINTER(prob);
+
+    PROTECT(samples=AS_INTEGER(samples);
+    pSamples=INTEGER_POINTER(samples);
 
     GetRNGstate();
     
