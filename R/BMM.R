@@ -118,3 +118,10 @@ sampleComp=function(PROB){
  PROB=sweep(PROB,FUN='>',MARGIN=2,STAT=u)
  apply(FUN=which.first,X=PROB,MARGIN=2)
 }
+
+sampleMultinom=function(PROB){
+   n=nrow(PROB)
+   p=ncol(PROB) 
+   samples=.Call(PROB,n,p,x=rpe(0,p))
+   return(samples)
+}
