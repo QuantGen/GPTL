@@ -2,4 +2,4 @@
 
 #include <Rinternals.h>
 
-SEXP sample_mutinomial(SEXP PROB, n, p, prob) ;
+SEXP sample_mutinomial(SEXP PROB, SEXP n, SEXP p, SEXP prob) ;
