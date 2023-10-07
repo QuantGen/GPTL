@@ -15,7 +15,6 @@ SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_ra
     double offset;
     double Cjj;
     double gradient;
-    double sol;
     double LR;
     double *pC;
     double *prhs;
@@ -40,10 +39,10 @@ SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_ra
     for (int iter = 0; iter < niter; iter++) {       
         for (j = 0; j < p; j++) { // loop over predictors
             Cjj = pC[j * (p + 1)]; 
-            offset=F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc);
-            gradient= - (prhs[j]-offset);
-            sol=pb[j]-LR*gradient/Cjj ; // dividing by Cjj (the 2nd derivative) makes step smaller when the function has more curvature
-            pb[j] = sol;
+            Cjb=F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc); C[,j]'b
+            gradient= - (prhs[j]-Cjb);   
+            // dividing by Cjj (the 2nd derivative) makes step smaller when the function has more curvature
+            pb[j]-=LR*gradient/Cjj ; 
         }
     }
     
