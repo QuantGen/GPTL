@@ -122,6 +122,6 @@ sampleComp=function(PROB){
 sampleMultinom=function(PROB){
    n=nrow(PROB)
    p=ncol(PROB) 
-   samples=.Call(PROB,n,p,x=rpe(0,p))
+   samples=.Call(PROB,n,p,rpe(0,p),rep(0,n))
    return(samples)
 }
