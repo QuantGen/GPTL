@@ -1,6 +1,8 @@
-#library(remotes)
-#install_github('https://github.com/quantGen/GPTL')
+if(FALSE){
+ library(remotes)
+ install_github('https://github.com/quantGen/GPTL')
 
+ }
 
 library(GPTL)
 
