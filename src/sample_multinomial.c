@@ -51,7 +51,7 @@ SEXP sample_multinomial(SEXP PROB, SEXP n, SEXP p, SEXP prob) {
      for (j = 0; j < nCat; j++) { 
          if(u<p_cumProb[j]) break;
      }
-     samples[i]=j;
+     sSamples[i]=j;
     }
     PutRNGstate();
 
