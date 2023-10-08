@@ -34,7 +34,7 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
  varE=S0.E/df0.E 
  counts=priorCounts/as.vector(nComp)
 	
- PROBS=matrix(nrow=p,ncol=nComp)
+ PROBS=matrix(nrow=nComp,ncol=p)
  	
  timeEffects=0
  timeProb=0
@@ -52,13 +52,13 @@ for(i in 1:nIter){
 	 timeIn=proc.time()[3]
 	 ## Sampling mixture components 
 	 for(k in 1:nComp){
-		 PROBS[,k]=dnorm(b,mean=B0[,k],sd=sqrt(varB[k]))#*compProb[k]	
+		 PROBS[k,]=dnorm(b,mean=B0[,k],sd=sqrt(varB[k]))#*compProb[k]	
 	 }
  	timeProb=timeProb+(proc.time()[3]-timeIn)
 	tiemIn=proc.time()[3] 
 	  #d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
 	  # d=sampleComp(PROBS)
-	  d=rMultinom(t(PROBS))
+	  d=rMultinom(PROBS)
         timeApply=timeApply+(proc.time()[3]-timeIn) 
 	
 	
