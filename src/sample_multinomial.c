@@ -39,8 +39,8 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
 
       // adding column values 
       for(j=1; j<=nCat; j++){
-         sumProb+=p_PROB[(i*nCat)+j];
          p_prob[j]=p_PROB[(i*nCat)+j];
+         sumProb+=p_prob[j];
       }
 
       // normalizing
