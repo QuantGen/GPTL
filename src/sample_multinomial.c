@@ -34,13 +34,15 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
 
     GetRNGstate();
 
-    Rprintf("nSamples=%d\n",nSamples);
+    //Rprintf("nSamples=%d\n",nSamples);
     
     for (i = 0; i < nSamples; i++){ 
+
+    Rprintf("Iter=%d\n",i+1);
       sumProb=0;
 
-      // adding column values 
-      for(j=1; j<=nCat; j++){
+      // assinging probs and additn to then normalize 
+      for(j=0; j<nCat; j++){
          p_prob[j]=p_PROB[(i*nCat)+j];
          sumProb+=p_prob[j];
       }
