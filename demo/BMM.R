@@ -30,9 +30,12 @@ install_github('https://github.com/QuantGen/GPTL')
 
  system.time( 
      tmp<-BMM(C=C,rhs=rhs,my=mean(y),vy=var(y),n=n,verbose=FALSE,
-              B0=cbind(rep(0,p),-1,1),nIter=1000,burnIn=100) 
+              B0=cbind(rep(0,p),-1,1),nIter=1100,burnIn=100) 
             )
-
+ system.time( 
+     tmp2<-BMM_old(C=C,rhs=rhs,my=mean(y),vy=var(y),n=n,verbose=FALSE,
+              B0=cbind(rep(0,p),-1,1),nIter=1100,burnIn=100) 
+            )
 
  colQTL=ifelse(b0==0,8,ifelse(b0==1,2,4))
  pointQTL=ifelse(colQTL==8,1,19)
@@ -40,4 +43,7 @@ install_github('https://github.com/QuantGen/GPTL')
   plot(tmp$POST.PROB[,1],col=colQTL,pch=pointQTL,ylim=c(0,1))
   plot(tmp$POST.PROB[,2],col=colQTL,pch=pointQTL,ylim=c(0,1))
   plot(tmp$POST.PROB[,3],col=colQTL,pch=pointQTL,ylim=c(0,1))
+
+
+
 
