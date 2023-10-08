@@ -12,7 +12,7 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
     
     int i, j, nSamples;
     double sumProb, cumProb, u;
-    double *p_PROB, *p_prob, *p_cumProb, *pAns;
+    double *p_PROB, *p_prob, *p_cumProb;
     int *p_samples;
 
     int nCat = Rf_nrows(PROB);
