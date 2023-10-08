@@ -27,7 +27,7 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
     p_prob=NUMERIC_POINTER(prob);
 
     PROTECT(cumProb=NEW_NUMERIC(nCat));
-    p_cumProb=NUMERIC_POINTER(p_cumProb);
+    p_cumProb=NUMERIC_POINTER(cumProb);
 
     PROTECT(samples = NEW_INTEGER(nCat)); 
     p_samples = INTEGER_POINTER(samples); 
