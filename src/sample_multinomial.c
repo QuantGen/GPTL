@@ -1,3 +1,4 @@
+
 #include "sample_multinomial.h"
 #include <R.h>
 #include <Rmath.h>
