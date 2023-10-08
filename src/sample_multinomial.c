@@ -33,6 +33,8 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
     p_samples = INTEGER_POINTER(samples); 
 
     GetRNGstate();
+
+    Rprintf("nSamples=%d\n",nSamples);
     
     for (i = 0; i < nSamples; i++){ 
       sumProb=0;
@@ -59,7 +61,7 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
 
      // sampling
      u=rand()/RAND_MAX;
-    // Rprintf("U=%f\n",u);
+     Rprintf("U=%f\n",u);
      for(j =0; j<nCat; j++){
        //Rprintf("Prob=%f\n",p_cumProb[j]);
      }
