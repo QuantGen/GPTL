@@ -3,4 +3,4 @@
 
 #include <Rinternals.h>
 
-SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p, SEXP prob, SEXP samples);
+SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p);
