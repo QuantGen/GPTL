@@ -50,13 +50,17 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
       for(j=1; j<nCat; j++){
          p_prob[j]=p_prob[j]/sumProb;
          p_cumProb[j]=p_cumProb[j-1]+p_prob[j];
+             
+        Rprintf("Prob=%f\n",p_prob[j]);
+        Rprintf("CumProb=%f\n",p_cumProb[j]);
+        
       }
 
      // sampling
      u=rand()/RAND_MAX;
-     Rprintf("U=%f\n",u);
+    // Rprintf("U=%f\n",u);
      for(j =0; j<nCat; j++){
-       Rprintf("Prob=%f\n",p_cumProb[j]);
+       //Rprintf("Prob=%f\n",p_cumProb[j]);
      }
         
      for (j = 0; j < nCat; j++) { 
