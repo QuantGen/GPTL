@@ -38,7 +38,7 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
     
     for (i = 0; i < nSamples; i++){ 
 
-    Rprintf("Iter=%d\n",i+1);
+    //Rprintf("Iter=%d\n",i+1);
       sumProb=0;
 
       // assinging probs and additn to then normalize 
@@ -56,17 +56,17 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
          p_prob[j]=p_prob[j]/sumProb;
          p_cumProb[j]=p_cumProb[j-1]+p_prob[j];
              
-        Rprintf("Prob=%f\n",p_prob[j]);
-        Rprintf("CumProb=%f\n",p_cumProb[j]);
+        //Rprintf("Prob=%f\n",p_prob[j]);
+        //Rprintf("CumProb=%f\n",p_cumProb[j]);
         
       }
 
      // sampling
      u=(double)rand() / RAND_MAX; 
-     Rprintf("U=%f\n",u);
-     for(j =0; j<nCat; j++){
+     //Rprintf("U=%f\n",u);
+     //for(j =0; j<nCat; j++){
        //Rprintf("Prob=%f\n",p_cumProb[j]);
-     }
+     //}
         
      for (j = 0; j < nCat; j++) { 
          if(u<p_cumProb[j]) break;
@@ -75,6 +75,6 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
     }
     PutRNGstate();
 
-    UNPROTECT(2); 
+    UNPROTECT(4); 
     return samples; 
 }
