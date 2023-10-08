@@ -7,10 +7,10 @@
 # R2: the prior proportion of variance of y explained by the model (this is used to derive hyper-parameters for the prior variances)
 # priorProb a vector of prior probabilities for the mixture compoentns (as many entries as columsn in B0), we internally scale it to add up to one
 # priorCounts, the number of counts associated to priorProb, using priorCounts very large (e.g., 1e8) fixes the prior probabilities. The default value is 2*ncol(B0)
-#  ...
+#  To do: sample error variance ; add prior probabilities for the mixtures (right now equivalent to 1/nClasses); priors for the variances
 ##
 
-BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,R2=.5,nComp=matrix(ncol(B0)),
+BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=.5,nComp=matrix(ncol(B0)),
                 df0.E=5,S0.E=vy*R2*df0.E,df0.b=rep(5,nComp), priorProb=rep(1/nComp,nComp),priorCounts=rep(2*nComp,nComp),verbose=TRUE){
 
  # nIter=150;burnIn=50;R2=.5;nComp=matrix(ncol(B0));df0.E=5;S0.E=vy*R2*df0.E;df0.b=rep(5,nComp);alpha=.1;my=mean(y); vy=var(y); B0=cbind(rep(0,p),-1,1)
@@ -39,20 +39,21 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
  timeEffects=0
  timeProb=0
  timeApply=0
+
+weightPostMeans=1/round((nIter-burnIn)/thin)
 for(i in 1:nIter){
          
-	 ## Future C code 
+	 ## Sampling effects
 	 timeIn=proc.time()[3]
 	  b=sample_effects(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB)
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
 	## End of C-code
- 
-	 postMeanB=postMeanB+b/nIter
 
-	 timeIn=proc.time()[3]
+	 
 	 ## Sampling mixture components 
+	timeIn=proc.time()[3]
 	 for(k in 1:nComp){
-		 PROBS[k,]=dnorm(b,mean=B0[,k],sd=sqrt(varB[k]))#*compProb[k]	
+	 PROBS[k,]=dnorm(b,mean=B0[,k],sd=sqrt(varB[k]))#*compProb[k]	
 	 }
  	timeProb=timeProb+(proc.time()[3]-timeIn)
 	tiemIn=proc.time()[3] 
@@ -61,37 +62,34 @@ for(i in 1:nIter){
 	  d=rMultinom(PROBS)
         timeApply=timeApply+(proc.time()[3]-timeIn) 
 	
-	
 	 ## Sampling the variance and the prior probabilities of the mixture components
 	 for(k in 1:nComp){
 		 tmp=(d==k)
-	 
 		 DF=sum(tmp)
 		 SS=S0.b[k]
 		 if(DF>0){
 			 bStar=b[tmp]-B0[tmp,k]
 			 SS=SS+sum(bStar^2)
-		 }
-		 
+		 }	 
 		 varB[k]=SS/rchisq(df=DF+df0.b[k],n=1) 
-		 postMeanVarB[k]= postMeanVarB[k]+varB[k]/nIter
-
 		 counts[k]=DF
-		 
 	 }
-
+        # Sampling the probability of each component 
 	compProb=rDirichlet(counts+priorCounts)
-	postProb=postProb+compProb/nIter
- 
-	 ## computing posterior mean of mixture probabilities
+
+	# Sampling the error variance
+	
+	## computing posterior means 
+	if(i>burnIn&(i%%thin==0)){
+	 postMeanVarB= postMeanVarB+varB*weightPostMeans
+	 postProb=postProb+compProb*weightPostMeans
+	 postMeanB=postMeanB+b*weightPostMeans
 	 for(k in 1:nComp){
 		 tmp=(d==k)
-		 POST.PROB[tmp,k]=POST.PROB[tmp,k]+1/nIter
+		 POST.PROB[tmp,k]=POST.PROB[tmp,k]+weightPostMeans
 	  }
-
-	 # Sampling error variances
-	 # we also need to add prior probabilities for the mixtures...
-	 if(verbose){ print(i) }
+        } 
+	if(verbose){ print(i) }
   } 
    message('Time Effects= ', timeEffects)
    message('Time Prob= ', timeProb)
@@ -120,9 +118,3 @@ sampleComp=function(PROB){
  apply(FUN=which.first,X=PROB,MARGIN=2)
 }
 
-rMultinom=function(PROB){
-   n=ncol(PROB)
-   p=nrow(PROB) 
-   samples=.Call("rMultinomial",PROB,n,p)
-   return(samples)
-}
