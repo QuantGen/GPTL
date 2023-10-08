@@ -119,9 +119,9 @@ sampleComp=function(PROB){
  apply(FUN=which.first,X=PROB,MARGIN=2)
 }
 
-sampleMultinom=function(PROB){
+rMultinom=function(PROB){
    n=nrow(PROB)
    p=ncol(PROB) 
-   samples=.Call("rMultinom",PROB,n,p)
+   samples=.Call("rMultinomial",PROB,n,p)
    return(samples)
 }
