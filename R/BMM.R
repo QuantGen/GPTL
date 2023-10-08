@@ -120,8 +120,8 @@ sampleComp=function(PROB){
 }
 
 rMultinom=function(PROB){
-   n=nrow(PROB)
-   p=ncol(PROB) 
+   n=ncol(PROB)
+   p=nrow(PROB) 
    samples=.Call("rMultinomial",PROB,n,p)
    return(samples)
 }
