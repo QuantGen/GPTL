@@ -29,7 +29,7 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
     PROTECT(cumProb=NEW_NUMERIC(nCat));
     p_cumProb=NUMERIC_POINTER(cumProb);
 
-    PROTECT(samples = NEW_INTEGER(nCat)); 
+    PROTECT(samples = NEW_INTEGER(nSamples)); 
     p_samples = INTEGER_POINTER(samples); 
 
     GetRNGstate();
@@ -71,7 +71,7 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
      for (j = 0; j < nCat; j++) { 
          if(u<p_cumProb[j]) break;
      }
-     p_samples[i]=j;
+     p_samples[i]=j+1;
     }
     PutRNGstate();
 
