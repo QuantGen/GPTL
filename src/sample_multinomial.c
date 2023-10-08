@@ -54,6 +54,11 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
 
      // sampling
      u=rand();
+     Rprintf("q=%f\n",u);
+     for(j =0; j<nCat; j++){
+       Rprintf("q=%f\n",p_umProb[j]);
+     }
+        
      for (j = 0; j < nCat; j++) { 
          if(u<p_cumProb[j]) break;
      }
