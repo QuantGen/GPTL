@@ -15,7 +15,7 @@ GD<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,lambda=0,
         B[,i]=.Call("GRAD_DESC",XX, Xy, B[,i-1],p, 1, learning_rate)
      }
      rownames(B)=rownames(XX)
-     colnames(B)=paste0('iter_',0:(nIter-1))
+     colnames(B)=paste0('iter_',0:(nIter))
     }else{
          B <- .Call("GRAD_DESC",XX, Xy, b, p, nIter, learning_rate)
     }
