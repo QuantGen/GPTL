@@ -9,7 +9,7 @@ GD<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,lambda=0,
 
     learning_rate=learning_rate/mean(diag(XX))
 
-    if(returnPath){
+    # if(returnPath){
      B=matrix(nrow=ncol(XX),ncol=nIter+1,NA)
      B[,1]=b
      for(i in 2:ncol(B)){
@@ -17,8 +17,11 @@ GD<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,lambda=0,
      }
      rownames(B)=rownames(XX)
      colnames(B)=paste0('iter_',0:(nIter))
-    }else{ 
-        B=.Call("GRAD_DESC",XX, Xy, b,p, nIter, learning_rate)
+    #}else{ 
+    #    B=.Call("GRAD_DESC",XX, Xy, b,p, nIter, learning_rate)
+    #}
+    if(!returnPath){
+      B=B[,ncol(B),drop=TRUE]
     }
     return(B)
 }
