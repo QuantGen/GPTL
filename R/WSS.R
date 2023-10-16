@@ -1,6 +1,5 @@
-## This function simply pools summary statistics using weights, the output can be use as inputs in both BLRCross(), RR(), or GD()
+## This function derived weighted sufficient statistics, the output can be use as inputs in both BLRCross(), RR(), or GD()
 
-if(FALSE){
 WSS=function(SSList,weights){
   # SSList should be a list of sufficient statistics with the ith element having [[i]]$XX, [[i]]$Xy, [[i]]$my, [[i]]$vy, [[i]]$n
   # weights: a vecctor of weights of the same length as SSList
@@ -38,4 +37,4 @@ WSS=function(SSList,weights){
 
   return(list(XX=XX,Xy=Xy,my=my,vy=vy,ESS=ESS)) # ESS is the effective sample size
 }
-}
+
