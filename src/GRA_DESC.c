@@ -28,7 +28,8 @@ SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_ra
 
     inc=1;
     
-    for (int iter = 0; iter < niter; iter++) {       
+    for (int iter = 0; iter < niter; iter++) { 
+        pb=0;prhs=0;pC=0;
         for (j = 0; j < p; j++) { // loop over predictors
             Cjj = pC[j * (p + 1)]; // I was using this for LR but it gave me numerical problems
             Cjb=F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc); //C[,j]'b
