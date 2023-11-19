@@ -44,7 +44,6 @@ GD2<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
         previous_lambda=lambda[h]
 
         if(returnPath){
-            B=matrix(nrow=ncol(XX),ncol=nIter+1,NA)
             B[,1,h]=b
             for(i in 2:ncol(B)){
               B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
