@@ -50,10 +50,17 @@ GD2<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
             for(i in 2:ncol(B)){
               B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
             }
-        }else{ 
+         }else{ 
             B[,1,h]=.Call("GRAD_DESC",XX, Xy, b+0,p, nIter, LR)
     }
-    dinames(B)=list(colnamnes(XX),paste0('iter_',ifelse(returnPath,1:nIter,nIter)),paste0('lambda_',lambda))
+    if(returnPath){
+      iterations=paste0('iter_',1:nIter)
+    }else{
+      iterations=paste0('iter_',nIter)
+    }
+  
+    dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
+  
     B=B[,,,drop=TRUE]
     return(B)
 }
