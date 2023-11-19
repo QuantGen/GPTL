@@ -28,6 +28,36 @@ GD<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,lambda=0,
     return(B)
 }
 
+GD2<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
+               lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
+
+    previous_lambda=0
+    B=array(dim=c(p,ifelse(returnPath,nIter,1),length(lambda)))
+
+    for(h in 1:length(lambda))
+        diag(XX)=diag(XX)+(lambda[h]- previous_lambda)
+        LR=learning_rate/mean(diag(XX))
+  
+        if( lambda0>0 ){    
+            Xy=Xy+(lambda[h]-previous_lambda)*lambda0*b0 
+        }
+        previous_lambda=lambda[h]
+
+        if(returnPath){
+            B=matrix(nrow=ncol(XX),ncol=nIter+1,NA)
+            B[,1]=b
+            for(i in 2:ncol(B)){
+              B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1],p, 1, LR)
+            }
+        }else{ 
+            B[,1,h]=.Call("GRAD_DESC",XX, Xy, b+0,p, nIter, LR)
+    }
+    dinames(B)=list(colnamnes(XX),paste0('iter_',ifelse(returnPath,1:nIter,nIter)),paste0('lambda_',lambda))
+    B=B[,,,drop=TRUE]
+    return(B)
+}
+
+# Old R implementation
 GD.R<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
     learning_rate=learning_rate/mean(diag(XX))
     B=matrix(nrow=ncol(XX),ncol=nIter+1,NA)
