@@ -33,10 +33,8 @@ GD2<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
 
     previous_lambda=0
     B=array(dim=c(p,ifelse(returnPath,nIter,1),length(lambda)))
-    print(dim(B))
-    print(length(b))
-  
-    for(h in 1:length(lambda))
+
+    for(h in 1:length(lambda)){
         diag(XX)=diag(XX)+(lambda[h]- previous_lambda)
         LR=learning_rate/mean(diag(XX))
   
@@ -52,6 +50,7 @@ GD2<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
             }
          }else{ 
             B[,1,h]=.Call("GRAD_DESC",XX, Xy, b+0,p, nIter, LR)
+        }
     }
     if(returnPath){
       iterations=paste0('iter_',1:nIter)
