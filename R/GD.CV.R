@@ -1,5 +1,5 @@
 
-GD.CV=function(X,y,nFolds=5,nRep=10,acc=cor,suppress_warnings=TRUE,...){
+GD.CV=function(X,y,nFolds=5,nRep=10,acc=cor,suppress_warnings=TRUE,nCores=1...){
     
     DIM=c(nIter,length(lambda),nRep)
     ACC=array(dim=DIM)
