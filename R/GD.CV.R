@@ -1,5 +1,5 @@
 
-GD.CV=function(X,y,nFolds=5,nRep=10,acc=cor,suppress_warnings=TRUE,nCores=1...){
+GD.CV=function(X,y,nFolds=5,nRep=10,acc=cor,suppress_warnings=TRUE,nCores=1,...){
     
     DIM=c(nIter,length(lambda),nRep)
     ACC=array(dim=DIM)
@@ -11,12 +11,10 @@ GD.CV=function(X,y,nFolds=5,nRep=10,acc=cor,suppress_warnings=TRUE,nCores=1...){
 
         for(j in 1:nFolds){
             tst=which(folds==j)
-
             XTRN=X[-tst,,drop=FALSE]
             yTRN=y[-tst]
             XX=crossprod(XTRN)
             Xy=crossprod(XTRN,yTRN)
-            #B=GD(XX=XX,Xy=Xy,...)
             B=GD(XX=XX,Xy=Xy,lambda=lambda,nIter=nIter,returnPath=returnPath)
             XTST=X[tst,,drop=FALSE]
             yTST=y[tst]
