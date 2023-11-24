@@ -1,6 +1,6 @@
 export(fitLSYS)
 export(GD)
-export(GD2)
+export(GD0)
 export(GD.R)
 export(RR)
 export(BMM)
