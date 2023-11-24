@@ -1,5 +1,7 @@
 export(fitLSYS)
 export(GD)
+export(GDXy)
+export(GD.CV)
 export(GD0)
 export(GD.R)
 export(RR)
