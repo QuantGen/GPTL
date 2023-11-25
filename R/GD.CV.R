@@ -15,7 +15,7 @@ GD.CV=function(X,y,nFolds=5,nRep=10,acc=cor,suppress_warnings=TRUE,nCores=1,...)
             yTRN=y[-tst]
             XX=crossprod(XTRN)
             Xy=crossprod(XTRN,yTRN)
-            B=GD(XX=XX,Xy=Xy,lambda=lambda,nIter=nIter,returnPath=returnPath)
+            B=GD(XX=XX,Xy=Xy,...)
             XTST=X[tst,,drop=FALSE]
             yTST=y[tst]
 
