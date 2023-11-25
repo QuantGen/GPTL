@@ -1,8 +1,8 @@
-GD.CVParallel=function(X,y,nRep,nFolds,acc=cor,suppress_warnings=TRUE,nIter=10,...){
-    TMP=mcreplicate(n=nRep, expr=GD.CV(X=X,y=y,nRep=1,nFolds=nFolds,acc=acc,suppress_warnings=TRUE,nIter=10, refresh = 0.1, mc.cores=detectCores(),... )
+GD.CVParallel=function(X,y,nRep=1,nFolds=5,acc=cor,suppress_warnings=TRUE,nIter=10,...){
+    TMP=mclapply(FUN=GD.CV,X=X,y=y,nRep=nRep,nFolds=nFolds,acc=acc,suppress_warnings=TRUE,nIter=10,...)
     return(TMP)
 }
-GD.CV=function(X,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,...){
+GD.CV=function(X,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,notUse=1,...){
     
     DIM=c(nIter,length(lambda),nRep)
     ACC=array(dim=DIM)
