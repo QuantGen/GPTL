@@ -5,7 +5,7 @@
 #tmp<-mclapply(FUN=GD.CV,x=X,y=y,notUse=1,lambda=c(.1,1),nFolds=5,acc=cor,suppress_warnings=TRUE,nIter=10,returnPath=T,mc.cores=8,X=1:12)
 ## To parallelize GD.CV we can
 #   - Replace the loop over reps using foreach
-#   - Use mclapply with a dummy argument (notUse=1, below)
+#   - Use mclapply with a dummy argument (notUse=1, below), the current implementation with mclappply (line 5 above) does not offer any benefit
 GD.CV=function(x,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambda=001,notUse=1,...){
     print(notUse)
     DIM=c(nIter,length(lambda),nRep)
