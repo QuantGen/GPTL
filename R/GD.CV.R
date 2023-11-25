@@ -6,7 +6,7 @@ GD.CV=function(x,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambd
     
     DIM=c(nIter,length(lambda),nRep)
     ACC=array(dim=DIM)
-    N=nrow(X)
+    N=nrow(x)
     for(i in 1:nRep){
         folds=sample(1:nFolds,size=N,replace=TRUE)
         AVG_ACC=array(dim=c(nIter,length(lambda)),0)
