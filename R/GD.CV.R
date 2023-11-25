@@ -31,8 +31,6 @@ GD.CV=function(X,y,nFolds=5,nRep=10,acc=cor,suppress_warnings=TRUE,nIter=10,...)
         AVG_ACC=AVG_ACC/nFolds
         ACC[,,i]=AVG_ACC
     }
-
     TMP=list(ACC=apply(FUN=mean,MARGIN=c(1,2),X=ACC),SD=apply(FUN=sd,MARGIN=c(1,2),X=ACC))
     return(TMP)
-
 }
