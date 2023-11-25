@@ -24,10 +24,6 @@ GD.CV=function(X,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambd
             
             for(Row in 1:nrow(AVG_ACC)){
                 for(Col in 1:ncol(AVG_ACC)){
-                    message('Row ',Row)
-                    message('Col ',Col)
-                    print(dim(B))
-                    
                     if(suppress_warnings){
                         suppressWarnings( AVG_ACC[Row,Col]<-AVG_ACC[Row,Col]+acc(yTST,XTST%*%B[,Row,Col]) )
                     }        
