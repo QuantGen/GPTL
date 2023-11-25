@@ -2,8 +2,12 @@
 #    TMP=mclapply(FUN=GD.CV,X=X,y=y,X=1:nFolds,nFolds=nFolds,acc=acc,suppress_warnings=TRUE,nIter=10,mc.cores=mc.cores,...)
 #    return(TMP)
 #}
+#tmp<-mclapply(FUN=GD.CV,x=X,y=y,notUse=1,lambda=c(.1,1),nFolds=5,acc=cor,suppress_warnings=TRUE,nIter=10,returnPath=T,mc.cores=8,X=1:12)
+## To parallelize GD.CV we can
+#   - Replace the loop over reps using foreach
+#   - Use mclapply with a dummy argument (notUse=1, below)
 GD.CV=function(x,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambda=001,notUse=1,...){
-    
+    print(notUse)
     DIM=c(nIter,length(lambda),nRep)
     ACC=array(dim=DIM)
     N=nrow(x)
