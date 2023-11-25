@@ -3,7 +3,7 @@ GD.CV=function(X,y,nFolds=5,nRep=10,acc=cor,suppress_warnings=TRUE,nIter=10,...)
     
     DIM=c(nIter,length(lambda),nRep)
     ACC=array(dim=DIM)
-
+    print(nIter)
     N=nrow(X)
     for(i in 1:nRep){
         folds=sample(1:nFolds,size=N,replace=TRUE)
