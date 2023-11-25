@@ -2,23 +2,23 @@ GD.CVParallel=function(x,y,nRep=1,nFolds=5,acc=cor,suppress_warnings=TRUE,nIter=
     TMP=mclapply(FUN=GD.CV,X=X,y=y,X=1:nFolds,nFolds=nFolds,acc=acc,suppress_warnings=TRUE,nIter=10,mc.cores=mc.cores,...)
     return(TMP)
 }
-GD.CV=function(x,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambda=001,notUse=1,...){
+GD.CV=function(X,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambda=001,notUse=1,...){
     
     DIM=c(nIter,length(lambda),nRep)
     ACC=array(dim=DIM)
-    N=nrow(x)
+    N=nrow(X)
     for(i in 1:nRep){
         folds=sample(1:nFolds,size=N,replace=TRUE)
         AVG_ACC=array(dim=c(nIter,length(lambda)),0)
 
         for(j in 1:nFolds){
             tst=which(folds==j)
-            XTRN=x[-tst,,drop=FALSE]
+            XTRN=X[-tst,,drop=FALSE]
             yTRN=y[-tst]
             XX=crossprod(XTRN)
             Xy=crossprod(XTRN,yTRN)
             B=GD(XX=XX,Xy=Xy,nIter=nIter,...)
-            XTST=x[tst,,drop=FALSE]
+            XTST=X[tst,,drop=FALSE]
             yTST=y[tst]
 
             for(Row in 1:nrow(AVG_ACC)){
