@@ -1,7 +1,7 @@
-GD.CVParallel=function(x,y,nRep=1,nFolds=5,acc=cor,suppress_warnings=TRUE,nIter=10,mc.cores=detectCores(),...){
-    TMP=mclapply(FUN=GD.CV,X=X,y=y,X=1:nFolds,nFolds=nFolds,acc=acc,suppress_warnings=TRUE,nIter=10,mc.cores=mc.cores,...)
-    return(TMP)
-}
+#GD.CVParallel=function(x,y,nRep=1,nFolds=5,acc=cor,suppress_warnings=TRUE,nIter=10,mc.cores=detectCores(),...){
+#    TMP=mclapply(FUN=GD.CV,X=X,y=y,X=1:nFolds,nFolds=nFolds,acc=acc,suppress_warnings=TRUE,nIter=10,mc.cores=mc.cores,...)
+#    return(TMP)
+#}
 GD.CV=function(X,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambda=001,notUse=1,...){
     
     DIM=c(nIter,length(lambda),nRep)
