@@ -2,7 +2,7 @@ GD.CVParallel=function(X,y,nRep=1,nFolds=5,acc=cor,suppress_warnings=TRUE,nIter=
     TMP=mclapply(FUN=GD.CV,X=X,y=y,nRep=nRep,nFolds=nFolds,acc=acc,suppress_warnings=TRUE,nIter=10,...)
     return(TMP)
 }
-GD.CV=function(X,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,notUse=1,...){
+GD.CV=function(X,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambda=0,notUse=1,...){
     
     DIM=c(nIter,length(lambda),nRep)
     ACC=array(dim=DIM)
