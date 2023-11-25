@@ -9,7 +9,7 @@
 SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_rate) {
 
     int inc=1, j, p, niter;
-    double Cjj, Cjb, gradient, LR;
+    double  Cjb, gradient, LR;
     double *pC, *prhs, *pb;
     
     p=INTEGER_VALUE(nCol);
