@@ -27,6 +27,7 @@ GD.CV=function(X,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambd
                     message('Row ',Row)
                     message('Col ',Col)
                     print(dim(B))
+                    
                     if(suppress_warnings){
                         suppressWarnings( AVG_ACC[Row,Col]<-AVG_ACC[Row,Col]+acc(yTST,XTST%*%B[,Row,Col]) )
                     }        
