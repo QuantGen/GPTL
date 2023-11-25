@@ -1,4 +1,4 @@
-GD.CVParallel=function(X,y,nRep=1,nFolds=5,acc=cor,suppress_warnings=TRUE,nIter=10,...){
+GD.CVParallel=function(X,y,nRep=1,nFolds=5,acc=cor,suppress_warnings=TRUE,nIter=10,mc.cores=detectCores(),...){
     TMP=mclapply(FUN=GD.CV,X=X,y=y,nRep=nRep,nFolds=nFolds,acc=acc,suppress_warnings=TRUE,nIter=10,...)
     return(TMP)
 }
