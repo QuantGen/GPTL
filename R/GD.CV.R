@@ -30,12 +30,12 @@ GD.CV=function(X,y,nFolds=5,nRep=10,acc=cor,suppress_warnings=TRUE,nIter=10,...)
         AVG_ACC=AVG_ACC/nFolds
         ACC[,,i]=AVG_ACC
     }
-    TMP=list(ACC=apply(FUN=mean,MARGIN=c(1,2),X=ACC),SD=apply(FUN=sd,MARGIN=c(1,2),X=ACC))
+    TMP=list(lambda=lambda,nIter=nIter,ACC=apply(FUN=mean,MARGIN=c(1,2),X=ACC),SD=apply(FUN=sd,MARGIN=c(1,2),X=ACC))
 
-    rownames(TMP$ACC)=1:nIter
-    colnames(TMP$ACC)=lambda
-    rownames(TMP$SD)=1:nIter
-    colnames(TMP$SD)=lambda  
+    rownames(TMP$ACC)=paste0('Iter_',1:nIter)
+    colnames(TMP$ACC)=paste0('Lambda_',1:length(lambda))
+    rownames(TMP$SD)=paste0('Iter_',1:nIter)
+    colnames(TMP$SD)=paste0('Lambda_',1:length(lambda))
     
     return(TMP)
 }
