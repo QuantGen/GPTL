@@ -1,8 +1,8 @@
-GD.CVParallel=function(X,y,nRep=1,nFolds=5,acc=cor,suppress_warnings=TRUE,nIter=10,mc.cores=detectCores(),...){
+GD.CVParallel=function(x,y,nRep=1,nFolds=5,acc=cor,suppress_warnings=TRUE,nIter=10,mc.cores=detectCores(),...){
     TMP=mclapply(FUN=GD.CV,X=X,y=y,X=1:nFolds,nFolds=nFolds,acc=acc,suppress_warnings=TRUE,nIter=10,mc.cores=mc.cores,...)
     return(TMP)
 }
-GD.CV=function(X,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambda=001,notUse=1,...){
+GD.CV=function(x,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambda=001,notUse=1,...){
     
     DIM=c(nIter,length(lambda),nRep)
     ACC=array(dim=DIM)
@@ -13,12 +13,12 @@ GD.CV=function(X,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambd
 
         for(j in 1:nFolds){
             tst=which(folds==j)
-            XTRN=X[-tst,,drop=FALSE]
+            XTRN=x[-tst,,drop=FALSE]
             yTRN=y[-tst]
             XX=crossprod(XTRN)
             Xy=crossprod(XTRN,yTRN)
             B=GD(XX=XX,Xy=Xy,nIter=nIter,...)
-            XTST=X[tst,,drop=FALSE]
+            XTST=x[tst,,drop=FALSE]
             yTST=y[tst]
 
             for(Row in 1:nrow(AVG_ACC)){
