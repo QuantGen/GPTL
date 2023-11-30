@@ -38,7 +38,7 @@ GD.CV=function(x,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambd
         AVG_ACC=AVG_ACC/nFolds
         ACC[,,i]=AVG_ACC
     }
-    TMP=list(lambda=lambda,nIter=nIter,ACC=apply(FUN=mean,MARGIN=c(1,2),X=ACC),SD=apply(FUN=sd,MARGIN=c(1,2),X=ACC))
+    TMP=list(lambda=lambda,nIter=nIter,ACC=apply(FUN=mean,MARGIN=c(1,2),X=ACC,na.rm=T),SD=apply(FUN=sd,MARGIN=c(1,2),X=ACC))
 
     rownames(TMP$ACC)=paste0('Iter_',1:nIter)
     colnames(TMP$ACC)=paste0('Lambda_',1:length(lambda))
