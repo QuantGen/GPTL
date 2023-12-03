@@ -7,7 +7,7 @@
 #   - Replace the loop over reps using foreach
 #   - Use mclapply with a dummy argument (notUse=1, below), the current implementation with mclappply (line 5 above) does not offer any benefit
 GD.CV=function(x,y,nFolds=5,nRep=1,acc=cor,suppress_warnings=TRUE,nIter=10,lambda=001,notUse=1,...){
-    print(notUse)
+    #print(notUse)
     DIM=c(nIter,length(lambda),nRep)
     ACC=array(dim=DIM)
     N=nrow(x)
