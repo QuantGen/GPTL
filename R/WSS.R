@@ -5,7 +5,9 @@ WSS=function(SSList,weights){
   # weights: a vecctor of weights of the same length as SSList
   # Value: a list with the pooled sufficient staitistics XX, Xy, my, vy, and the estimated effective sample size (see https://www.jepusto.com/effective-sample-size-aggregation/)
 
-  weights=weights/sum(weights)
+  #weights=weights/sum(weights)
+  # I think we should use weigths=weights/max(weights), that way, we can have for one group a weight of 1 and then weight relative to it.
+  weights=weights/max(weights)
 
   if(length(weights) != length(SSList)){ 
     stop('SSList and weights must have the same length') 
