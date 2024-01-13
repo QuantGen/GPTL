@@ -69,7 +69,7 @@ GD<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
     dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
 
     if(sortGradient){ 
-      B=B[orderBack,,,] 
+      B=B[orderBack,,,drop=FALSE] 
     }
   
     B=B[,,,drop=TRUE]
