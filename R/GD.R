@@ -36,6 +36,7 @@ GD<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
       tmp=order(abs(gradient0),decreasing=TRUE)
       XX=XX[tmp,tmp]
       Xy=Xy[tmp]
+      orderBack=order(tmp)
     }
     previous_lambda=0
     B=array(dim=c(p,ifelse(returnPath,nIter,1),length(lambda)))
@@ -67,6 +68,7 @@ GD<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
     dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
   
     B=B[,,,drop=TRUE]
+    B=B[orderBack,,,drop=TRUE]
     return(B)
 }
 
