@@ -29,9 +29,11 @@ GD0<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,lambda=0
 }
 
 GD<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
-               lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE,sortGradient=TRUE){
-    if(sortGradient){  
-      tmp=order(abs(Xy),decreasing=TRUE)
+               lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE,sortGradient=FALSE){
+    if(sortGradient){ 
+      gradient0=Xy
+      if(any(b!=0){ gradient0=gradient0-XX%*%b }
+      tmp=order(abs(gradient0),decreasing=TRUE)
       XX=XX[tmp,tmp]
       Xy=Xy[tmp]
     }
