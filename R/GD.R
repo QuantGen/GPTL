@@ -38,6 +38,7 @@ GD<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
       Xy=Xy[tmp]
       orderBack=order(tmp)
     }
+  
     previous_lambda=0
     B=array(dim=c(p,ifelse(returnPath,nIter,1),length(lambda)))
 
