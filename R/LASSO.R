@@ -7,11 +7,13 @@ LASSO <- function(XX, Xy, p=ncol(XX), b=rep(0,p), lambda=1, b0=rep(0,p), lambda0
     B[,1,h]=b
     for (i in 2:ncol(B)) {
       for (j in 1:p) {
-        B2j=(Xy[j]-XX[j,-j] %*% B[,i-1,h][-j])/XX[j,j]
-        if (abs(B2j-lambda0*b0[j]) < lambda) {
-          B[,i,h][j]=lambda0*b0[j]
+        Q=(Xy[j]-XX[j,-j] %*% B[,i-1,h][-j])/XX[j,j]
+        if (Q+lambda/XX[j,j] < lambda0*b0[j]) {
+          B[,i,h][j]=Q+lambda/XX[j,j]
+        } else if (Q-lambda/XX[j,j] > lambda0*b0[j]) {
+          B[,i,h][j]=Q-lambda/XX[j,j]
         } else {
-          B[,i,h][j]=B2j-sign(B2j-lambda0*b0[j]-(lambda/XX[j,j]))*(lambda/XX[j,j])
+          B[,i,h][j]=lambda0*b0[j]
         }
       }
     }
