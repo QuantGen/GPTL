@@ -1,5 +1,4 @@
 # Lasso regression
-# ! Still Developing
 
 LASSO <- function(XX, Xy, p=ncol(XX), b=rep(0,p), lambda=1, b0=rep(0,p), lambda0=1, nIter=50, returnPath=FALSE) {
   B=array(dim=c(p,nIter,length(lambda)))
