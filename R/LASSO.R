@@ -7,9 +7,9 @@ LASSO <- function(XX, Xy, p=ncol(XX), b=rep(0,p), lambda=1, b0=rep(0,p), lambda0
     for (i in 2:ncol(B)) {
       for (j in 1:p) {
         Q=(Xy[j]-XX[j,-j] %*% B[,i-1,h][-j])/XX[j,j]
-        if (Q+lambda/XX[j,j] < lambda0*b0[j]) {
+        if (Q+lambda/XX[j,j] > lambda0*b0[j]) {
           B[,i,h][j]=Q+lambda/XX[j,j]
-        } else if (Q-lambda/XX[j,j] > lambda0*b0[j]) {
+        } else if (Q-lambda/XX[j,j] < lambda0*b0[j]) {
           B[,i,h][j]=Q-lambda/XX[j,j]
         } else {
           B[,i,h][j]=lambda0*b0[j]
