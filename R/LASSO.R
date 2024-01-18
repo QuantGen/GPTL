@@ -26,4 +26,38 @@ LASSO <- function(XX, Xy, p=ncol(XX), b=rep(0,p), lambda=1, b0=rep(0,p), lambda0
   }
 }
 
+OLS<- function(XX, Xy, p=ncol(XX), b=rep(0,p),lambda=0,nIter=100,returnPath=TRUE) {
+  B=array(dim=c(p,nIter,length(lambda)))
+  bIni=b
+  
+  for (h in 1:length(lambda)) {
+    B[,1,h]=bIni
+    for (i in 2:nIter) {
+       for (j in 1:p) {
+        offset=sum(XX[,j]*b)-XX[j,j]*b[j]
+        bOLS=(Xy[j]-offset)/XX[j,j]
+        b[j]=bOLS
+       }
+       B[,i,h]=b
+      }
+    }
+    return(B[,,,drop=TRUE])
+}
+
+## OLS Works!
+if(FALSE){
+  n=1000
+  p=10
+  X=matrix(nrow=n,ncol=p,rnorm(n*p))
+  b=rexp(p)
+  signal=X%*%b
+  error=rnorm(sd=sd(signal),n=n)
+  y=signal+error
+
+  fm0=lm(y~X-1)
+
+  fm=OLS(XX=crossprod(X),Xy=crossprod(X,y),nIter=1000)
+  plot(coef(fm0),fm[,1000])
+}
+
 
