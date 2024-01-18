@@ -44,7 +44,7 @@ OLS<- function(XX, Xy, p=ncol(XX), b=rep(0,p),lambda=0,nIter=100,returnPath=TRUE
     return(B[,,,drop=TRUE])
 }
 
-## OLS Works!
+## Testing OLS (it Works!)
 if(FALSE){
   n=1000
   p=10
@@ -60,4 +60,48 @@ if(FALSE){
   plot(coef(fm0),fm[,1000])
 }
 
+## Now LASSO (using Gauss-Seidel type algorithm)
+LASSO.GS<- function(XX, Xy, p=ncol(XX), b=rep(0,p),lambda=0,nIter=100,returnPath=TRUE) {
+  B=array(dim=c(p,nIter,length(lambda)))
+  bIni=b
+  
+  for (h in 1:length(lambda)) {
+    B[,1,h]=bIni
+    for (i in 2:nIter) {
+       for (j in 1:p) {
+        offset=sum(XX[,j]*b)-XX[j,j]*b[j]
+        bOLS=(Xy[j]-offset)/XX[j,j]
+        if(abs(bOLS)>lambda[h]){
+          b[j]=bOLS-sign(bOLS)*lambda[h]
+        }else{
+          b[j]=0
+        }
+       }
+       B[,i,h]=b
+      }
+    }
+    return(B[,,,drop=TRUE])
+}
 
+## Testing LASSO.GS (It seems to work)
+
+if(FALSE){
+  n=1000
+  p=10
+  QTL=c(2,4,6,8)
+  X=matrix(nrow=n,ncol=p,rnorm(n*p))
+  b=rep(0,p)
+  b[QTL]=1
+  signal=X%*%b
+  error=rnorm(sd=sd(signal),n=n)
+  y=signal+error
+
+  fm0=lm(y~X-1)
+  library(glmnet)
+  fmL=glmnet(y=y,x=X)
+  fm=LASSO.GS(XX=crossprod(X),Xy=crossprod(X,y),nIter=1000,lambda=fmL$lambda)
+  par(mfrow=c(3,3))
+  for(i in seq(from=2,to=18,by=2)){
+   plot(fmL$beta[,i],fm[,1000,i],col=4,cex=1.5);abline(a=0,b=1)
+  }
+}
