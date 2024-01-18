@@ -25,3 +25,5 @@ LASSO <- function(XX, Xy, p=ncol(XX), b=rep(0,p), lambda=1, b0=rep(0,p), lambda0
     return(B[,nIter,])
   }
 }
+
+
