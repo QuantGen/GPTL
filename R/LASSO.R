@@ -72,7 +72,7 @@ LASSO.CD<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nIter
   ## Default lambda for LASSO
   if(is.null(lambda)){
     bOLS=Xy/diag(XX)
-    lambda.max=max(abs(bOLS-b0))+1e-4
+    lambda.max=max(diag(XX)*abs(bOLS-b0))+1e-4
     lambda.min=lambda.max/100
     lambda=exp(seq(from=log(lambda.max),to=log(lambda.min),length=10))# glmnet uses length=100
   }
