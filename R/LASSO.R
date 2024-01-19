@@ -107,15 +107,15 @@ if(FALSE){
 }
 
 
-## Now LASSO (using Gauss-Seidel type algorithm)
-LASSO.GS2<- function(XX, Xy, p=ncol(XX),b0=rep(0,p), b=rep(0,p),lambda=0,nIter=100,returnPath=TRUE) {
+## Now LASSO with initial beta_0 (using Gauss-Seidel type algorithm)
+LASSO.GS2<- function(XX, Xy, p=ncol(XX), b=rep(0,p), lambda=0, b0=rep(0,p), lambda0=0, nIter=100,returnPath=TRUE) {
   B=array(dim=c(p,nIter,length(lambda)))
   bIni=b
   
   for (h in 1:length(lambda)) {
     B[,1,h]=bIni
     for (i in 2:nIter) {
-       for (j in 1:p) {
+      for (j in 1:p) {
         offset=sum(XX[,j]*b)-XX[j,j]*b[j]
         bOLS=(Xy[j]-offset)/XX[j,j]
         if(abs(bOLS-b0[j])>lambda[h]){
@@ -123,11 +123,17 @@ LASSO.GS2<- function(XX, Xy, p=ncol(XX),b0=rep(0,p), b=rep(0,p),lambda=0,nIter=1
         }else{
           b[j]=b0[j]
         }
-       }
-       B[,i,h]=b
       }
+      B[,i,h]=b
     }
+  }
+  iterations=paste0('iter_',1:nIter)
+  dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
+  if (returnPath) {
     return(B[,,,drop=TRUE])
+  } else {
+    return(B[,nIter,,drop=TRUE])
+  }
 }
 
 
