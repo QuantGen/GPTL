@@ -62,28 +62,36 @@ if(FALSE){
 
 ## Now LASSO (using Coordinate Descent)
 
-LASSO.CD<- function(XX, Xy, p=ncol(XX), b=rep(0,p),lambda=0,nIter=100,returnPath=TRUE) {
+LASSO.CD<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nIter=100,returnPath=TRUE) {
 
   ## Notes
   #  To match glment, XX and Xy should be crossprod(X)/n and crossprod(X,y)/n
   #  With both X and y centered
   ##
 
+  ## Default lambda for LASSO
+  if(is.null(lambda)){
+    bOLS=Xy/diag(XX)
+    lambda.max=max(abs(bOLS-b0))+1e-4
+    lambda.min=lambda.max/100
+    lambda=exp(seq(from=log(lambda.max),to=log(lambda.min),length=10))# glmnet uses length=100
+  }
+
+  
   B=array(dim=c(p,nIter,length(lambda)))
   bIni=b
 
   D=diag(XX)
   
   for (h in 1:length(lambda)) {
-    tmp_lambda=lambda[h]/D
-
+ 
     B[,1,h]=bIni
     for (i in 2:nIter) {
        for (j in 1:p) {
         offset=sum(XX[,j]*b)-XX[j,j]*b[j]
         bOLS=(Xy[j]-offset)/XX[j,j]
-        if(abs(bOLS)>tmp_lambda[j]){
-          b[j]=bOLS-sign(bOLS)*tmp_lambda[j]
+        if(abs(bOLS)>lambda[h]/D[j]){
+          b[j]=bOLS-sign(bOLS)*lambda[h]/D[j]
         }else{
           b[j]=0
         }
