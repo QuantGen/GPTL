@@ -60,19 +60,30 @@ if(FALSE){
   plot(coef(fm0),fm[,1000])
 }
 
-## Now LASSO (using Gauss-Seidel type algorithm)
-LASSO.GS<- function(XX, Xy, p=ncol(XX), b=rep(0,p),lambda=0,nIter=100,returnPath=TRUE) {
+## Now LASSO (using Coordinate Descent)
+
+LASSO.CD<- function(XX, Xy, p=ncol(XX), b=rep(0,p),lambda=0,nIter=100,returnPath=TRUE) {
+
+  ## Notes
+  #  To match glment, XX and Xy should be crossprod(X)/n and crossprod(X,y)/n
+  #  With both X and y centered
+  ##
+
   B=array(dim=c(p,nIter,length(lambda)))
   bIni=b
+
+  D=diag(XX)
   
   for (h in 1:length(lambda)) {
+    tmp_lambda=lambda[h]/D
+
     B[,1,h]=bIni
     for (i in 2:nIter) {
        for (j in 1:p) {
         offset=sum(XX[,j]*b)-XX[j,j]*b[j]
         bOLS=(Xy[j]-offset)/XX[j,j]
-        if(abs(bOLS)>lambda[h]){
-          b[j]=bOLS-sign(bOLS)*lambda[h]
+        if(abs(bOLS)>tmp_lambda[j]){
+          b[j]=bOLS-sign(bOLS)*tmp_lambda[j]
         }else{
           b[j]=0
         }
@@ -83,13 +94,16 @@ LASSO.GS<- function(XX, Xy, p=ncol(XX), b=rep(0,p),lambda=0,nIter=100,returnPath
     return(B[,,,drop=TRUE])
 }
 
-## Testing LASSO.GS (It seems to work)
 
+## Testing LASSO.CD (It seems to work) with scaled predictors
 if(FALSE){
   n=1000
   p=10
   QTL=c(2,4,6,8)
-  X=matrix(nrow=n,ncol=p,rnorm(n*p))
+
+  ## With this scaling the diagonals of X'X are all equalt to n
+  X=scale(matrix(nrow=n,ncol=p,rnorm(n*p)),center=TRUE,scale=TRUE)*sqrt((n)/(n-1))
+ 
   b=rep(0,p)
   b[QTL]=1
   signal=X%*%b
@@ -98,12 +112,15 @@ if(FALSE){
 
   fm0=lm(y~X-1)
   library(glmnet)
-  fmL=glmnet(y=y,x=X)
-  fm=LASSO.GS(XX=crossprod(X),Xy=crossprod(X,y),nIter=1000,lambda=fmL$lambda)
+  fmL=glmnet(y=y,x=X,standarize=FALSE)
+
+  ## Note: to match we need to multiply lambda by n...
+  fm=LASSO.CD(XX=crossprod(X),Xy=crossprod(X,y),nIter=5000,lambda=fmL$lambda*n)
   par(mfrow=c(3,3))
   for(i in seq(from=2,to=18,by=2)){
    plot(fmL$beta[,i],fm[,1000,i],col=4,cex=1.5);abline(a=0,b=1)
   }
+  
 }
 
 
