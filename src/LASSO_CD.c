@@ -9,7 +9,7 @@
 SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SEXP b0) {
 
     int inc=1, j, p, niter;
-    double  Cjj, Cjb, Lambda, offset, bOLS;
+    double  Cjj, Cjb, offset, bOLS, Lambda;
     double *pC, *prhs, *pb, *pb0;
     
     p=INTEGER_VALUE(nCol);
