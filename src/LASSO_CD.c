@@ -9,7 +9,7 @@
 SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SEXP b0) {
 
     int inc=1, j, p, niter;
-    double  Cjj, Cjb, offset, bOLS, Lambda;
+    double  Cjj, Cjb, offset, bOLS, Lambda, sign_bOLS;
     double *pC, *prhs, *pb, *pb0;
     
     p=INTEGER_VALUE(nCol);
@@ -38,8 +38,15 @@ SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SEXP
 
             offset=Cjb-Cjj*pb[j];
             bOLS=(prhs[j]-offset)/Cjj;
+            if (bOLS < 0) {
+                sign_bOLS=-1;
+            } else if (bOLS = 0) {
+                sign_bOLS=0;
+            } else {
+                sign_bOLS=1;
+            }
             if (abs(bOLS - pb0[j]) > Lambda/Cjj) {
-                pb[j]=bOLS-SIGN(1,bOLS)*Lambda/Cjj;
+                pb[j]=bOLS-sign_bOLS*Lambda/Cjj;
             } else {
                 pb[j]=0;
             }
