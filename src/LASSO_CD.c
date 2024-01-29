@@ -6,11 +6,11 @@
 #include <Rconfig.h>
 #include <R_ext/Lapack.h>
 
-SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda) {
+SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SEXP b0) {
 
     int inc=1, j, p, niter;
     double  Cjj, Cjb, gradient, lambda;
-    double *pC, *prhs, *pb;
+    double *pC, *prhs, *pb, *pb0;
     
     p=INTEGER_VALUE(nCol);
     niter=INTEGER_VALUE(nIter);
@@ -26,6 +26,9 @@ SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda) {
     PROTECT(b=AS_NUMERIC(b));
     pb=NUMERIC_POINTER(b);
 
+    PROTECT(b0=AS_NUMERIC(b0));
+    pb0=NUMERIC_POINTER(b0);
+
     inc=1;
     
     for (int iter = 0; iter < niter; iter++) { 
@@ -35,7 +38,7 @@ SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda) {
 
             offset=Cjb-Cjj*pb[j];
             bOLS=(prhs[j]-offset)/Cjj;
-            if (abs(bOLS) > Lambda/Cjj) {
+            if (abs(bOLS - pb0[j]) > Lambda/Cjj) {
                 pb[j]=bOLS-SIGN(1,bOLS)*Lambda/Cjj;
             } else {
                 pb[j]=0;
