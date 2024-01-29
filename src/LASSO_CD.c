@@ -53,7 +53,7 @@ SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SEXP
         }
     }
     
-    UNPROTECT(3); 
+    UNPROTECT(4); 
     return b;
    
 }
