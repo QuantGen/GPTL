@@ -19,8 +19,6 @@ LASSO.CD1<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nIte
   
   B=array(dim=c(p,nIter,length(lambda)))
   bIni=b
-
-  D=diag(XX)
   
   for (h in 1:length(lambda)) {
  
