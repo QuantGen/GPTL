@@ -37,9 +37,6 @@ if(FALSE){
   XX=crossprod(X)
   Xy=crossprod(X,y)
 
-  fm_CD=RIDGE.CD(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=10,nIter=50,returnPath=FALSE)
-  #compare with Gradient Descent
-  fm_GD=GD(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=50,learning_rate=1/10,
-               lambda=10,b0=rep(0,p),lambda0=1,returnPath=FALSE,sortGradient=FALSE)
+  fm_EN=ElasticNet(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=10,nIter=50,returnPath=T, alpha=1)
 
 }
