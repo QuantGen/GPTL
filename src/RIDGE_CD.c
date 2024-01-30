@@ -6,7 +6,7 @@
 #include <Rconfig.h>
 #include <R_ext/Lapack.h>
 
-SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SEXP b0) {
+SEXP RIDGE_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SEXP b0) {
 
     int inc=1, j, p, niter;
     double  Cjj, Cjb, offset, bOLS, Lambda;
