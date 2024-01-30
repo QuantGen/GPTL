@@ -37,6 +37,14 @@ if(FALSE){
   XX=crossprod(X)
   Xy=crossprod(X,y)
 
-  fm_EN=ElasticNet(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=10,nIter=50,returnPath=T, alpha=1)
+  library(glmnet)
+  fmL=glmnet(y=y,x=X, alpha=0.5)
+  fm_EN=ElasticNet(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=fmL$lambda,nIter=50,returnPath=T, alpha=0.5)
+
+
+  par(mfrow=c(3,3))
+  for(i in seq(from=2,to=18,by=2)){
+    plot(fmL$beta[,i],fm_EN[,50,i],col=4,cex=1.5);abline(a=0,b=1)
+  }
 
 }
