@@ -39,9 +39,9 @@ SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SEXP
             offset=Cjb-Cjj*pb[j];
             bOLS=(prhs[j]-offset)/Cjj;
             // sign function
-            if (bOLS-pb0[j] < 0) {
+            if (bOLS < 0) {
                 sign_bOLS=-1;
-            } else if (bOLS-pb0[j] == 0) {
+            } else if (bOLS == 0) {
                 sign_bOLS=0;
             } else {
                 sign_bOLS=1;
