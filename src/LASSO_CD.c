@@ -47,8 +47,8 @@ SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SEXP
                 sign_bOLS=1;
             }
             
-            if (abs(bOLS - pb0[j]) > Lambda/Cjj) {
-                pb[j]=bOLS-sign_bOLS*Lambda/Cjj;
+            if (abs(bOLS - pb0[j]) > Lambda) {
+                pb[j]=bOLS-sign_bOLS*Lambda;
             } else {
                 pb[j]=pb0[j];
             }
