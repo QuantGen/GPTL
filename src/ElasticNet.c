@@ -39,17 +39,11 @@ SEXP ElasticNet(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SE
 
             offset=Cjb-Cjj*pb[j];
             bOLS=(prhs[j]-offset)/(Cjj+Lambda*(1-Alpha));
-            // sign function
-            if (bOLS + Lambda*(1-Alpha)*pb0[j]/(Cjj+Lambda*(1-Alpha)) - pb0[j] + Lambda*Alpha/(Cjj+Lambda*(1-Alpha)) < 0) {
-                sign_bOLS=-1;
-            } else if (bOLS + Lambda*(1-Alpha)*pb0[j]/(Cjj+Lambda*(1-Alpha)) - pb0[j] + Lambda*Alpha/(Cjj+Lambda*(1-Alpha)) == 0) {
-                sign_bOLS=0;
-            } else {
-                sign_bOLS=1;
-            }
             
-            if (abs(bOLS + Lambda*(1-Alpha)*pb0[j]/(Cjj+Lambda*(1-Alpha)) - pb0[j]) > Lambda*Alpha/(Cjj+Lambda*(1-Alpha))) {
-                pb[j]=bOLS + Lambda*(1-Alpha)*pb0[j]/(Cjj+Lambda*(1-Alpha)) - sign_bOLS*Lambda*Alpha/(Cjj+Lambda*(1-Alpha));
+            if (bOLS-pb0[j] < -Lambda*Alpha/Cjj) {
+                pb[j]=bOLS + (Lambda*(1-Alpha)*pb0[j]+Lambda*Alpha)/(Cjj+Lambda*(1-Alpha));
+            } else if (bOLS-pb0[j] > Lambda*Alpha/Cjj) {
+                pb[j]=bOLS + (Lambda*(1-Alpha)*pb0[j]-Lambda*Alpha)/(Cjj+Lambda*(1-Alpha));
             } else {
                 pb[j]=pb0[j];
             }
