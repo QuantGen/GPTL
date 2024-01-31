@@ -38,17 +38,11 @@ SEXP LASSO_CD(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SEXP
 
             offset=Cjb-Cjj*pb[j];
             bOLS=(prhs[j]-offset)/Cjj;
-            // sign function
-            if (bOLS-pb0[j] < 0) {
-                sign_bOLS=-1;
-            } else if (bOLS-pb0[j] == 0) {
-                sign_bOLS=0;
-            } else {
-                sign_bOLS=1;
-            }
             
-            if (abs(bOLS - pb0[j]) > Lambda/Cjj) {
-                pb[j]=bOLS-sign_bOLS*Lambda/Cjj;
+            if (bOLS - pb0[j] < -Lambda/Cjj) {
+                pb[j]=bOLS + Lambda/Cjj;
+            } else if (bOLS - pb0[j] > Lambda/Cjj) {
+                pb[j]=bOLS - Lambda/Cjj;
             } else {
                 pb[j]=pb0[j];
             }
