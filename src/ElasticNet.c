@@ -6,17 +6,17 @@
 #include <Rconfig.h>
 #include <R_ext/Lapack.h>
 
-SEXP ElasticNet(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SEXP b0, SEXP alpha) {
+SEXP ElasticNet(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda1, SEXP lambda2, SEXP b0) {
 
     int inc=1, j, p, niter;
-    double  Cjj, Cjb, offset, bOLS, Lambda, sign_bOLS, Alpha;
+    double  Cjj, Cjb, offset, bOLS, Lambda1, Lambda2, sign_bOLS;
     double *pC, *prhs, *pb, *pb0;
     
     p=INTEGER_VALUE(nCol);
     niter=INTEGER_VALUE(nIter);
     
-    Lambda =NUMERIC_VALUE(lambda);
-    Alpha =NUMERIC_VALUE(alpha);
+    Lambda1 =NUMERIC_VALUE(lambda1);
+    Lambda2 =NUMERIC_VALUE(lambda2);
     
     PROTECT(C=AS_NUMERIC(C));
     pC=NUMERIC_POINTER(C);
@@ -38,12 +38,12 @@ SEXP ElasticNet(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda, SE
             Cjb=F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc); //C[,j]'b
 
             offset=Cjb-Cjj*pb[j];
-            bOLS=(prhs[j]-offset)/(Cjj+Lambda*(1-Alpha));
+            bOLS=(prhs[j]-offset)/(Cjj+Lambda2);
             
-            if (bOLS-pb0[j] < -Lambda*Alpha/Cjj) {
-                pb[j]=bOLS + (Lambda*(1-Alpha)*pb0[j]+Lambda*Alpha)/(Cjj+Lambda*(1-Alpha));
-            } else if (bOLS-pb0[j] > Lambda*Alpha/Cjj) {
-                pb[j]=bOLS + (Lambda*(1-Alpha)*pb0[j]-Lambda*Alpha)/(Cjj+Lambda*(1-Alpha));
+            if (bOLS-pb0[j] < -Lambda1/Cjj) {
+                pb[j]=bOLS + (Lambda2*pb0[j]+Lambda1)/(Cjj+Lambda2);
+            } else if (bOLS-pb0[j] > Lambda1/Cjj) {
+                pb[j]=bOLS + (Lambda2*pb0[j]-Lambda1)/(Cjj+Lambda2);
             } else {
                 pb[j]=pb0[j];
             }
