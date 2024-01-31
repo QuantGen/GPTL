@@ -9,7 +9,7 @@
 SEXP ElasticNet(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda1, SEXP lambda2, SEXP b0) {
 
     int inc=1, j, p, niter;
-    double  Cjj, Cjb, offset, bOLS, Lambda1, Lambda2, sign_bOLS;
+    double  Cjj, Cjb, offset, rhs, bOLS, Lambda1, Lambda2, sign_bOLS;
     double *pC, *prhs, *pb, *pb0;
     
     p=INTEGER_VALUE(nCol);
@@ -38,12 +38,13 @@ SEXP ElasticNet(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda1, S
             Cjb=F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc); //C[,j]'b
 
             offset=Cjb-Cjj*pb[j];
-            bOLS=(prhs[j]-offset)/(Cjj+Lambda2);
+            rhs=prhs[j]-offset
+            bOLS=rhs/Cjj;
             
             if (bOLS-pb0[j] < -Lambda1/Cjj) {
-                pb[j]=bOLS + (Lambda2*pb0[j]+Lambda1)/(Cjj+Lambda2);
+                pb[j]=(rhs+Lambda2*pb0[j]+Lambda1)/(Cjj+Lambda2);
             } else if (bOLS-pb0[j] > Lambda1/Cjj) {
-                pb[j]=bOLS + (Lambda2*pb0[j]-Lambda1)/(Cjj+Lambda2);
+                pb[j]=(rhs+Lambda2*pb0[j]-Lambda1)/(Cjj+Lambda2);
             } else {
                 pb[j]=pb0[j];
             }
