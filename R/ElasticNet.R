@@ -2,6 +2,13 @@
 
 # C code implemented
 ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,alpha=0.5,nIter=100,returnPath=TRUE) {
+
+  if(is.null(lambda)){
+    bOLS=Xy/diag(XX)
+    lambda.max=max(diag(XX)*abs(bOLS-b0))+1e-4
+    lambda.min=lambda.max/100
+    lambda=exp(seq(from=log(lambda.max),to=log(lambda.min),length=10))# glmnet uses length=100
+  }
   
   B=array(dim=c(p,nIter,length(lambda)))
   bIni=b
