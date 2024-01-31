@@ -13,12 +13,14 @@ ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,alp
   
   B=array(dim=c(p,nIter,length(lambda)))
   bIni=b
+  lambda1=lambda*alpha
+  lambda2=lambda*(1-alpha)
   
   for (h in 1:length(lambda)) {
  
     B[,1,h]=bIni
     for (i in 2:nIter) {
-      B[,i,h]=.Call("ElasticNet",XX, Xy, B[,i-1,h],p, 1, lambda[h], b0, alpha)
+      B[,i,h]=.Call("ElasticNet",XX, Xy, B[,i-1,h],p, 1, lambda1[h], lambda2[h], b0)
     }
   }
 
