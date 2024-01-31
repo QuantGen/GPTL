@@ -2,7 +2,8 @@
 
 # C code implemented
 ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,alpha=0.5,nIter=100,returnPath=TRUE) {
-
+  #alpha=0 -> Ridge; alpha=1 -> Lasso
+  
   if(is.null(lambda)){
     bOLS=Xy/diag(XX)
     lambda.max=max(diag(XX)*abs(bOLS-b0))+1e-4
