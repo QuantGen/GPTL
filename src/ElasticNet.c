@@ -38,7 +38,7 @@ SEXP ElasticNet(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda1, S
             Cjb=F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc); //C[,j]'b
 
             offset=Cjb-Cjj*pb[j];
-            rhs=prhs[j]-offset
+            rhs=prhs[j]-offset;
             bOLS=rhs/Cjj;
             
             if (bOLS-pb0[j] < -Lambda1/Cjj) {
