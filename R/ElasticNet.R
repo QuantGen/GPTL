@@ -11,7 +11,7 @@ ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLa
   }
   
   B=array(dim=c(p,nIter,length(lambda)))
-  dimnames(B)=list(colnames(XX),paste0('iter_',1:nIter),paste0('lambda_',round(lambda,2)))
+  dimnames(B)=list(colnames(XX),paste0('iter_',1:nIter),paste0('lambda_',round(lambda,4)))
   
   lambda1=lambda*alpha
   lambda2=lambda*(1-alpha)
