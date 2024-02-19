@@ -25,7 +25,7 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
  print(S0.b)
  print(varB)
  print(df0.b)
- stop('zzzzz')
+
 
  priorProb=priorProb/sum(priorProb)
  compProb=priorProb
@@ -79,6 +79,9 @@ for(i in 1:nIter){
 		 varB[k]=SS/rchisq(df=DF+df0.b[k],n=1) 
 		 counts[k]=DF
 	 }
+	 print(varB)
+	 return(list(b=b,d=d,S0.=S0.b,df0=df0.b))
+	
         # Sampling the probability of each component 
 	compProb=rDirichlet(counts+priorCounts)
 
