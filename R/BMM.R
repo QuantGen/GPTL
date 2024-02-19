@@ -41,6 +41,7 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
  timeApply=0
 
  samplesVarB=matrix(nrow=nIter,ncol=nComp,NA)
+ samplesB=matrix(nrow=nIter,ncol=p,NA)
 
 weightPostMeans=1/round((nIter-burnIn)/thin)
 for(i in 1:nIter){
@@ -50,7 +51,7 @@ for(i in 1:nIter){
 	  b=sample_effects(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB)
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
 	## End of C-code
-
+	 samplesaB[i,]=b
 	 
 	 ## Sampling mixture components 
 	timeIn=proc.time()[3]
@@ -101,7 +102,8 @@ for(i in 1:nIter){
    message('Time Prob= ', timeProb)
    message('Time Apply= ', timeApply)
  }
- return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,samplesVarB=samplesVarB))
+ return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,
+	     	samplesVarB=samplesVarB,samplesB=samplesB))
 }
 ## A function to sample from a Dirichlet
 
