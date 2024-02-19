@@ -22,11 +22,6 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
  S0.b=c(df0.b)*c(vy)*c(R2)/c(sum(diag(C))/n)
  varB=S0.b/df0.b
 
- print(S0.b)
- print(varB)
- print(df0.b)
-
-
  priorProb=priorProb/sum(priorProb)
  compProb=priorProb
 
@@ -44,6 +39,8 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
  timeEffects=0
  timeProb=0
  timeApply=0
+
+ samplesVarB=matrix(nrow=nIter,ncol=nComp,NA)
 
 weightPostMeans=1/round((nIter-burnIn)/thin)
 for(i in 1:nIter){
@@ -79,8 +76,7 @@ for(i in 1:nIter){
 		 varB[k]=SS/rchisq(df=DF+df0.b[k],n=1) 
 		 counts[k]=DF
 	 }
-	 print(varB)
-	 return(list(b=b,d=d,S0.=S0.b,df0=df0.b))
+	 samplesVarB[i,]=varB
 	
         # Sampling the probability of each component 
 	compProb=rDirichlet(counts+priorCounts)
@@ -105,7 +101,7 @@ for(i in 1:nIter){
    message('Time Prob= ', timeProb)
    message('Time Apply= ', timeApply)
  }
- return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb))
+ return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,samplesVarB=samplesVarB))
 }
 ## A function to sample from a Dirichlet
 
