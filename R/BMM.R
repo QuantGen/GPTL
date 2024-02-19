@@ -22,6 +22,11 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
  S0.b=c(df0.b)*c(vy)*c(R2)/c(sum(diag(C))/n)
  varB=S0.b/df0.b
 
+ print(S0.b)
+ print(varB)
+ print(df0.b)
+ stop('zzzzz')
+
  priorProb=priorProb/sum(priorProb)
  compProb=priorProb
 
@@ -91,10 +96,13 @@ for(i in 1:nIter){
         } 
 	if(verbose){ print(i) }
   } 
+
+ if(verbose){
    message('Time Effects= ', timeEffects)
    message('Time Prob= ', timeProb)
-  message('Time Apply= ', timeApply)
-   return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb))
+   message('Time Apply= ', timeApply)
+ }
+ return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb))
 }
 ## A function to sample from a Dirichlet
 
