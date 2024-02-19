@@ -51,7 +51,7 @@ for(i in 1:nIter){
 	  b=sample_effects(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB)
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
 	## End of C-code
-	 samplesaB[i,]=b
+	 samplesB[i,]=b
 	 
 	 ## Sampling mixture components 
 	timeIn=proc.time()[3]
