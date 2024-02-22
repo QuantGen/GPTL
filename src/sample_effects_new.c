@@ -20,7 +20,7 @@
 */
 
 
-SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP varB) {
+SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP varB, SEXP RSS) {
     
     GetRNGstate();
   
@@ -46,7 +46,12 @@ SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP va
   
     double VARE;
     VARE=NUMERIC_VALUE(varE);
-  
+
+    
+    PROTECT(RSS=AS_NUMERIC(RSS));
+    pRSS=NUMERIC_POINTER(RSS);
+
+	
     double Cjj;
     double offset;
     int inc=1;
@@ -54,6 +59,7 @@ SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP va
     double lhs;
     double sol;
     double z;
+    double old_beta;
      
     for (int j = 0; j < p; j++) { // loop effects
        Cjj = pC[j * (p + 1)];
@@ -64,12 +70,20 @@ SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP va
        lhs=(Cjj/VARE)+(1/pvarB[pd[j]]);
        sol=rhs_offset/lhs;
        z=norm_rand()*sqrt(1/lhs);
-       //Rprintf("Z=%f\n",z);
+       old_beta=pbeta[j];
        pb[j]=sol+z;
+       pRSS[0]+=(pow(pb[j],2) - pow(old_beta,2))*Cjj  -2*(pb[j]-old_beta)*(rhs_offset);
+
     }
-    // Creating a list to return results
     PutRNGstate();
-      
-    UNPROTECT(6);
-    return b;
+
+   // Creating a list with 1 vector elements:
+      PROTECT(list = allocVector(VECSXP, 2));
+      SET_VECTOR_ELT(list, 0, b);
+      SET_VECTOR_ELT(list, 1, RSS);
+       
+      UNPROTECT(7);
+ 
+      return(list);
+
 }
