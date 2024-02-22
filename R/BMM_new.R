@@ -34,6 +34,8 @@ BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn
 
  RSS=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
  RSS2=RSS
+
+ print(c(RSS2,RSS)/n)
   
  varE=vy*(1-R2)
  counts=priorCounts/as.vector(nComp)
@@ -92,7 +94,7 @@ for(i in 1:nIter){
 	# Sampling the error variance
   	RSS2=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
 	SS=RSS2
-	print(c(RSS,RSS2))
+	print(c(RSS,RSS2)/n)
         DF=n
 	varE=SS/rchisq(df=DF,n=1)
         samplesVarE[i]=varE
