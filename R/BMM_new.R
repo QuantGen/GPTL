@@ -10,7 +10,7 @@
 #  To do: sample error variance ; add prior probabilities for the mixtures (right now equivalent to 1/nClasses); priors for the variances
 ##
 
-BMM=function(   C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=.1,
+BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=.1,
 	        nComp=matrix(ncol(B0)), df0.E=5,S0.E=vy*(1-R2)*df0.E,df0.b=rep(10,nComp), 
 	        priorProb=rep(1/nComp,nComp),priorCounts=rep(2*nComp,nComp),verbose=TRUE){
  B0=as.matrix(B0)
