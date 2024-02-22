@@ -89,8 +89,9 @@ for(i in 1:nIter){
 	compProb=rDirichlet(counts+priorCounts)
 
 	# Sampling the error variance
-   SS=RSS+S0.E
-   DF=n+df0.E
+  	RSS=vy*(n-1)-crossprod(b,C)%*%b
+	SS=RSS+S0.E
+        DF=n+df0.E
 	 varE=SS/rchisq(df=DF,n=1)
    samplesVarE[i]=varE
   
