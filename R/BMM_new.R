@@ -52,7 +52,7 @@ for(i in 1:nIter){
          
 	 ## Sampling effects
 	 timeIn=proc.time()[3]
-	  tmp=sample_effects_new(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB,RSS=RSS)
+	  tmp=sample_effects_new(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB,RSS=RSS2)
           b=tmp[[1]]
           RSS=tmp[[2]]
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
@@ -89,7 +89,7 @@ for(i in 1:nIter){
 	compProb=rDirichlet(counts+priorCounts)
 
 	# Sampling the error variance
-  	RSS2=vy*(n-1)-crossprod(b,C)%*%b
+  	RSS2=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
 	SS=RSS2
 	print(c(RSS,RSS2))
         DF=n
