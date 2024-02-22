@@ -20,7 +20,7 @@ BMM=function(   C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=
  d=rep(1,p) # indicator variable for the group
  POST.PROB=matrix(nrow=p,ncol=nComp,0)
 	
- S0.b=c(df0.b)*c(vy)*c(R2/10)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
+ S0.b=c(df0.b)*c(vy)*c(R2)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
  varB=S0.b/df0.b
 
  priorProb=priorProb/sum(priorProb)
@@ -32,7 +32,7 @@ BMM=function(   C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=
  postMeanVarB=rep(0,nComp)
  postProb=rep(0,nComp)
 
- varE=S0.E/df0.E 
+ varE=vy*(1-R2)
  counts=priorCounts/as.vector(nComp)
 	
  PROBS=matrix(nrow=nComp,ncol=p)
@@ -104,7 +104,7 @@ for(i in 1:nIter){
    message('Time Apply= ', timeApply)
  }
  return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,
-	     	samplesVarB=samplesVarB,samplesB=samplesB))
+	     	samplesVarB=samplesVarB,samplesB=samplesB,varE=varE))
 }
 ## A function to sample from a Dirichlet
 
