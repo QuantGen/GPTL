@@ -53,8 +53,8 @@ for(i in 1:nIter){
 	 ## Sampling effects
 	 timeIn=proc.time()[3]
 	  tmp=sample_effects_new(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB,RSS=RSS)
-    b=tmp[1]
-    RSS=tmp[2]
+          b=tmp[[1]]
+          RSS=tmp[[2]]
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
 	## End of C-code
 	 samplesB[i,]=b
