@@ -93,8 +93,8 @@ for(i in 1:nIter){
 	
 	# Sampling the error variance
   	RSS2=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
-	SS=RSS2
-	print(c(RSS,RSS2)/n)
+	SS=RSS
+	#print(c(RSS,RSS2)/n)
         DF=n
 	varE=SS/rchisq(df=DF,n=1)
         samplesVarE[i]=varE
