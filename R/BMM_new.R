@@ -88,7 +88,7 @@ for(i in 1:nIter){
 	
   # Sampling the probability of each component 
 	compProb=rDirichlet(counts+priorCounts)
-
+	
 	# Sampling the error variance
   	RSS2=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
 	SS=RSS2
