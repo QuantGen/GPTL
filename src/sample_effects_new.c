@@ -78,7 +78,7 @@ SEXP sample_effects_new(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEX
       SET_VECTOR_ELT(list, 0, b);
       SET_VECTOR_ELT(list, 1, RSS);
        
-      UNPROTECT(7);
+      UNPROTECT(8);
       
       PutRNGstate();
 	
