@@ -33,6 +33,7 @@ BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn
  postProb=rep(0,nComp)
 
  RSS=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
+ RSS2=RSS
   
  varE=vy*(1-R2)
  counts=priorCounts/as.vector(nComp)
