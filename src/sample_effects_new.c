@@ -20,12 +20,18 @@
 */
 
 
-SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP varB, SEXP RSS) {
+SEXP sample_effects_new(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP varB, SEXP RSS) {
     
     GetRNGstate();
   
     int p = Rf_ncols(C);
- 
+    int inc=1;
+
+    double Cjj, offset, rhs_offset, lhs, sol, z, old_beta;
+    double *pRSS;
+
+    SEXP list;
+	
     PROTECT(rhs=AS_NUMERIC(rhs));
     double *prhs=NUMERIC_POINTER(rhs); 
 
@@ -51,16 +57,6 @@ SEXP sample_effects(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEXP va
     PROTECT(RSS=AS_NUMERIC(RSS));
     pRSS=NUMERIC_POINTER(RSS);
 
-	
-    double Cjj;
-    double offset;
-    int inc=1;
-    double rhs_offset;
-    double lhs;
-    double sol;
-    double z;
-    double old_beta;
-     
     for (int j = 0; j < p; j++) { // loop effects
        Cjj = pC[j * (p + 1)];
        offset = F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc);
