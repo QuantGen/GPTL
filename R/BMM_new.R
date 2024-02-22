@@ -16,12 +16,15 @@ BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn
  B0=as.matrix(B0)
  # nIter=150;burnIn=50;R2=.5;nComp=matrix(ncol(B0));df0.E=5;S0.E=vy*R2*df0.E;df0.b=rep(5,nComp);alpha=.1;my=mean(y); vy=var(y); B0=cbind(rep(0,p),-1,1)
  p=ncol(C) 
- b=rep(0,p)
+ b=rowMeans(B0)
  d=rep(1,p) # indicator variable for the group
  POST.PROB=matrix(nrow=p,ncol=nComp,0)
 	
- S0.b=c(df0.b)*c(vy)*c(R2/2)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
+ S0.b=c(df0.b)*c(vy)*c(R2/5)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
  varB=S0.b/df0.b
+
+ print(varB)
+ stop('xxxxx')
 
  priorProb=priorProb/sum(priorProb)
  compProb=priorProb
