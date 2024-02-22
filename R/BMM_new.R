@@ -89,11 +89,12 @@ for(i in 1:nIter){
 	compProb=rDirichlet(counts+priorCounts)
 
 	# Sampling the error variance
-  	RSS=vy*(n-1)-crossprod(b,C)%*%b
-	SS=RSS+S0.E
-        DF=n+df0.E
-	 varE=SS/rchisq(df=DF,n=1)
-   samplesVarE[i]=varE
+  	RSS2=vy*(n-1)-crossprod(b,C)%*%b
+	SS=RSS2
+	print(c(RSS,RSS2))
+        DF=n
+	varE=SS/rchisq(df=DF,n=1)
+        samplesVarE[i]=varE
   
 	## computing posterior means 
 	if(i>burnIn&(i%%thin==0)){
