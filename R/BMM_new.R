@@ -13,6 +13,7 @@
 BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=.1,
 	        nComp=matrix(ncol(B0)), df0.E=5,S0.E=vy*(1-R2)*df0.E,df0.b=rep(10,nComp), 
 	        priorProb=rep(1/nComp,nComp),priorCounts=rep(2*nComp,nComp),verbose=TRUE){
+	
  B0=as.matrix(B0)
  # nIter=150;burnIn=50;R2=.5;nComp=matrix(ncol(B0));df0.E=5;S0.E=vy*R2*df0.E;df0.b=rep(5,nComp);alpha=.1;my=mean(y); vy=var(y); B0=cbind(rep(0,p),-1,1)
  p=ncol(C) 
@@ -20,11 +21,8 @@ BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn
  d=rep(1,p) # indicator variable for the group
  POST.PROB=matrix(nrow=p,ncol=nComp,0)
 	
- S0.b=c(df0.b)*c(vy)*c(R2/5)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
+ S0.b=c(df0.b)*c(vy)*c(R2/10)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
  varB=S0.b/df0.b
-
- print(varB)
- stop('xxxxx')
 
  priorProb=priorProb/sum(priorProb)
  compProb=priorProb
@@ -36,29 +34,25 @@ BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn
  postProb=rep(0,nComp)
 
  RSS=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
- RSS2=RSS
-
- print(c(RSS2,RSS)/n)
-  
- varE=vy*(1-R2)
+	
+ varE=RSS/n
+	
  counts=priorCounts/as.vector(nComp)
 	
  PROBS=matrix(nrow=nComp,ncol=p)
  	
- timeEffects=0
- timeProb=0
- timeApply=0
+ timeEffects=0; timeProb=0; timeApply=0
 
  samplesVarB=matrix(nrow=nIter,ncol=nComp,NA)
  samplesB=matrix(nrow=nIter,ncol=p,NA)
  samplesVarE=rep(NA,nIter)
 
-weightPostMeans=1/round((nIter-burnIn)/thin)
-for(i in 1:nIter){
-         
+ weightPostMeans=1/round((nIter-burnIn)/thin)
+	
+ for(i in 1:nIter){        
 	 ## Sampling effects
 	 timeIn=proc.time()[3]
-	  tmp=sample_effects_new(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB,RSS=RSS2)
+	  tmp=sample_effects_new(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB,RSS=RSS)
           b=tmp[[1]]
           RSS=tmp[[2]]
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
@@ -95,7 +89,7 @@ for(i in 1:nIter){
 	compProb=rDirichlet(counts+priorCounts)
 	
 	# Sampling the error variance
-  	RSS2=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
+  	#RSS2=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
 	SS=RSS
 	#print(c(RSS,RSS2)/n)
         DF=n
