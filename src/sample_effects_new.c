@@ -66,7 +66,7 @@ SEXP sample_effects_new(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEX
        lhs=(Cjj/VARE)+(1/pvarB[pd[j]]);
        sol=rhs_offset/lhs;
        z=norm_rand()*sqrt(1/lhs);
-       old_beta=pbeta[j];
+       old_beta=pb[j];
        pb[j]=sol+z;
        pRSS[0]+=(pow(pb[j],2) - pow(old_beta,2))*Cjj  -2*(pb[j]-old_beta)*(rhs_offset);
 
