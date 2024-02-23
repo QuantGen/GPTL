@@ -22,7 +22,7 @@ BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn
  POST.PROB=matrix(nrow=p,ncol=nComp,0)
 	
  S0.b=c(df0.b)*c(vy)*c(R2/10)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
- varB=S0.b/df0.b
+ varB=(S0.b/df0.b)
 
  priorProb=priorProb/sum(priorProb)
  compProb=priorProb
@@ -52,7 +52,7 @@ BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn
  for(i in 1:nIter){        
 	 ## Sampling effects
 	 timeIn=proc.time()[3]
-	  tmp=sample_effects_new(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB,RSS=RSS)
+	  tmp=sample_effects_new(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB[d],RSS=RSS)
           b=tmp[[1]]
           RSS=tmp[[2]]
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
