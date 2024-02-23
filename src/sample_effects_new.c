@@ -62,19 +62,15 @@ SEXP sample_effects_new(SEXP C, SEXP rhs, SEXP b, SEXP d, SEXP B0,SEXP varE, SEX
        offset = F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc);
        offset -= Cjj * pb[j];
        rhs_offset = prhs[j] - offset;
-       rhs_offset=(rhs_offset/VARE)+pB0[(p*pd[j] + j)]/pvarB[pd[j]];
-       lhs=(Cjj/VARE)+(1/pvarB[pd[j]]);
+       rhs_offset=(rhs_offset/VARE)+pB0[(p*pd[j] + j)]/pvarB[j];
+       lhs=(Cjj/VARE)+(1/pvarB[j]);
        sol=rhs_offset/lhs;
        z=norm_rand()*sqrt(1/lhs);
        old_beta=pb[j];
        pb[j]=sol+z;
-       //Rprintf("Z=%f\n",old_beta);
        //Rprintf("Z=%f\n",pb[j]);
 	    
        pRSS[0]+=(pow(pb[j],2) - pow(old_beta,2))*Cjj  -2*(pb[j]-old_beta)*(prhs[j]-offset);
-
-      //pRSS[0]+=(pow(pbeta[j_global],2) - pow(old_beta,2))*Cjj  -2*(pbeta[j_global]-old_beta)*(rhs-offset);
-  
 	    
     }
 
