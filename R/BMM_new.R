@@ -10,8 +10,8 @@
 #  To do: sample error variance ; add prior probabilities for the mixtures (right now equivalent to 1/nClasses); priors for the variances
 ##
 
-BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=.1,
-	        nComp=matrix(ncol(B0)), df0.E=5,S0.E=vy*(1-R2)*df0.E,df0.b=rep(10,nComp), 
+BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=0.25,
+	        nComp=matrix(ncol(B0)),K=1/nComp, df0.E=5,S0.E=vy*(1-R2)*df0.E,df0.b=rep(10,nComp), 
 	        priorProb=rep(1/nComp,nComp),priorCounts=rep(2*nComp,nComp),verbose=TRUE){
 	
  B0=as.matrix(B0)
@@ -21,7 +21,7 @@ BMM_new=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn
  d=rep(1,p) # indicator variable for the group
  POST.PROB=matrix(nrow=p,ncol=nComp,0)
 	
- S0.b=c(df0.b)*c(vy)*c(R2/10)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
+ S0.b=c(df0.b)*c(vy)*c(R2*K)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
  varB=(S0.b/df0.b)
 
  priorProb=priorProb/sum(priorProb)
