@@ -15,21 +15,28 @@ ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLa
   
   lambda1=lambda*alpha
   lambda2=lambda*(1-alpha)*0.5
+
+  conv_iter=rep(maxIter, length(lambda))
   
   for (h in 1:length(lambda)) {
     B[,1,h]=b
     for (i in 2:maxIter) {
       B[,i,h]=.Call("ElasticNet",XX, Xy, B[,i-1,h], p, 1, lambda1[h], lambda2[h], b0)
       if (max(abs(B[,i,h]-B[,i-1,h])) < conv_threshold) {
+        conv_iter[h]=i
         break
       }
     }
   }
 
   if (returnPath) {
-    return(list(B=B[,1:i,,drop=TRUE], lambda=lambda, alpha=alpha))
+    return(list(B=B[,,,drop=TRUE], lambda=lambda, alpha=alpha, conv_iter=conv_iter))
   } else {
-    return(list(B=B[,i,,drop=TRUE], lambda=lambda, alpha=alpha))
+    B_last=B[,conv_iter[1],1,drop=TRUE]
+    for (h in 1:length(lambda)) {
+      B_last=cbind(B_last, B[,conv_iter[h],h,drop=TRUE])
+    }
+    return(list(B=B_last, lambda=lambda, alpha=alpha, conv_iter=conv_iter))
   }
 }
 
