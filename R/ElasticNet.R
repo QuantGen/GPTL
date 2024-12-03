@@ -33,10 +33,12 @@ ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLa
     return(list(B=B[,,,drop=TRUE], lambda=lambda, alpha=alpha, conv_iter=conv_iter))
   } else {
     B_last=B[,conv_iter[1],1,drop=TRUE]
-    for (h in 2:length(lambda)) {
-      B_last=cbind(B_last, B[,conv_iter[h],h,drop=TRUE])
+    if (length(lambda)>1) {
+      for (h in 2:length(lambda)) {
+        B_last=cbind(B_last, B[,conv_iter[h],h,drop=TRUE])
+      }
+      colnames(B_last)=dimnames(B)[[3]]
     }
-    colnames(B_last)=dimnames(B)[[3]]
     return(list(B=B_last, lambda=lambda, alpha=alpha, conv_iter=conv_iter))
   }
 }
