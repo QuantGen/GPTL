@@ -22,6 +22,7 @@ ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLa
       B[,i,h]=.Call("ElasticNet",XX, Xy, B[,i-1,h], p, 1, lambda1[h], lambda2[h], b0)
       if (max(abs(B[,i,h]-B[,i-1,h])) < conv_threshold) {
         break
+      }
     }
   }
 
