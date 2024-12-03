@@ -1,7 +1,7 @@
 # Elastic Net
 
 # C code implemented
-ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30,alpha=0.5,nIter=100,returnPath=TRUE) {
+ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30,alpha=0.5,maxIter=500,returnPath=TRUE) {
   #alpha=0 -> Ridge; alpha=1 -> Lasso
   
   if(is.null(lambda)){
@@ -18,15 +18,17 @@ ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLa
   
   for (h in 1:length(lambda)) {
     B[,1,h]=b
-    for (i in 2:nIter) {
+    for (i in 2:maxIter) {
       B[,i,h]=.Call("ElasticNet",XX, Xy, B[,i-1,h], p, 1, lambda1[h], lambda2[h], b0)
+      if (max(abs(B[,i,h]-B[,i-1,h])) < 1e-4) {
+        break
     }
   }
 
   if (returnPath) {
-    return(list(B=B[,,,drop=TRUE], lambda=lambda, alpha=alpha))
+    return(list(B=B[,1:i,,drop=TRUE], lambda=lambda, alpha=alpha))
   } else {
-    return(list(B=B[,nIter,,drop=TRUE], lambda=lambda, alpha=alpha))
+    return(list(B=B[,i,,drop=TRUE], lambda=lambda, alpha=alpha))
   }
 }
 
