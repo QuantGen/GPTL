@@ -10,10 +10,10 @@ ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLa
     lambda.lasso=seq(from=lambda.max,to=lambda.min,length=nLambda)
 
     h2.min=.005
- 	  h2.max=0.995
- 	  h2.grid=exp(seq(from=log(h2.min),to=log(h2.max),length=nLambda))
- 	  K=mean(diag(XX))
- 	  lambda.ridge=K*(1-h2.grid)/h2.grid
+    h2.max=0.995
+    h2.grid=exp(seq(from=log(h2.min),to=log(h2.max),length=nLambda))
+    K=mean(diag(XX))
+    lambda.ridge=K*(1-h2.grid)/h2.grid
 
     lambda=alpha*lambda.lasso+(1-alpha)*sqrt(lambda.ridge)
   }
