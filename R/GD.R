@@ -29,8 +29,9 @@ GD0<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,lambda=0
 }
 
 GD<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
-               lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE,sortGradient=FALSE){
-    if(sortGradient){ 
+               lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
+    # disabled for now because orderBack may not be working properly
+    if(FALSE){ 
       gradient0=Xy
       if(any(abs(b)>.Machine$double.eps)){ gradient0=gradient0-XX%*%b }
       tmp=order(abs(gradient0),decreasing=TRUE)
@@ -68,7 +69,8 @@ GD<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
   
     dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
 
-    if(sortGradient){ 
+    # sortGradient disabled for now because orderBack may not be working properly
+    if(FALSE){ 
       B=B[orderBack,,,drop=FALSE] 
     }
   
