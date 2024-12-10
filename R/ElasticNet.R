@@ -5,17 +5,17 @@ ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLa
   #alpha=0 -> Ridge; alpha=1 -> Lasso
   
   if(is.null(lambda)){
-    lambda.max=max(abs(Xy))+1e-4
-    lambda.min=lambda.max/10000
-    lambda.lasso=seq(from=lambda.max,to=lambda.min,length=nLambda)
-
-    h2.min=.005
-    h2.max=0.995
-    h2.grid=exp(seq(from=log(h2.min),to=log(h2.max),length=nLambda))
-    K=mean(diag(XX))
-    lambda.ridge=K*(1-h2.grid)/h2.grid
-
-    lambda=alpha*lambda.lasso+(1-alpha)*sqrt(lambda.ridge)
+    if (alpha == 0) {
+      h2.min=0.01
+      h2.max=0.99
+      h2.grid=exp(seq(from=log(h2.min),to=log(h2.max),length=nLambda))
+      K=mean(diag(XX))
+      lambda=K*(1-h2.grid)/h2.grid
+    } else {
+      lambda.max=(max(abs(Xy))+1e-5)/alpha
+      lambda.min=lambda.max/100
+      lambda=exp(seq(from=log(lambda.max),to=log(lambda.min),length=nLambda))
+    }
   }
   
   B=array(dim=c(p,maxIter,length(lambda)))
