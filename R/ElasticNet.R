@@ -12,6 +12,7 @@ ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLa
       K=mean(diag(XX))
       lambda=K*(1-h2.grid)/h2.grid
     } else {
+      # Adjust for initial beta later...
       lambda.max=(max(abs(Xy))+1e-5)/alpha
       lambda.min=lambda.max/100
       lambda=exp(seq(from=log(lambda.max),to=log(lambda.min),length=nLambda))
