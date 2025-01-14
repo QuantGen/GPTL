@@ -7,7 +7,7 @@ ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLa
   if(is.null(lambda)){
     if (alpha == 0) {
       h2.min=0.01
-      h2.max=0.99
+      h2.max=0.9
       h2.grid=exp(seq(from=log(h2.min),to=log(h2.max),length=nLambda))
       K=mean(diag(XX))
       lambda=K*(1-h2.grid)/h2.grid
