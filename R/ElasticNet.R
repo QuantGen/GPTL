@@ -1,7 +1,7 @@
 # Elastic Net
 
 # C code implemented
-ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30,alpha=0.5,conv_threshold=1e-4,maxIter=500,returnPath=TRUE) {
+ElasticNet<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30,alpha=0,conv_threshold=1e-4,maxIter=500,returnPath=TRUE) {
   #alpha=0 -> Ridge; alpha=1 -> Lasso
   
   if(is.null(lambda)){
