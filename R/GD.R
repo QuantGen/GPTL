@@ -1,7 +1,7 @@
 
 # A wrapper to the C-function that performs Gradient Descent in a system of linear equations
 
-GD0<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,lambda=0,b0=rep(0,p),
+GD0<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/50,lambda=0,b0=rep(0,p),
               lambda0=1,returnPath=FALSE){
 
     
@@ -28,7 +28,7 @@ GD0<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,lambda=0
     return(B)
 }
 
-GD<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
+GD<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/50,
                lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
     # disabled for now because orderBack may not be working properly
     if(FALSE){ 
@@ -81,7 +81,7 @@ GD<- function( XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,
 }
 
 # Old R implementation
-GD.R<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/10,lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
+GD.R<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/50,lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
     learning_rate=learning_rate/mean(diag(XX))
     B=matrix(nrow=ncol(XX),ncol=nIter+1,NA)
      B[,1]=b
