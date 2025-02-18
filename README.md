@@ -41,7 +41,7 @@ table(CLUSTER$cluster)
 #> 346 253 
 ```
 
-We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used).  For the target data set, 20% of the samples are randomly selected and retained as a testing set. We compute the sufficient statistics (**X'X** and **X'y**) for each set.
+We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). We compute the sufficient statistics (**X'X** and **X'y**) for each set.
 
 ```R
 X_s=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE)
@@ -51,14 +51,8 @@ r_s=crossprod(X_s, y_s)
 
 X_t=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE)
 y_t=wheat.Y[CLUSTER$cluster == 2,1]
-set.seed(217)
-TST=sample(1:nrow(X_t), round(nrow(X_t)*0.2))
-TRN=(1:nrow(X_t))[-TST]
-
-C_t_TRN=crossprod(X_t[TRN,])
-r_t_TRN=crossprod(X_t[TRN,], y_t[TRN])
-C_t_TST=crossprod(X_t[TST,])
-r_t_TST=crossprod(X_t[TST,], y_t[TST])
+C_t=crossprod(X_t)
+r_t=crossprod(X_t, y_t)
 ```
 
 ### Estimating prior effects from the source data set
@@ -78,7 +72,7 @@ prior=fm$ETA[[1]]$b
 GD() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the GD cycles.
 
 ```R
-fm_GDES=GD(C_t_TRN,r_t_TRN,b=prior,nIter=100,returnPath=T,learning_rate=1/50)
+fm_GDES=GD(C_t,r_t,b=prior,nIter=100,returnPath=T,learning_rate=1/50)
 dim(fm_GDES)
 #> [1] 1279  100
 ```
@@ -88,7 +82,7 @@ dim(fm_GDES)
 PR() function takes as inputs the sufficient statistics plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$ and $\alpha$.
 
 ```R
-fm_PR=PR(C_t_TRN, r_t_TRN, b0=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
+fm_PR=PR(C_t, r_t, b0=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
@@ -106,8 +100,8 @@ str(fm_PR)
 BMM() function takes as inputs the sufficient statistics from the target population, a matrix (B) whose columns contain the prior means (one row per SNP, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means (and posterior SDs) for SNP effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each SNP effect to each of the components of the mixture).
 
 ```R
-fm_BMM=BMM_new(C=C_t_TRN, rhs=r_t_TRN, my=mean(y_t[TRN]), vy=var(y_t[TRN]), nIter=12000,
-               burnIn=2000, thin=5, verbose=FALSE, B0=cbind(prior,0), n=nrow(X_t[TRN,]))
+fm_BMM=BMM_new(C=C_t, rhs=r_t, my=mean(y_t), vy=var(y_t), nIter=12000, burnIn=2000, thin=5,
+               verbose=FALSE, B0=cbind(prior,0), n=nrow(X_t))
 str(fm_BMM)
 #> List of 7
 #>  $ b           : num [1:1279] -5.61e-03 1.70e-02 2.51e-02 -5.04e-05 3.41e-03 ...
