@@ -68,8 +68,8 @@ We estimated effects using a Bayesian shrinkage estimation method (a Bayesian mo
 ```R
 idPriors=rep(1,ncol(C_s))
 priors=list(list(model='BRR'))
-fm<-BLRCross(n=nrow(X_s),vy=var(y_s),my=mean(y_s),XX=C_s,Xy=r_s,priors=priors,idPriors=idPriors,
-             nIter=12000,burnIn=2000,verbose=TRUE)
+fm<-BLRCross(n=nrow(X_s),vy=var(y_s),my=mean(y_s),XX=C_s,Xy=r_s,priors=priors,
+             idPriors=idPriors, nIter=12000,burnIn=2000,verbose=TRUE)
 prior=fm$ETA[[1]]$b
 ```
 
@@ -88,7 +88,8 @@ dim(fm_GDES)
 PR() function takes as inputs the sufficient statistics plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$ and $\alpha$.
 
 ```R
-fm_PR=PR(C_t_TRN, r_t_TRN, b0=prior, alpha=0, nLambda=100, conv_threshold=1e-4, maxIter=1000, returnPath=FALSE)
+fm_PR=PR(C_t_TRN, r_t_TRN, b0=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
+         maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
 #>  $ B        : num [1:1279, 1:100] 0.01016 0.02012 0.0016 0.00335 0.00539 ...
@@ -107,7 +108,8 @@ PR() function takes as inputs the sufficient statistics plus, potentially, value
 BMM() function takes as inputs the sufficient statistics from the target population, a matrix (B) whose columns contain the prior means (one row per SNP, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means (and posterior SDs) for SNP effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each SNP effect to each of the components of the mixture).
 
 ```R
-fm_BMM=BMM_new(C=C_t_TRN, rhs=r_t_TRN, my=mean(y_t[TRN]), vy=var(y_t[TRN]), nIter=12000, burnIn=2000, thin=5, verbose=FALSE, B0=cbind(prior,0), n=nrow(X_t[TRN,]))
+fm_BMM=BMM_new(C=C_t_TRN, rhs=r_t_TRN, my=mean(y_t[TRN]), vy=var(y_t[TRN]), nIter=12000,
+               burnIn=2000, thin=5, verbose=FALSE, B0=cbind(prior,0), n=nrow(X_t[TRN,]))
 str(fm_BMM)
 #> List of 7
 #>  $ b           : num [1:1279] -5.61e-03 1.70e-02 2.51e-02 -5.04e-05 3.41e-03 ...
