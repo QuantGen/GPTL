@@ -5,7 +5,7 @@
     Performs penalized regressions that shrinkage estimates towards prior value.
 }
 \usage{
-FWD(XX, Xy, p=ncol(XX), b=rep(0,p),lambda=NULL,nLambda=30,alpha=0,
+PR(XX, Xy, p=ncol(XX), b=rep(0,p),lambda=NULL,nLambda=30,alpha=0,
     conv_threshold=1e-4,maxIter=500,returnPath=TRUE)
 }
 \arguments{
