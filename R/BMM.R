@@ -10,18 +10,19 @@
 #  To do: sample error variance ; add prior probabilities for the mixtures (right now equivalent to 1/nClasses); priors for the variances
 ##
 
-BMM=function(   C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=.1,
-	        nComp=matrix(ncol(B0)), df0.E=5,S0.E=vy*R2*df0.E,df0.b=rep(10,nComp), 
+BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=0.25,
+	        nComp=matrix(ncol(B0)),K=1/nComp, df0.E=5,S0.E=vy*(1-R2)*df0.E,df0.b=rep(10,nComp), 
 	        priorProb=rep(1/nComp,nComp),priorCounts=rep(2*nComp,nComp),verbose=TRUE){
+	
  B0=as.matrix(B0)
  # nIter=150;burnIn=50;R2=.5;nComp=matrix(ncol(B0));df0.E=5;S0.E=vy*R2*df0.E;df0.b=rep(5,nComp);alpha=.1;my=mean(y); vy=var(y); B0=cbind(rep(0,p),-1,1)
  p=ncol(C) 
- b=rep(0,p)
+ b=rowMeans(B0)
  d=rep(1,p) # indicator variable for the group
  POST.PROB=matrix(nrow=p,ncol=nComp,0)
 	
- S0.b=c(df0.b)*c(vy)*c(R2/2)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
- varB=S0.b/df0.b
+ S0.b=c(df0.b)*c(vy)*c(R2*K)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
+ varB=(S0.b/df0.b)
 
  priorProb=priorProb/sum(priorProb)
  compProb=priorProb
@@ -32,24 +33,28 @@ BMM=function(   C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=
  postMeanVarB=rep(0,nComp)
  postProb=rep(0,nComp)
 
- varE=vy*(1-R2)
+ RSS=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
+	
+ varE=RSS/n
+	
  counts=priorCounts/as.vector(nComp)
 	
  PROBS=matrix(nrow=nComp,ncol=p)
  	
- timeEffects=0
- timeProb=0
- timeApply=0
+ timeEffects=0; timeProb=0; timeApply=0
 
  samplesVarB=matrix(nrow=nIter,ncol=nComp,NA)
  samplesB=matrix(nrow=nIter,ncol=p,NA)
+ samplesVarE=rep(NA,nIter)
 
-weightPostMeans=1/round((nIter-burnIn)/thin)
-for(i in 1:nIter){
-         
+ weightPostMeans=1/round((nIter-burnIn)/thin)
+	
+ for(i in 1:nIter){        
 	 ## Sampling effects
 	 timeIn=proc.time()[3]
-	  b=sample_effects(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB)
+	  tmp=sample_effects_new(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB[d],RSS=RSS)
+          b=tmp[[1]]
+          RSS=tmp[[2]]
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
 	## End of C-code
 	 samplesB[i,]=b
@@ -80,11 +85,17 @@ for(i in 1:nIter){
 	 }
 	 samplesVarB[i,]=varB
 	
-        # Sampling the probability of each component 
+  # Sampling the probability of each component 
 	compProb=rDirichlet(counts+priorCounts)
-
-	# Sampling the error variance
 	
+	# Sampling the error variance
+  	#RSS2=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
+	SS=RSS
+	#print(c(RSS,RSS2)/n)
+        DF=n
+	varE=SS/rchisq(df=DF,n=1)
+        samplesVarE[i]=varE
+  
 	## computing posterior means 
 	if(i>burnIn&(i%%thin==0)){
 	 postMeanVarB= postMeanVarB+varB*weightPostMeans
@@ -104,7 +115,7 @@ for(i in 1:nIter){
    message('Time Apply= ', timeApply)
  }
  return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,
-	     	samplesVarB=samplesVarB,samplesB=samplesB,varE=varE))
+	     	samplesVarB=samplesVarB,samplesB=samplesB,samplesVarE=samplesVarE))
 }
 ## A function to sample from a Dirichlet
 
