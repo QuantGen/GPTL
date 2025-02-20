@@ -25,7 +25,7 @@ BMM(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2
     \item{S0.E}{(numeric) The scale parameter for the scaled inverse-chi squared prior assigned to the residual variance. If the scale is not specified a value is calculated so that the prior mode of the residual variance equals var(y)*(1-R2)*df0.E.}
     \item{df0.b}{A numeric vector of length nComp, the parameter for the Dirichlet prior assigned to the prior information.}
     \item{priorProb}{A numeric vector of length nComp, the mixture prior ($\pi$).}
-    \item{priorCounts}{}
+    \item{priorCounts}{(integer) Counts of the mixture prior ($\pi$).}
     \item{verbose}{(logical) if TRUE the iteration history is printed, default TRUE.}
 }
 \value{
