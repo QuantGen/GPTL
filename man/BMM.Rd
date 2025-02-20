@@ -17,7 +17,7 @@ BMM(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2
     \item{B0}{(matrix) A matrix includes the estimated effects for each prior information (one row per SNP, one column per prior source of information).}
     \item{nIter}{(integer) The number of iterations.}
     \item{burnIn}{(integer) The number of burn-in.}
-    \item{thin}{}
+    \item{thin}{(integer) The number of thinning.}
     \item{R2}{}
     \item{nComp}{}
     \item{K}{}
