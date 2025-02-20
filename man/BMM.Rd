@@ -18,7 +18,7 @@ BMM(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2
     \item{nIter}{(integer) The number of iterations.}
     \item{burnIn}{(integer) The number of burn-in.}
     \item{thin}{(integer) The number of thinning.}
-    \item{R2}{}
+    \item{R2}{(numeric, 0<R2<1) }
     \item{nComp}{}
     \item{K}{}
     \item{df0.E}{}
