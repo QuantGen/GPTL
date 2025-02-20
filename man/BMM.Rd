@@ -20,6 +20,7 @@ BMM(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2
     \item{thin}{(integer) The number of thinning.}
     \item{R2}{(numeric, 0<R2<1) The proportion of variance that one expects, a priori, to be explained by the regression.}
     \item{nComp}{(integer) The number of prior information in B0.}
+    \item{K}{(numeric) Inverse of the number of prior information in B0.}
     \item{df0.E}{}
     \item{S0.E}{}
     \item{df0.b}{}
