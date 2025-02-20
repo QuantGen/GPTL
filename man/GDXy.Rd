@@ -5,11 +5,11 @@
     Performs Gradient Descent with Early Stopping that takes X and y, instead of XX and Xy.
 }
 \usage{
-GD(XX,Xy,p=ncol(XX),b=rep(0,p),nIter=10,learning_rate=1/50,returnPath=FALSE)
+GDXy(X,y,centerX=TRUE,scaleX=FALSE,sortGradient=FALSE,...)
 }
 \arguments{
-    \item{XX}{A matrix, XX=crossprod(X), with X an incidence matrix of dimension n times p.}
-    \item{Xy}{A numeric vector of length p, Xy=crossprod(X,y).}
+    \item{X}{A matrix, genotype, with X an incidence matrix of dimension n times p.}
+    \item{y}{A numeric vector of length p, phenotype.}
     \item{p}{(integer) Number of variants. If NULL you must provide XX.}
     \item{b}{A numeric vector of length p. Prior estimates.}
     \item{nIter}{(integer) Number of iteration that the algorithm will run.}
