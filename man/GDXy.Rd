@@ -10,11 +10,10 @@ GDXy(X,y,centerX=TRUE,scaleX=FALSE,sortGradient=FALSE,...)
 \arguments{
     \item{X}{A matrix, genotype, with X an incidence matrix of dimension n times p.}
     \item{y}{A numeric vector of length p, phenotype.}
-    \item{p}{(integer) Number of variants. If NULL you must provide XX.}
-    \item{b}{A numeric vector of length p. Prior estimates.}
-    \item{nIter}{(integer) Number of iteration that the algorithm will run.}
-    \item{learning_rate}{(integer) Step size of the algorithm.}
-    \item{returnPath}{(logical) if TRUE the iteration history is printed, default TRUE.}
+    \item{centerX}{(logical) Whether centers the columns of X, default TRUE.}
+    \item{scaleX}{(logical) Whether scales the columns of X, default FALSE.}
+    \item{sortGradient}{(logical) .}
+    \item{...}{Other arguments passed on to \code{\link[=GD]{GD()}}'s params argument.}
 }
 \value{
     A (p x nIter) matrix includes the estimated effects for each predictor (rows) for each iteration.
