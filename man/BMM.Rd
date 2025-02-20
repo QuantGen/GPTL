@@ -2,7 +2,7 @@
 \alias{BMM}
 \title{Transfer Learning using Bayesian model with an informative finite mixture prior}
 \description{
-    Performs Bayesian regressions with an informative finite mixture prior that shrinkage estimates towards prior values.
+    Performs Bayesian regressions with an informative finite mixture prior that shrink estimates towards prior values.
 }
 \usage{
 BMM(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=0.25,
@@ -24,7 +24,7 @@ BMM(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2
     \item{df0.E}{(numeric) The degree of freedom for the scaled inverse-chi squared prior assigned to the residual variance. The default value for the df parameter is 5.}
     \item{S0.E}{(numeric) The scale parameter for the scaled inverse-chi squared prior assigned to the residual variance. If the scale is not specified a value is calculated so that the prior mode of the residual variance equals var(y)*(1-R2)*df0.E.}
     \item{df0.b}{A numeric vector of length nComp, the parameter for the Dirichlet prior assigned to the prior information.}
-    \item{priorProb}{A numeric vector of length nComp, the mixture prior (\ifelse{html}{\out{&pi;}}).}
+    \item{priorProb}{A numeric vector of length nComp, the mixture prior ($\pi$).}
     \item{priorCounts}{}
     \item{verbose}{(logical) if TRUE the iteration history is printed, default TRUE.}
 }
