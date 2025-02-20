@@ -22,7 +22,7 @@ BMM(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2
     \item{nComp}{(integer) The number of prior information in B0.}
     \item{K}{(numeric) Inverse of the number of prior information in B0.}
     \item{df0.E}{(numeric) The degree of freedom for the scaled inverse-chi squared prior assigned to the residual variance. The default value for the df parameter is 5.}
-    \item{S0.E}{}
+    \item{S0.E}{(numeric) The scale parameter for the scaled inverse-chi squared prior assigned to the residual variance. If the scale is not specified a value is calculated so that the prior mode of the residual variance equals var(y)*(1-R2)*df0.E.}
     \item{df0.b}{}
     \item{priorProb}{}
     \item{priorCounts}{}
