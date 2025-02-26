@@ -30,10 +30,14 @@ library(GPTL)
 ```R
 library(BGLR)
 data(wheat)
-dim(wheat.X)
-#> [1] 599 1279
-dim(wheat.Y)
-#> [1] 599 4
+str(wheat.X)
+#>  num [1:599, 1:1279] 0 1 1 0 0 1 1 1 0 0 ...
+#>  - attr(*, "dimnames")=List of 2
+#>   ..$ : NULL
+#>   ..$ : chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
+str(wheat.Y[,1])
+#>  Named num [1:599] 1.672 -0.253 0.342 0.785 0.998 ...
+#>  - attr(*, "names")= chr [1:599] "775" "2166" "2167" "2465" ...
 X=scale(wheat.X, center=TRUE, scale=TRUE)
 CLUSTER=kmeans(X,2)
 table(CLUSTER$cluster)
