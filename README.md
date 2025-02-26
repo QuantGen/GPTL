@@ -101,7 +101,7 @@ str(fm_PR)
 
 ### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
-BMM() function takes as inputs the sufficient statistics from the target population, a matrix (B) whose columns contain the prior means (one row per SNP, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for SNP effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each SNP effect to each of the components of the mixture).
+BMM() function takes as inputs the sufficient statistics from the target population, a matrix (B) whose columns contain the prior means (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
 ```R
 fm_BMM=BMM(C=C_t, rhs=r_t, my=mean(y_t), vy=var(y_t), nIter=12000, burnIn=2000, thin=5,
