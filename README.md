@@ -27,7 +27,7 @@ library(GPTL)
 
 ### Loading example dataset
 
-Here we use the [wheat](https://doi.org/10.1104/pp.105.063438) data set collected from CIMMYT's Global Wheat Program. 
+Here we use the [wheat](https://doi.org/10.1104/pp.105.063438) data set collected from CIMMYT's Global Wheat Program. We use the 599 wheat lines genotype (1279 variants) and phenotype (average grain yield) data to illustrate the methods in GPTL.
 
 ```R
 library(BGLR)
