@@ -68,7 +68,7 @@ Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the sourc
 
 ### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
-GD() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the GD cycles.
+GD() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
 fm_GDES=GD(XX=XX_t, Xy=Xy_t, b=prior, nIter=100, returnPath=T, learning_rate=1/50)
@@ -78,7 +78,7 @@ dim(fm_GDES)
 
 ### Transfer Learning using penalized regressions (*TL-PR*)
 
-PR() function takes as inputs the sufficient statistics plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$ and $\alpha$, enabling users to select the optimal model based on cross-validation.
+PR() function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$ and $\alpha$, enabling users to select the optimal model based on cross-validation.
 
 ```R
 fm_PR=PR(XX=XX_t, Xy=Xy_t, b0=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
@@ -96,7 +96,7 @@ str(fm_PR)
 
 ### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
-BMM() function takes as inputs the sufficient statistics from the target population, a matrix (B) whose columns contain the prior means (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
+BMM() function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
 ```R
 fm_BMM=BMM(C=XX_t, rhs=Xy_t, my=mean(y_t), vy=var(y_t), nIter=12000, burnIn=2000, thin=5,
