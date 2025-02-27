@@ -71,14 +71,14 @@ fm=BGLR(y=y_s, response_type = "gaussian", ETA = ETA, nIter = 12000,
 prior=fm$ETA[[1]]$b
 ```
 
-Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross* function in the **BGLR** R-package.
+Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
 
 ### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
 GD() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the GD cycles.
 
 ```R
-fm_GDES=GD(C_t,r_t,b=prior,nIter=100,returnPath=T,learning_rate=1/50)
+fm_GDES=GD(XX_t,Xy_t,b=prior,nIter=100,returnPath=T,learning_rate=1/50)
 dim(fm_GDES)
 #> [1] 1279  100
 ```
@@ -88,7 +88,7 @@ dim(fm_GDES)
 PR() function takes as inputs the sufficient statistics plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$ and $\alpha$, enabling users to select the optimal model based on cross-validation.
 
 ```R
-fm_PR=PR(C_t, r_t, b0=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
+fm_PR=PR(XX_t, Xy_t, b0=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
@@ -106,7 +106,7 @@ str(fm_PR)
 BMM() function takes as inputs the sufficient statistics from the target population, a matrix (B) whose columns contain the prior means (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
 ```R
-fm_BMM=BMM(C=C_t, rhs=r_t, my=mean(y_t), vy=var(y_t), nIter=12000, burnIn=2000, thin=5,
+fm_BMM=BMM(C=XX_t, rhs=Xy_t, my=mean(y_t), vy=var(y_t), nIter=12000, burnIn=2000, thin=5,
                verbose=FALSE, B0=cbind(prior,0), n=nrow(X_t))
 str(fm_BMM)
 #> List of 7
