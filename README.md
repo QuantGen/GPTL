@@ -27,7 +27,7 @@ library(GPTL)
 
 ### Loading example dataset
 
-Here we use the wheat data set collected from CIMMYT's Global Wheat Program [Ref]
+Here we use the wheat data set collected from CIMMYT's Global Wheat Program [Ref](https://doi.org/10.1104/pp.105.063438). 
 
 ```R
 library(BGLR)
