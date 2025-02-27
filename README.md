@@ -62,15 +62,16 @@ Xy_t=crossprod(X_t, y_t)
 
 ### Estimating prior effects from the source data set
 
-We estimated effects using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package)
+We estimated effects using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package).
 
 ```R
 ETA=list(list(X=X_s, model="BRR"))
 fm=BGLR(y=y_s, response_type = "gaussian", ETA = ETA, nIter = 12000,
        burnIn = 2000, verbose = FALSE)
-
 prior=fm$ETA[[1]]$b
 ```
+
+Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross* function in the **BGLR** R-package.
 
 ### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
