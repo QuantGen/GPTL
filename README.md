@@ -32,16 +32,9 @@ Here we use the [wheat](https://doi.org/10.1104/pp.105.063438) data set collecte
 ```R
 library(BGLR)
 data(wheat)
-str(wheat.X)
-#>  num [1:599, 1:1279] 0 1 1 0 0 1 1 1 0 0 ...
-#>  - attr(*, "dimnames")=List of 2
-#>   ..$ : NULL
-#>   ..$ : chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
-str(wheat.Y[,1])
-#>  Named num [1:599] 1.672 -0.253 0.342 0.785 0.998 ...
-#>  - attr(*, "names")= chr [1:599] "775" "2166" "2167" "2465" ...
 y=wheat.Y[,1]
 X=scale(wheat.X, center=TRUE, scale=TRUE)
+
 CLUSTER=kmeans(X,2)
 table(CLUSTER$cluster)
 #>   1   2 
@@ -78,7 +71,7 @@ Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the sourc
 GD() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the GD cycles.
 
 ```R
-fm_GDES=GD(XX_t,Xy_t,b=prior,nIter=100,returnPath=T,learning_rate=1/50)
+fm_GDES=GD(XX=XX_t, Xy=Xy_t, b=prior, nIter=100, returnPath=T, learning_rate=1/50)
 dim(fm_GDES)
 #> [1] 1279  100
 ```
@@ -88,7 +81,7 @@ dim(fm_GDES)
 PR() function takes as inputs the sufficient statistics plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$ and $\alpha$, enabling users to select the optimal model based on cross-validation.
 
 ```R
-fm_PR=PR(XX_t, Xy_t, b0=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
+fm_PR=PR(XX=XX_t, Xy=Xy_t, b0=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
