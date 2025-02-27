@@ -40,6 +40,7 @@ str(wheat.X)
 str(wheat.Y[,1])
 #>  Named num [1:599] 1.672 -0.253 0.342 0.785 0.998 ...
 #>  - attr(*, "names")= chr [1:599] "775" "2166" "2167" "2465" ...
+y=wheat.Y[,1]
 X=scale(wheat.X, center=TRUE, scale=TRUE)
 CLUSTER=kmeans(X,2)
 table(CLUSTER$cluster)
@@ -47,18 +48,16 @@ table(CLUSTER$cluster)
 #> 346 253 
 ```
 
-We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). We compute the sufficient statistics (**X'X** and **X'y**) for each set.
+We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). We compute the sufficient statistics (**X'X** and **X'y**) for the target data set.
 
 ```R
 X_s=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE)
-y_s=wheat.Y[CLUSTER$cluster == 1,1]
-C_s=crossprod(X_s)
-r_s=crossprod(X_s, y_s)
+y_s=y[CLUSTER$cluster == 1]
 
 X_t=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE)
-y_t=wheat.Y[CLUSTER$cluster == 2,1]
-C_t=crossprod(X_t)
-r_t=crossprod(X_t, y_t)
+y_t=y[CLUSTER$cluster == 2]
+XX_t=crossprod(X_t)
+Xy_t=crossprod(X_t, y_t)
 ```
 
 ### Estimating prior effects from the source data set
@@ -66,10 +65,10 @@ r_t=crossprod(X_t, y_t)
 We estimated effects using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package)
 
 ```R
-idPriors=rep(1,ncol(C_s))
-priors=list(list(model='BRR'))
-fm<-BLRCross(n=nrow(X_s),vy=var(y_s),my=mean(y_s),XX=C_s,Xy=r_s,priors=priors,
-             idPriors=idPriors, nIter=12000,burnIn=2000,verbose=TRUE)
+ETA=list(list(X=X_s, model="BRR"))
+fm=BGLR(y=y_s, response_type = "gaussian", ETA = ETA, nIter = 12000,
+       burnIn = 2000, verbose = FALSE)
+
 prior=fm$ETA[[1]]$b
 ```
 
