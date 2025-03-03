@@ -1,5 +1,5 @@
 # A Gibbs Sampler for a Bayesian Mixture Model
-# C=X'X, rhs=X'y, my=mean(y), vy=var(y),n=length(y)
+# XX=X'X, Xy=X'y, my=mean(y), vy=var(y),n=length(y)
 # Note: we don't include an intercept, so, before computing X'y, X'X, you should center X and y arount their means.
 # B0, a matrix with prior estiamtes of marker effects, as many columns as prior estimates. We also suggest including one column
 #     full of zeroes, to allow for just plain shrinkage towards zero, if needed (this is the default value)
@@ -10,18 +10,18 @@
 #  To do: sample error variance ; add prior probabilities for the mixtures (right now equivalent to 1/nClasses); priors for the variances
 ##
 
-BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=0.25,
+BMM=function(XX,Xy,my,vy,n,B0=matrix(nrow=ncol(XX),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=0.25,
 	        nComp=matrix(ncol(B0)),K=1/nComp, df0.E=5,S0.E=vy*(1-R2)*df0.E,df0.b=rep(10,nComp), 
 	        priorProb=rep(1/nComp,nComp),priorCounts=rep(2*nComp,nComp),verbose=TRUE){
 	
  B0=as.matrix(B0)
  # nIter=150;burnIn=50;R2=.5;nComp=matrix(ncol(B0));df0.E=5;S0.E=vy*R2*df0.E;df0.b=rep(5,nComp);alpha=.1;my=mean(y); vy=var(y); B0=cbind(rep(0,p),-1,1)
- p=ncol(C) 
+ p=ncol(XX) 
  b=rowMeans(B0)
  d=rep(1,p) # indicator variable for the group
  POST.PROB=matrix(nrow=p,ncol=nComp,0)
 	
- S0.b=c(df0.b)*c(vy)*c(R2*K)/c(sum(diag(C))/n) # dividing R2/10 assumes that most of the vairance is between components.
+ S0.b=c(df0.b)*c(vy)*c(R2*K)/c(sum(diag(XX))/n) # dividing R2/10 assumes that most of the vairance is between components.
  varB=(S0.b/df0.b)
 
  priorProb=priorProb/sum(priorProb)
@@ -33,7 +33,7 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
  postMeanVarB=rep(0,nComp)
  postProb=rep(0,nComp)
 
- RSS=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
+ RSS=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)
 	
  varE=RSS/n
 	
@@ -52,7 +52,7 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
  for(i in 1:nIter){        
 	 ## Sampling effects
 	 timeIn=proc.time()[3]
-	  tmp=sample_effects_new(C=C,rhs=rhs,b=b,d=d,B0=B0,varE=varE,varB=varB[d],RSS=RSS)
+	  tmp=sample_effects_new(C=XX,rhs=Xy,b=b,d=d,B0=B0,varE=varE,varB=varB[d],RSS=RSS)
           b=tmp[[1]]
           RSS=tmp[[2]]
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
@@ -89,7 +89,7 @@ BMM=function(C,rhs,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,
 	compProb=rDirichlet(counts+priorCounts)
 	
 	# Sampling the error variance
-  	#RSS2=vy*(n-1)+crossprod(b,C)%*%b-2*crossprod(b,rhs)
+  	#RSS2=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)
 	SS=RSS
 	#print(c(RSS,RSS2)/n)
         DF=n
