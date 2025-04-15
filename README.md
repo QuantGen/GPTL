@@ -16,6 +16,10 @@ To install from Github:
 remotes::install_github("QuantGen/GPTL")
 ```
 
+This should take less than 30 seconds for a typical computer when including installation of all non-base dependencies.
+
+This package should be compatible with Windows, Mac, and Linux operating systems and has been tested on Windows 7 & 10, macOS Sequoia & Sonoma, and Linux CentOS 7.
+
 Examples
 --------
 
