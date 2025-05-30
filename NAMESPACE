@@ -1,6 +1,8 @@
 export(fitLSYS)
 export(GD.CV)
 export(GD)
+export(GD_sparse)
+export(GD2)
 export(GDXy)
 export(GD.CV)
 export(GD0)
