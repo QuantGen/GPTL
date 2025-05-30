@@ -1,4 +1,4 @@
-GPTL: Genomic Prediction Using Transfer Learnin
+GPTL: Genomic Prediction Using Transfer Learning
 ================================================
 
 GPTL is an R package that implements several methods for Genomic Prediction using Transfer Learning, including
