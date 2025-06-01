@@ -62,7 +62,9 @@ SEXP rMultinomial(SEXP PROB, SEXP n, SEXP p) {
       }
 
      // sampling
-     u=(double)rand() / RAND_MAX; 
+     u=unif_rand();
+     //Not recommended to rand() function, R uses its own random generators
+     //u=(double)rand() / RAND_MAX; 
      //Rprintf("U=%f\n",u);
      //for(j =0; j<nCat; j++){
        //Rprintf("Prob=%f\n",p_cumProb[j]);
