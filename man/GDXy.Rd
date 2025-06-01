@@ -5,7 +5,7 @@
     Performs Gradient Descent with Early Stopping that takes X and y, instead of XX and Xy.
 }
 \usage{
-GDXy(X,y,centerX=TRUE,scaleX=FALSE,...)
+GDXy(X, y, centerX = TRUE, scaleX = FALSE,...)
 }
 \arguments{
     \item{X}{A matrix, genotype, with X an incidence matrix of dimension n times p.}

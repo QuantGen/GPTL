@@ -5,7 +5,7 @@
     Performs Bayesian regressions with an informative finite mixture prior that shrink estimates towards prior values.
 }
 \usage{
-BMM(XX,Xy,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=0.25,
+BMM(XX,Xy,my,vy,n,B0=matrix(nrow=ncol(XX),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=0.25,
     nComp=matrix(ncol(B0)),K=1/nComp, df0.E=5,S0.E=vy*(1-R2)*df0.E,df0.b=rep(10,nComp), 
     priorProb=rep(1/nComp,nComp),priorCounts=rep(2*nComp,nComp),verbose=TRUE)
 }
@@ -14,6 +14,7 @@ BMM(XX,Xy,my,vy,n,B0=matrix(nrow=ncol(C),ncol=1,0),nIter=150,burnIn=50,thin=5,R2
     \item{Xy}{A numeric vector of length p, Xy=crossprod(X,y).}
     \item{my}{(numeric) Mean of y.}
     \item{vy}{(numeric) Variance of y.}
+    \item{n}{.}
     \item{B0}{(matrix) A matrix includes the estimated effects for each prior information (one row per SNP, one column per prior source of information).}
     \item{nIter}{(integer) The number of iterations.}
     \item{burnIn}{(integer) The number of burn-in.}
