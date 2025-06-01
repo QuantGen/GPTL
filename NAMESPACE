@@ -1,3 +1,7 @@
+importFrom("methods", "as", "is")
+importFrom("stats", "cor", "dnorm", "rchisq", "rgamma", "rnorm",
+             "runif", "sd")
+             
 export(fitLSYS)
 export(GD.CV)
 export(GD)
@@ -18,4 +22,5 @@ export(LASSO)
 export(LASSO.CD1)
 export(RIDGE.CD)
 export(PR)
+
 useDynLib(GPTL, .registration = TRUE, .fixes = "C_")
