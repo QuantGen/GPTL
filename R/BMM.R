@@ -133,9 +133,9 @@ sampleComp=function(PROB){
  n=nrow(PROB)
  rSum=rowSums(PROB)
  PROB=apply(FUN=cumsum,X=PROB,MARGIN=1)
- PROB=sweep(PROB,FUN='/',MARGIN=2,STAT=rSum)
+ PROB=sweep(PROB,FUN='/',MARGIN=2,STATS=rSum)
  u=runif(n)
- PROB=sweep(PROB,FUN='>',MARGIN=2,STAT=u)
+ PROB=sweep(PROB,FUN='>',MARGIN=2,STATS=u)
  apply(FUN=which.first,X=PROB,MARGIN=2)
 }
 
