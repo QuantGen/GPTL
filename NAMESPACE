@@ -22,5 +22,6 @@ export(LASSO)
 export(LASSO.CD1)
 export(RIDGE.CD)
 export(PR)
+export(PR2)
 
 useDynLib(GPTL, .registration = TRUE, .fixes = "C_")
