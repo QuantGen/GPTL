@@ -1,5 +1,5 @@
 Package: GPTL
-Version: 0.0.1
+Version: 0.0.2
 License: MIT + file LICENSE
 Title: Genomic Prediction using Transfer Learning
 Description: An R package that implements several methods for Genomic Prediction Using Transfer Learning.
