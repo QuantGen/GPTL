@@ -66,7 +66,7 @@ PR2<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30
       h2.min=0.01
       h2.max=0.9
       h2.grid=exp(seq(from=log(h2.min),to=log(h2.max),length=nLambda))
-      K=mean(diag(XX))
+      K=mean(diagXX)
       lambda=K*(1-h2.grid)/h2.grid
     } else {
       # Adjust for initial beta later...
