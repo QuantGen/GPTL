@@ -1,4 +1,8 @@
-#include "fitLSYS.h"
+#include <R.h>
+#include <Rmath.h>
+#include <Rinternals.h>
+#include <Rdefines.h>
+#include <Rconfig.h>
 
 SEXP fitLSYS(SEXP C, SEXP rhs, SEXP b, SEXP active, SEXP RSS, SEXP maxIter, SEXP tolerance) {
     int p = Rf_ncols(C);

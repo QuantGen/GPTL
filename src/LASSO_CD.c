@@ -1,4 +1,3 @@
-#include "LASSO_CD.h"
 #include <R.h>
 #include <Rmath.h>
 #include <Rinternals.h>

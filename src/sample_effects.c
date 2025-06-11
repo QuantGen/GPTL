@@ -4,7 +4,6 @@
 #include <Rdefines.h>
 #include <Rconfig.h>
 #include <R_ext/Lapack.h>
-#include "sample_effects.h"
 
  /* Future C code
 	 for(j in 1:p){

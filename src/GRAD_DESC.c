@@ -1,4 +1,3 @@
-#include "GRAD_DESC.h"
 #include <R.h>
 #include <Rmath.h>
 #include <Rinternals.h>
