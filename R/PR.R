@@ -56,6 +56,8 @@ PR<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30,
 
 PR2<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30,alpha=0,conv_threshold=1e-4,maxIter=500,returnPath=TRUE) {
   #alpha=0 -> Ridge; alpha=1 -> Lasso
+
+  diagXX=as.vector(Matrix::diag(XX))
   
   if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
   
@@ -89,7 +91,7 @@ PR2<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30
     {
     	#Sparse matrix
     	for (i in 2:maxIter) {
-      		B[,i,h]=.Call("ElasticNet_sparse",XX@x,XX@p,XX@i,as.vector(Matrix::diag(XX)),
+      		B[,i,h]=.Call("ElasticNet_sparse",XX@x,XX@p,XX@i,diagXX,
       		              Xy, B[,i-1,h], p, 1, lambda1[h], lambda2[h], b0)
       		if (max(abs(B[,i,h]-B[,i-1,h])) < conv_threshold) 
       		{
