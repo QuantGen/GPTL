@@ -69,11 +69,19 @@ GD.SS<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/50,
 }
 
 
-GD<- function(ld,gwas,p=ncol(ld),b=rep(0,p),nIter=10,learning_rate=1/50,
-               lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
+GD<- function(ld,gwas,b,nIter=10,learning_rate=1/50,
+               lambda=0,lambda0=1,returnPath=FALSE){
+    
+    if (rownames(ld) != colnames(ld)) stop("Rowname and colname in LD not match\n")
+    snp_list=Reduce(intersect, list(rownames(ld),gwas$id,rownames(b)))
+    if (length(snp_list) == 0) stop("No matched SNPs in LD, GWAS, and prior\n")
+    ld=ld[snp_list,snp_list]
+    gwas=gwas[gwas$id %in% snp_list,]
+    b=b[snp_list,]
 
-    if (!(nrow(ld)==nrow(gwas) | rownames(ld)==gwas$id)) stop("SNP ID not match\n")
-
+    p=ncol(ld)
+    b0=rep(0,p)
+  
     allell_freq=gwas$allell_freq
     beta=gwas$beta
     N=gwas$N
