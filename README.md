@@ -65,17 +65,18 @@ We estimated effects using a Bayesian shrinkage estimation method (a Bayesian mo
 ETA=list(list(X=X_s, model="BRR"))
 fm=BGLR(y=y_s, response_type = "gaussian", ETA = ETA, nIter = 12000,
        burnIn = 2000, verbose = FALSE)
-prior=fm$ETA[[1]]$b
+prior=matrix(fm$ETA[[1]]$b, nrow=length(fm$ETA[[1]]$b))
+rownames(prior)=rownames(X_s)
 ```
 
 Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
 
 ### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
-GD() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
+GD.SS() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
-fm_GDES=GD(XX=XX_t, Xy=Xy_t, b=prior, nIter=100, returnPath=T, learning_rate=1/50)
+fm_GDES=GD.SS(XX=XX_t, Xy=Xy_t, b=prior, nIter=100, returnPath=T, learning_rate=1/50)
 dim(fm_GDES)
 #> [1] 1279  100
 ```
