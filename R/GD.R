@@ -1,6 +1,7 @@
 GD.SS<- function(XX,Xy,b, nIter=10,learning_rate=1/50,
                lambda=0,lambda0=1,returnPath=FALSE){
 
+    if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
     if (rownames(XX) != colnames(XX)) stop("Rowname and colname in XX not match\n")
     snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(b)))
     if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
@@ -10,8 +11,6 @@ GD.SS<- function(XX,Xy,b, nIter=10,learning_rate=1/50,
 
     p=ncol(XX)
     b0=rep(0,p)
-  
-  	if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
   	
     previous_lambda=0
     B=array(dim=c(p,ifelse(returnPath,nIter,1),length(lambda)))
