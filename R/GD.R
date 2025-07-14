@@ -76,7 +76,7 @@ GD<- function(ld,gwas,N,p=ncol(ld),b=rep(0,p),nIter=10,learning_rate=1/50,
 
     allell_freq=gwas$allell_freq
     beta=gwas$beta
-    sd=2 * allell_freq * (1-allell_freq)
+    sd=sqrt(2 * allell_freq * (1-allell_freq))
     XX=(N-1) * (ld * outer(sd, sd))
     Xy=XX %*% beta
   	
