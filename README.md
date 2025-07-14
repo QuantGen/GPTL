@@ -45,7 +45,7 @@ table(CLUSTER$cluster)
 #> 346 253 
 ```
 
-We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). We compute the sufficient statistics (**X'X** and **X'y**) for the target data set.
+We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). 
 
 ```R
 X_s=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE)
@@ -53,8 +53,22 @@ y_s=y[CLUSTER$cluster == 1]
 
 X_t=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE)
 y_t=y[CLUSTER$cluster == 2]
+```
+
+We compute the sufficient statistics (**X'X** and **X'y**) for the target data set.
+
+```R
 XX_t=crossprod(X_t)
 Xy_t=crossprod(X_t, y_t)
+```
+
+Alternatively, one can provide a LD reference panel (i.e., a matrix of correlations between the variants) and GWAS results (including variants IDs, allele frequencies, estimated effects, and SEs) if the sufficient statistics (**X'X** and **X'y**) or individual genotype and phenotype (**X** and **y**) for the target population are not available. An example of the format of GWAS results:
+
+```
+    id             beta       se         N          allele_freq
+    rs3131972      0.00235    0.01269    15000      0.55476
+    rs3131969      -0.01228   0.01206    15000      0.44582
+    rs1048488      0.00989    0.01162    15000      0.63647
 ```
 
 ### Estimating prior effects from the source data set
