@@ -68,6 +68,88 @@ GD.SS<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/50,
     return(B)
 }
 
+
+GD<- function(ld,gwas,N,p=ncol(ld),b=rep(0,p),nIter=10,learning_rate=1/50,
+               lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
+
+    if (!(nrow(ld)==nrow(gwas) | rownames(ld)==gwas$id)) stop("SNP ID not match\n")
+
+    allell_freq=gwas$allell_freq
+    beta=gwas$beta
+    sd=2 * allell_freq * (1-allell_freq)
+    XX=(N-1) * (ld * outer(sd, sd))
+    Xy=XX %*% beta
+  	
+    previous_lambda=0
+    B=array(dim=c(p,ifelse(returnPath,nIter,1),length(lambda)))
+
+    for(h in 1:length(lambda))
+    {
+    	if(is(XX,"dgCMatrix"))
+    	{	
+    	    #Sparse matrix
+        	Matrix::diag(XX)<-Matrix::diag(XX) + (lambda[h]- previous_lambda)
+        	LR=learning_rate/mean(Matrix::diag(XX))
+        }else{
+        	#Dense matrix
+        	diag(XX)=diag(XX)+(lambda[h]- previous_lambda)
+        	LR=learning_rate/mean(diag(XX))
+        }
+  
+        if( lambda0>0 ){    
+            Xy=Xy+(lambda[h]-previous_lambda)*lambda0*b0 
+        }
+        previous_lambda=lambda[h]
+
+        if(returnPath)
+        {
+            B[,1,h]=b
+            
+            if(is(XX,"dgCMatrix"))
+            {
+            	#Sparse matrix
+            	for(i in 2:ncol(B))
+            	{
+            		B[,i,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, B[,i-1,h],p, 1, LR)
+            	}
+            }else{
+            	#Dense matrix
+            	for(i in 2:ncol(B))
+            	{
+            		B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
+            	}
+            }            
+         }else{
+         	if(is(XX,"dgCMatrix"))
+         	{
+         		#Sparse matrix
+             	B[,1,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, b+0,p, nIter, LR)
+            }else{
+            	#Dense matrix
+            	B[,1,h]=.Call("GRAD_DESC",XX, Xy, b+0,p, nIter, LR)
+            }
+        }
+    }
+    
+    
+    if(returnPath){
+      iterations=paste0('iter_',1:nIter)
+    }else{
+      iterations=paste0('iter_',nIter)
+    }
+    
+    dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
+  
+    B=B[,,,drop=TRUE]
+    
+    return(B)
+}
+
+
+
+
+
+
 # Old R implementation
 GD.R<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/50,lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
     learning_rate=learning_rate/mean(diag(XX))
