@@ -69,16 +69,17 @@ GD.SS<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/50,
 }
 
 
-GD<- function(ld,gwas,N,p=ncol(ld),b=rep(0,p),nIter=10,learning_rate=1/50,
+GD<- function(ld,gwas,p=ncol(ld),b=rep(0,p),nIter=10,learning_rate=1/50,
                lambda=0,b0=rep(0,p),lambda0=1,returnPath=FALSE){
 
     if (!(nrow(ld)==nrow(gwas) | rownames(ld)==gwas$id)) stop("SNP ID not match\n")
 
     allell_freq=gwas$allell_freq
     beta=gwas$beta
+    N=gwas$N
     sd=sqrt(2 * allell_freq * (1-allell_freq))
-    XX=(N-1) * (ld * outer(sd, sd))
-    Xy=XX %*% beta
+    XX=(N-1) * ld * outer(sd, sd)
+    Xy=beta * diag(XX)
   	
     previous_lambda=0
     B=array(dim=c(p,ifelse(returnPath,nIter,1),length(lambda)))
