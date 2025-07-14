@@ -71,6 +71,20 @@ Alternatively, one can provide a LD reference panel (i.e., a matrix of correlati
     rs1048488      0.00989    0.01162    15000      0.63647
 ```
 
+```R
+str(ld)
+#> num [1:1279, 1:1279] 1 0.12 0.102 0.256 0.241 ...
+#> - attr(*, "dimnames")=List of 2
+#>  ..$ : chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
+#>  ..$ : chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
+
+head(gwas, 3)
+#> id             beta       se         N          allele_freq
+#> wPt.0538       0.00235    0.01269    15000      0.55476
+#> wPt.8463       -0.01228   0.01206    15000      0.44582
+#> wPt.6348       0.00989    0.01162    15000      0.63647
+```
+
 ### Estimating prior effects from the source data set
 
 We estimated effects using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package).
