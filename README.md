@@ -62,14 +62,7 @@ XX_t=crossprod(X_t)
 Xy_t=crossprod(X_t, y_t)
 ```
 
-Alternatively, one can provide a LD reference panel (i.e., a matrix of correlations between the variants) and GWAS results (including variants IDs, allele frequencies, estimated effects, and SEs) if the sufficient statistics (**X'X** and **X'y**) or individual genotype and phenotype (**X** and **y**) for the target population are not available. An example of the format of GWAS results:
-
-```
-    id             beta       se         N          allele_freq
-    rs3131972      0.00235    0.01269    15000      0.55476
-    rs3131969      -0.01228   0.01206    15000      0.44582
-    rs1048488      0.00989    0.01162    15000      0.63647
-```
+Alternatively, one can provide a LD reference panel (i.e., a matrix of correlations between the variants) and GWAS results (including variants IDs, allele frequencies, estimated effects, and SEs) if the sufficient statistics (**X'X** and **X'y**) or individual genotype and phenotype (**X** and **y**) for the target population are not available.
 
 ```R
 str(ld)
@@ -105,6 +98,14 @@ GD.SS() function takes as input the sufficient statistics derived from the targe
 
 ```R
 fm_GDES=GD.SS(XX=XX_t, Xy=Xy_t, b=prior, nIter=100, returnPath=T, learning_rate=1/50)
+dim(fm_GDES)
+#> [1] 1279  100
+```
+
+GD() function takes as input a LD reference panel and GWAS results from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
+
+```R
+fm_GDES=GD.SS(ld=ld, gwas=gwas, b=prior, nIter=100, returnPath=T, learning_rate=1/50)
 dim(fm_GDES)
 #> [1] 1279  100
 ```
