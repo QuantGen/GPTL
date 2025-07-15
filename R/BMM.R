@@ -16,7 +16,7 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 
  if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
 	
- if (rownames(XX) != colnames(XX)) stop("Rowname and colname in XX not match\n")
+ if (!all(rownames(XX) == colnames(XX))) stop("Rowname and colname in XX not match\n")
 	
  snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(B)))
  if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
@@ -151,7 +151,7 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	        nComp=matrix(ncol(B)), K=1/nComp, df0.E=5, S0.E=vy*(1-R2)*df0.E, df0.b=rep(10,nComp), 
 	        priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE){
 
- if (rownames(ld) != colnames(ld)) stop("Rowname and colname in LD not match\n")
+ if (!all(rownames(ld) == colnames(ld))) stop("Rowname and colname in LD not match\n")
 
  if (!all(c('id', 'beta', 'se', 'n', 'allele_freq') %in% colnames(gwas))) stop("Must provide GWAS results that consist of columns: id (variant IDs), beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency)\n")
     
