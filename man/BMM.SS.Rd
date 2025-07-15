@@ -2,7 +2,7 @@
 \alias{BMM.SS}
 \title{Transfer Learning using Bayesian model with an informative finite mixture prior (sufficient statistics)}
 \description{
-    Performs Bayesian regressions with an informative finite mixture prior that shrink estimates towards prior values.
+    Performs Bayesian regressions with an informative finite mixture prior that shrink estimates towards prior values, taking sufficient statistics as inputs.
 }
 \usage{
 BMM.SS(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
