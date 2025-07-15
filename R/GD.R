@@ -2,7 +2,7 @@ GD.SS<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, r
 
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
     
-    if (rownames(XX) != colnames(XX)) stop("Rowname and colname in XX not match\n")
+    if (!all(rownames(XX) == colnames(XX))) stop("Rowname and colname in XX not match\n")
     
     snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(b)))
     if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
@@ -81,7 +81,7 @@ GD.SS<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, r
 
 GD<- function(ld, gwas, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, returnPath=FALSE){
     
-    if (rownames(ld) != colnames(ld)) stop("Rowname and colname in LD not match\n")
+    if (!all(rownames(XX) == colnames(XX))) stop("Rowname and colname in XX not match\n")
 
     if (!all(c('id', 'beta', 'se', 'n', 'allele_freq') %in% colnames(gwas))) stop("Must provide GWAS results that consist of columns: id (variant IDs), beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency)\n")
     
