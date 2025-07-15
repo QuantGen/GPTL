@@ -85,7 +85,7 @@ PR.SS<- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-
 PR<- function(ld, gwas, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4, maxIter=500, returnPath=TRUE) {
   #alpha=0 -> Ridge; alpha=1 -> Lasso
 
-  if (!all(rownames(XX) == colnames(XX))) stop("Rowname and colname in XX not match\n")
+  if (!all(rownames(ld) == colnames(ld))) stop("Rowname and colname in LD not match\n")
 
   if (!all(c('id', 'beta', 'se', 'n', 'allele_freq') %in% colnames(gwas))) stop("Must provide GWAS results that consist of columns: id (variant IDs), beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency)\n")
  
