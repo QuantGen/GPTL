@@ -5,7 +5,7 @@
     Performs Gradient Descent with Early Stopping, taking LD reference panel and GWAS results as inputs.
 }
 \usage{
-GD.SS(ld, gwas, b, nIter = 10, learning_rate = 1/50, returnPath = FALSE)
+GD(ld, gwas, b, nIter = 10, learning_rate = 1/50, returnPath = FALSE)
 }
 \arguments{
     \item{ld}{A (p x p) matrix, with row and column names being variant IDs. LD reference panel.}
