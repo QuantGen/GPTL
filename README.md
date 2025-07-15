@@ -87,7 +87,7 @@ ETA=list(list(X=X_s, model="BRR"))
 fm=BGLR(y=y_s, response_type = "gaussian", ETA = ETA, nIter = 12000,
        burnIn = 2000, verbose = FALSE)
 prior=matrix(fm$ETA[[1]]$b, nrow=length(fm$ETA[[1]]$b))
-rownames(prior)=rownames(X_s)
+rownames(prior)=colnames(X_s)
 ```
 
 Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
