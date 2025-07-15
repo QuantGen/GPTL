@@ -98,10 +98,10 @@ PR<- function(ld, gwas, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4
   p=ncol(ld)
   b0=rep(0,p)
   
-  allell_freq=gwas$allell_freq
+  allele_freq=gwas$allele_freq
   beta=gwas$beta
   n_gwas=gwas$n
-  sd=sqrt(2 * allell_freq * (1-allell_freq))
+  sd=sqrt(2 * allele_freq * (1-allele_freq))
   XX=(n_gwas-1) * ld * outer(sd, sd)
   Xy=beta * diag(XX)
   
