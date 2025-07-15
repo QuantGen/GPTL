@@ -5,13 +5,13 @@
     Performs Bayesian regressions with an informative finite mixture prior that shrink estimates towards prior values, taking LD reference panel and GWAS results as inputs.
 }
 \usage{
-BMM.SS(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
-	   nComp=matrix(ncol(B)), K=1/nComp, df0.E=5, S0.E=vy*(1-R2)*df0.E, df0.b=rep(10,nComp), 
-	   priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE)
+BMM(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
+    nComp=matrix(ncol(B)), K=1/nComp, df0.E=5, S0.E=vy*(1-R2)*df0.E, df0.b=rep(10,nComp), 
+    priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE)
 }
 \arguments{
-    \item{XX}{A (p x p) matrix, with row and column names being variant IDs. XX=crossprod(X), with X an genotype matrix of dimension n times p.}
-    \item{Xy}{A numeric column vector of length p, with row names being variant IDs. Xy=crossprod(X,y).}
+    \item{ld}{A (p x p) matrix, with row and column names being variant IDs. LD reference panel.}
+    \item{gwas}{A data frame. Must provide GWAS results that consist of columns: id (variant IDs), beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency).}
     \item{B}{(matrix) A matrix includes the estimated effects for each prior information (one row per SNP, one column per prior source of information), with row names being variant IDs.}
     \item{my}{(numeric) Mean of y.}
     \item{vy}{(numeric) Variance of y.}
