@@ -1,6 +1,6 @@
 \name{GD.SS}
 \alias{GD.SS}
-\title{Transfer Learning using Gradient Descent with Early Stopping}
+\title{Transfer Learning using Gradient Descent with Early Stopping (sufficient statistics)}
 \description{
     Performs Gradient Descent with Early Stopping, taking sufficient statistics as inputs.
 }
