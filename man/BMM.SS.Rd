@@ -1,21 +1,21 @@
-\name{BMM}
-\alias{BMM}
-\title{Transfer Learning using Bayesian model with an informative finite mixture prior}
+\name{BMM.SS}
+\alias{BMM.SS}
+\title{Transfer Learning using Bayesian model with an informative finite mixture prior (sufficient statistics)}
 \description{
     Performs Bayesian regressions with an informative finite mixture prior that shrink estimates towards prior values.
 }
 \usage{
-BMM(XX,Xy,my,vy,n,B0=matrix(nrow=ncol(XX),ncol=1,0),nIter=150,burnIn=50,thin=5,R2=0.25,
-    nComp=matrix(ncol(B0)),K=1/nComp, df0.E=5,S0.E=vy*(1-R2)*df0.E,df0.b=rep(10,nComp), 
-    priorProb=rep(1/nComp,nComp),priorCounts=rep(2*nComp,nComp),verbose=TRUE)
+BMM.SS(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
+	   nComp=matrix(ncol(B)), K=1/nComp, df0.E=5, S0.E=vy*(1-R2)*df0.E, df0.b=rep(10,nComp), 
+	   priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE)
 }
 \arguments{
-    \item{XX}{A matrix, XX=crossprod(X), with X an incidence matrix of dimension n times p.}
-    \item{Xy}{A numeric vector of length p, Xy=crossprod(X,y).}
+    \item{XX}{A (p x p) matrix, with row and column names being variant IDs. XX=crossprod(X), with X an genotype matrix of dimension n times p.}
+    \item{Xy}{A numeric column vector of length p, with row names being variant IDs. Xy=crossprod(X,y).}
+    \item{B}{(matrix) A matrix includes the estimated effects for each prior information (one row per SNP, one column per prior source of information), with row names being variant IDs.}
     \item{my}{(numeric) Mean of y.}
     \item{vy}{(numeric) Variance of y.}
-    \item{n}{.}
-    \item{B0}{(matrix) A matrix includes the estimated effects for each prior information (one row per SNP, one column per prior source of information).}
+    \item{n}{(integer) Sample size.}
     \item{nIter}{(integer) The number of iterations.}
     \item{burnIn}{(integer) The number of burn-in.}
     \item{thin}{(integer) The number of thinning.}
