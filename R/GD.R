@@ -93,9 +93,9 @@ GD<- function(ld,gwas,b,nIter=10,learning_rate=1/50,
   
     allell_freq=gwas$allell_freq
     beta=gwas$beta
-    n=gwas$n
+    n_gwas=gwas$n
     sd=sqrt(2 * allell_freq * (1-allell_freq))
-    XX=(n-1) * ld * outer(sd, sd)
+    XX=(n_gwas-1) * ld * outer(sd, sd)
     Xy=beta * diag(XX)
   	
     previous_lambda=0
