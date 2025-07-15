@@ -113,7 +113,7 @@ fm_GDES2=GD(ld=ld, gwas=gwas, b=prior, nIter=100, returnPath=T, learning_rate=1/
 PR.SS() function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$ and $\alpha$, enabling users to select the optimal model based on cross-validation.
 
 ```R
-fm_PR=PR.SS(XX=XX_t, Xy=Xy_t, b0=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
+fm_PR=PR.SS(XX=XX_t, Xy=Xy_t, b=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
@@ -139,7 +139,7 @@ BMM.SS() function takes as inputs the sufficient statistics derived from the tar
 
 ```R
 fm_BMM=BMM.SS(XX=XX_t, Xy=Xy_t, my=mean(y_t), vy=var(y_t), nIter=12000, burnIn=2000, thin=5,
-               verbose=FALSE, B0=cbind(prior,0), n=nrow(X_t))
+               verbose=FALSE, B=cbind(prior,0), n=nrow(X_t))
 str(fm_BMM)
 #> List of 7
 #>  $ b           : num [1:1279] -0.01643 0.01787 0.02097 0.00445 -0.00112 ...
