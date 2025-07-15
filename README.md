@@ -72,7 +72,7 @@ str(ld)
 #>  ..$ : chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
 
 head(gwas, 3)
-#> id             beta       se         N          allele_freq
+#> id             beta       se         n          allele_freq
 #> wPt.0538       0.00235    0.01269    15000      0.55476
 #> wPt.8463       -0.01228   0.01206    15000      0.44582
 #> wPt.6348       0.00989    0.01162    15000      0.63647
