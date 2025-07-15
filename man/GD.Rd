@@ -17,5 +17,6 @@ GD.SS(ld, gwas, b, nIter = 10, learning_rate = 1/50, returnPath = FALSE)
 }
 \value{
     If returnPath==TRUE, a (p x nIter) matrix includes the estimated effects for each predictor (rows) for each iteration.
+
     If returnPath==FALSE, a numeric vector of length p includes the final estimated effects for each predictor.
 }
