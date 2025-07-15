@@ -1,15 +1,18 @@
-
-
-
-
-#XX can be sparse or dense matrix
-
-PR2<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30,alpha=0,conv_threshold=1e-4,maxIter=500,returnPath=TRUE) {
+PR.SS<- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4, maxIter=500, returnPath=TRUE) {
   #alpha=0 -> Ridge; alpha=1 -> Lasso
 
-  diagXX=as.vector(Matrix::diag(XX))
-  
   if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
+  if (rownames(XX) != colnames(XX)) stop("Rowname and colname in XX not match\n")
+  snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(b)))
+  if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
+  XX=XX[snp_list,snp_list]
+  Xy=Xy[snp_list,]
+  b=b[snp_list,]
+
+  p=ncol(XX)
+  b0=rep(0,p)
+  
+  diagXX=as.vector(Matrix::diag(XX))
   
   if(is.null(lambda)){
     if (alpha == 0) {
@@ -78,7 +81,7 @@ PR2<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30
 
 
 # Stable PR function before implementing sparse sufficient statistics
-PR<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30,alpha=0,conv_threshold=1e-4,maxIter=500,returnPath=TRUE) {
+PR1<- function(XX, Xy, p=ncol(XX), b=rep(0,p),b0=rep(0,p),lambda=NULL,nLambda=30,alpha=0,conv_threshold=1e-4,maxIter=500,returnPath=TRUE) {
   #alpha=0 -> Ridge; alpha=1 -> Lasso
   
   if(is.null(lambda)){
