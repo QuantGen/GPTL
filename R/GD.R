@@ -1,5 +1,4 @@
-GD.SS<- function(XX,Xy,b, nIter=10,learning_rate=1/50,
-               lambda=0,lambda0=1,returnPath=FALSE){
+GD.SS<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, returnPath=FALSE){
 
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
     if (rownames(XX) != colnames(XX)) stop("Rowname and colname in XX not match\n")
@@ -78,8 +77,7 @@ GD.SS<- function(XX,Xy,b, nIter=10,learning_rate=1/50,
 }
 
 
-GD<- function(ld,gwas,b,nIter=10,learning_rate=1/50,
-               lambda=0,lambda0=1,returnPath=FALSE){
+GD<- function(ld, gwas, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, returnPath=FALSE){
     
     if (rownames(ld) != colnames(ld)) stop("Rowname and colname in LD not match\n")
     snp_list=Reduce(intersect, list(rownames(ld),gwas$id,rownames(b)))
