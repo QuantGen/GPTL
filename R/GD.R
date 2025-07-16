@@ -10,7 +10,7 @@ GD.SS<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, r
     Xy=Xy[snp_list,]
     b=b[snp_list,]
 
-    p=ncol(XX)
+    p=length(Xy)
     b0=rep(0,p)
   	
     previous_lambda=0
