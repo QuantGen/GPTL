@@ -95,7 +95,7 @@ PR<- function(ld, gwas, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4
   gwas=gwas[gwas$id %in% snp_list,]
   b=b[snp_list,]
 
-  p=ncol(ld)
+  p=nrow(gwas)
   b0=rep(0,p)
   
   allele_freq=gwas$allele_freq
