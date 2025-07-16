@@ -91,7 +91,7 @@ GD<- function(ld, gwas, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, re
     gwas=gwas[gwas$id %in% snp_list,]
     b=b[snp_list,]
 
-    p=ncol(ld)
+    p=nrow(gwas)
     b0=rep(0,p)
   
     allele_freq=gwas$allele_freq
