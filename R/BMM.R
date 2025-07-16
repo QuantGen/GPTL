@@ -155,7 +155,7 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 
  if (!all(c('id', 'beta', 'se', 'n', 'allele_freq') %in% colnames(gwas))) stop("Must provide GWAS results that consist of columns: id (variant IDs), beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency)\n")
     
- snp_list=Reduce(intersect, list(rownames(ld),gwas$id,rownames(b)))
+ snp_list=Reduce(intersect, list(rownames(ld),gwas$id,rownames(B)))
  if (length(snp_list) == 0) stop("No matched SNPs in LD, GWAS, and prior\n")
  ld=ld[snp_list,snp_list]
  gwas=gwas[gwas$id %in% snp_list,]
