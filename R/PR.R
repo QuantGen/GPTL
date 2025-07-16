@@ -11,7 +11,7 @@ PR.SS<- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-
   Xy=Xy[snp_list,]
   b=b[snp_list,]
 
-  p=ncol(XX)
+  p=length(Xy)
   b0=rep(0,p)
   
   diagXX=as.vector(Matrix::diag(XX))
