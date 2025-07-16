@@ -155,12 +155,14 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 
  if (!all(c('id', 'beta', 'se', 'n', 'allele_freq') %in% colnames(gwas))) stop("Must provide GWAS results that consist of columns: id (variant IDs), beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency)\n")
     
- snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(B)))
- if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
- XX=XX[snp_list,snp_list]
- Xy=Xy[snp_list,]
+ snp_list=Reduce(intersect, list(rownames(ld),gwas$id,rownames(b)))
+ if (length(snp_list) == 0) stop("No matched SNPs in LD, GWAS, and prior\n")
+ ld=ld[snp_list,snp_list]
+ gwas=gwas[gwas$id %in% snp_list,]
  B=B[snp_list,]
-  
+
+ p=nrow(gwas)
+
  allele_freq=gwas$allele_freq
  beta=gwas$beta
  n_gwas=gwas$n
@@ -170,7 +172,6 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 
  B=as.matrix(B)
  # nIter=150;burnIn=50;R2=.5;nComp=matrix(ncol(B));df0.E=5;S0.E=vy*R2*df0.E;df0.b=rep(5,nComp);alpha=.1;my=mean(y); vy=var(y); B=cbind(rep(0,p),-1,1)
- p=ncol(XX) 
  b=rowMeans(B)
  d=rep(1,p) # indicator variable for the group
  POST.PROB=matrix(nrow=p,ncol=nComp,0)
