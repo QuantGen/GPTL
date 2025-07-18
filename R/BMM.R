@@ -21,7 +21,7 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
  snp_list=Reduce(intersect, list(rownames(XX),names(Xy),rownames(B)))
  if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
  XX=XX[snp_list,snp_list]
- Xy=Xy[snp_list,]
+ Xy=Xy[snp_list]
  B=B[snp_list,]
 
  B=as.matrix(B)
