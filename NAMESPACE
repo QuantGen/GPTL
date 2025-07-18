@@ -2,7 +2,7 @@ importFrom("methods", "as", "is")
 importFrom("stats", "cor", "dnorm", "rchisq", "rgamma", "rnorm",
              "runif", "sd")
              
-export(BMM2)
+export(BMM_SCALES)
 export(GD.SS)
 export(GD)
 export(GD.R)
