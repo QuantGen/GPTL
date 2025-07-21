@@ -20,9 +20,9 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	
  snp_list=Reduce(intersect, list(rownames(XX),names(Xy),rownames(B)))
  if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
- XX=XX[snp_list,snp_list]
- Xy=Xy[snp_list]
- B=B[snp_list,]
+ XX=XX[snp_list,snp_list,drop = FALSE]
+ Xy=Xy[snp_list,,drop = FALSE]
+ B=B[snp_list,,drop = FALSE]
 
  B=as.matrix(B)
  # nIter=150;burnIn=50;R2=.5;nComp=matrix(ncol(B));df0.E=5;S0.E=vy*R2*df0.E;df0.b=rep(5,nComp);alpha=.1;my=mean(y); vy=var(y); B=cbind(rep(0,p),-1,1)
@@ -157,9 +157,9 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
     
  snp_list=Reduce(intersect, list(rownames(ld),gwas$id,rownames(B)))
  if (length(snp_list) == 0) stop("No matched SNPs in LD, GWAS, and prior\n")
- ld=ld[snp_list,snp_list]
- gwas=gwas[gwas$id %in% snp_list,]
- B=B[snp_list,]
+ ld=ld[snp_list,snp_list,drop = FALSE]
+ gwas=gwas[gwas$id %in% snp_list,,drop = FALSE]
+ B=B[snp_list,,drop = FALSE]
 
  p=nrow(gwas)
 
