@@ -7,9 +7,9 @@ PR.SS<- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-
   
   snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(b)))
   if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
-  XX=XX[snp_list,snp_list]
-  Xy=Xy[snp_list,]
-  b=b[snp_list,]
+  XX=XX[snp_list,snp_list,drop = FALSE]
+  Xy=Xy[snp_list,,drop = FALSE]
+  b=b[snp_list,,drop = FALSE]
 
   p=length(Xy)
   b0=rep(0,p)
@@ -91,9 +91,9 @@ PR<- function(ld, gwas, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4
  
   snp_list=Reduce(intersect, list(rownames(ld),gwas$id,rownames(b)))
   if (length(snp_list) == 0) stop("No matched SNPs in LD, GWAS, and prior\n")
-  ld=ld[snp_list,snp_list]
-  gwas=gwas[gwas$id %in% snp_list,]
-  b=b[snp_list,]
+  ld=ld[snp_list,snp_list,drop = FALSE]
+  gwas=gwas[gwas$id %in% snp_list,,drop = FALSE]
+  b=b[snp_list,,drop = FALSE]
 
   p=nrow(gwas)
   b0=rep(0,p)
