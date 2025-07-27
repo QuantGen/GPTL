@@ -21,7 +21,7 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
  snp_list=Reduce(intersect, list(rownames(XX),names(Xy),rownames(B)))
  if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
  XX=XX[snp_list,snp_list,drop = FALSE]
- Xy=Xy[snp_list,,drop = FALSE]
+ Xy=Xy[snp_list]
  B=B[snp_list,,drop = FALSE]
 
  B=as.matrix(B)
@@ -168,7 +168,7 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
  n_gwas=gwas$n
  sd=sqrt(2 * allele_freq * (1-allele_freq))
  XX=(n_gwas-1) * ld * outer(sd, sd)
- Xy=beta * diag(XX)
+ Xy=beta * Matrix::diag(XX)
 
  B=as.matrix(B)
  # nIter=150;burnIn=50;R2=.5;nComp=matrix(ncol(B));df0.E=5;S0.E=vy*R2*df0.E;df0.b=rep(5,nComp);alpha=.1;my=mean(y); vy=var(y); B=cbind(rep(0,p),-1,1)
