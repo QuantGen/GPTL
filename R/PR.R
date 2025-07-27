@@ -5,11 +5,11 @@ PR.SS<- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-
   
   if (!all(rownames(XX) == colnames(XX))) stop("Rowname and colname in XX not match\n")
   
-  snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(b)))
+  snp_list=Reduce(intersect, list(rownames(XX),names(Xy),names(b)))
   if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
   XX=XX[snp_list,snp_list,drop = FALSE]
-  Xy=Xy[snp_list,,drop = FALSE]
-  b=b[snp_list,,drop = FALSE]
+  Xy=Xy[snp_list]
+  b=b[snp_list]
 
   p=length(Xy)
   b0=rep(0,p)
@@ -89,11 +89,11 @@ PR<- function(ld, gwas, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4
 
   if (!all(c('id', 'beta', 'se', 'n', 'allele_freq') %in% colnames(gwas))) stop("Must provide GWAS results that consist of columns: id (variant IDs), beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency)\n")
  
-  snp_list=Reduce(intersect, list(rownames(ld),gwas$id,rownames(b)))
+  snp_list=Reduce(intersect, list(rownames(ld),gwas$id,names(b)))
   if (length(snp_list) == 0) stop("No matched SNPs in LD, GWAS, and prior\n")
   ld=ld[snp_list,snp_list,drop = FALSE]
   gwas=gwas[gwas$id %in% snp_list,,drop = FALSE]
-  b=b[snp_list,,drop = FALSE]
+  b=b[snp_list]
 
   p=nrow(gwas)
   b0=rep(0,p)
@@ -103,7 +103,7 @@ PR<- function(ld, gwas, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4
   n_gwas=gwas$n
   sd=sqrt(2 * allele_freq * (1-allele_freq))
   XX=(n_gwas-1) * ld * outer(sd, sd)
-  Xy=beta * diag(XX)
+  Xy=beta * Matrix::diag(XX)
   
   diagXX=as.vector(Matrix::diag(XX))
   
