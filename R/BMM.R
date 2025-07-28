@@ -128,7 +128,6 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
   	#RSS2=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)
 	if(!fixVarE){
 	 SS=RSS
-	 message(SS)
 	#print(c(RSS,RSS2)/n)
          DF=n
 	 varE=SS/rchisq(df=DF,n=1)
@@ -285,7 +284,6 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	
 	if(!fixVarE){
 	 SS=RSS
-	 message(SS)
 	#print(c(RSS,RSS2)/n)
          DF=n
 	 varE=SS/rchisq(df=DF,n=1)
