@@ -12,7 +12,7 @@
 
 BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	        nComp=matrix(ncol(B)), K=1/nComp, df0.E=5, S0.E=vy*(1-R2)*df0.E, df0.b=rep(10,nComp), 
-	        priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE){
+	        priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE, fixVarE=FALSE){
 
  if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
 	
@@ -51,7 +51,11 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 
  #Need to convert to numeric because if XX is sparse, the result is an object 
  #of class dgeMatrix
- RSS=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)
+if(fixVarE){
+	RSS=vy*(n-1)*(1-R2)
+}else{
+	RSS=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)
+}
  RSS=as.numeric(RSS)
 
  varE=RSS/n
@@ -121,7 +125,9 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	SS=RSS
 	#print(c(RSS,RSS2)/n)
         DF=n
-	varE=SS/rchisq(df=DF,n=1)
+	if (!fixVarE) {
+		 varE=SS/rchisq(df=DF,n=1)
+	 }
         samplesVarE[i]=varE
   
 	## computing posterior means 
