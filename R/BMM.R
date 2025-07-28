@@ -167,7 +167,8 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
  beta=gwas$beta
  n_gwas=gwas$n
  sd=sqrt(2 * allele_freq * (1-allele_freq))
- XX=(n_gwas-1) * ld * outer(sd, sd)
+ sd_diag=Diagonal(x=sd)
+ XX=(n_gwas-1) * (sd_diag %*% ld %*% sd_diag)
  Xy=beta * Matrix::diag(XX)
 
  B=as.matrix(B)
