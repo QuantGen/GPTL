@@ -102,7 +102,8 @@ PR<- function(ld, gwas, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4
   beta=gwas$beta
   n_gwas=gwas$n
   sd=sqrt(2 * allele_freq * (1-allele_freq))
-  XX=(n_gwas-1) * ld * outer(sd, sd)
+  sd_diag=Diagonal(x=sd)
+  XX=(n_gwas-1) * (sd_diag %*% ld %*% sd_diag)
   Xy=beta * Matrix::diag(XX)
   
   diagXX=as.vector(Matrix::diag(XX))
