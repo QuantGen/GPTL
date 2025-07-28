@@ -149,7 +149,7 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
   } 
 
  if(verbose){
-   message('Time per cycle= ', time0-proc.time()[3], ' varE: ',round(varE,4))
+   message('Time per cycle= ', proc.time()[3]-time0, ' varE: ',round(varE,4))
  }
  return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,
 	     	samplesVarB=samplesVarB,samplesB=samplesB,samplesVarE=samplesVarE))
@@ -307,7 +307,7 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
   } 
 
  if(verbose){
-   message('Time per cycle= ', time0-proc.time()[3], ' varE: ',round(varE,4))
+   message('Time per cycle= ', proc.time()[3]-time0, ' varE: ',round(varE,4))
  }
  return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,
 	     	samplesVarB=samplesVarB,samplesB=samplesB,samplesVarE=samplesVarE))
