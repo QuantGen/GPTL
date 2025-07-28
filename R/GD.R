@@ -98,7 +98,8 @@ GD<- function(ld, gwas, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, re
     beta=gwas$beta
     n_gwas=gwas$n
     sd=sqrt(2 * allele_freq * (1-allele_freq))
-    XX=(n_gwas-1) * ld * outer(sd, sd)
+    sd_diag=Diagonal(x=sd)
+    XX=(n_gwas-1) * (sd_diag %*% ld %*% sd_diag)
     Xy=beta * Matrix::diag(XX)
   	
     previous_lambda=0
