@@ -247,7 +247,6 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	   RSS=tmp[[2]]
         }
      
-	 message(RSS)
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
 	## End of C-code
 	 samplesB[i,]=b
