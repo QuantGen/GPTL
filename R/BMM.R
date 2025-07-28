@@ -230,7 +230,7 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	  }
 	  
       b=tmp[[1]]
-      if (!fixVarE) {RSS=tmp[[2]]}
+      RSS=ifelse(fixVarE, RSS, tmp[[2]])
 	 message(RSS)
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
 	## End of C-code
