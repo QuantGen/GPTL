@@ -10,7 +10,7 @@ PR(ld, gwas, b, lambda = NULL, nLambda = 30, alpha = 0, conv_threshold= 1e-04, m
 \arguments{
     \item{ld}{A (p x p) matrix, with row and column names being variant IDs. LD reference panel.}
     \item{gwas}{A data frame. Must provide GWAS results that consist of columns: id (variant IDs), beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency).}
-    \item{b}{A numeric column vector of length p, with row names being variant IDs. Prior estimates.}
+    \item{b}{A numeric vector of length p, with names being variant IDs. Prior estimates.}
     \item{lambda}{numeric, or a numeric vector of shrinkage parameters. If NULL a grid of values will be generated based on XX and Xy.}
     \item{nLambda}{(integer) Number of shrinkage parameters to be generated. If lambda is given, nLambda will be overriden.}
     \item{alpha}{(numeric) The Elastic Net mixing parameter, with \eqn{0 \le \alpha \le 1}.}
