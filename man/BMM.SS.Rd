@@ -11,7 +11,7 @@ BMM.SS(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 }
 \arguments{
     \item{XX}{A (p x p) matrix, with row and column names being variant IDs. XX=crossprod(X), with X an genotype matrix of dimension n times p.}
-    \item{Xy}{A numeric column vector of length p, with row names being variant IDs. Xy=crossprod(X,y).}
+    \item{Xy}{A numeric vector of length p, with names being variant IDs. Xy=crossprod(X,y).}
     \item{B}{(matrix) A matrix includes the estimated effects for each prior information (one row per SNP, one column per prior source of information), with row names being variant IDs.}
     \item{my}{(numeric) Mean of y.}
     \item{vy}{(numeric) Variance of y.}
