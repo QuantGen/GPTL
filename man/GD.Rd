@@ -10,7 +10,7 @@ GD(ld, gwas, b, nIter = 10, learning_rate = 1/50, returnPath = FALSE)
 \arguments{
     \item{ld}{A (p x p) matrix, with row and column names being variant IDs. LD reference panel.}
     \item{gwas}{A data frame. Must provide GWAS results that consist of columns: id (variant IDs), beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency).}
-    \item{b}{A numeric column vector of length p, with row names being variant IDs. Prior estimates.}
+    \item{b}{A numeric vector of length p, with names being variant IDs. Prior estimates.}
     \item{nIter}{(integer) Number of iterations that the algorithm will run.}
     \item{learning_rate}{(integer) Step size of the algorithm.}
     \item{returnPath}{(logical) if TRUE the iteration history is printed, default TRUE.}
