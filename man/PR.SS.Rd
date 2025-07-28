@@ -9,8 +9,8 @@ PR.SS(XX, Xy, b, lambda = NULL, nLambda = 30, alpha = 0, conv_threshold= 1e-04, 
 }
 \arguments{
     \item{XX}{A (p x p) matrix, with row and column names being variant IDs. XX=crossprod(X), with X an genotype matrix of dimension n times p.}
-    \item{Xy}{A numeric column vector of length p, with row names being variant IDs. Xy=crossprod(X,y).}
-    \item{b}{A numeric column vector of length p, with row names being variant IDs. Prior estimates.}
+    \item{Xy}{A numeric vector of length p, with names being variant IDs. Xy=crossprod(X,y).}
+    \item{b}{A numeric  vector of length p, with names being variant IDs. Prior estimates.}
     \item{lambda}{numeric, or a numeric vector of shrinkage parameters. If NULL a grid of values will be generated based on XX and Xy.}
     \item{nLambda}{(integer) Number of shrinkage parameters to be generated. If lambda is given, nLambda will be overriden.}
     \item{alpha}{(numeric) The Elastic Net mixing parameter, with \eqn{0 \le \alpha \le 1}.}
