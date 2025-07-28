@@ -51,7 +51,11 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 
  #Need to convert to numeric because if XX is sparse, the result is an object 
  #of class dgeMatrix
- if (fixVarE) {RSS=vy*(n-1)*(1-R2)} else {RSS=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)}
+ if (fixVarE){
+	 RSS=vy*(n-1)*(1-R2)
+ }else{
+	 RSS=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)
+ }
  RSS=as.numeric(RSS)
 
  varE=RSS/n
@@ -71,6 +75,7 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
  for(i in 1:nIter){        
 	  ## Sampling effects
 	  timeIn=proc.time()[3]
+	  time0=timeIn
 	  
 	  if(is(XX,"dgCMatrix"))
 	  {
@@ -82,7 +87,9 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	  }
 	  
       b=tmp[[1]]
-      if (!fixVarE) {RSS=tmp[[2]]}
+      if(!fixVarE) {
+	   RSS=tmp[[2]]
+      }
       
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
 	## End of C-code
@@ -119,11 +126,14 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	
 	# Sampling the error variance
   	#RSS2=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)
-	SS=RSS
+	if(!fixVarE){
+	 SS=RSS
+	 message(SS)
 	#print(c(RSS,RSS2)/n)
-        DF=n
-	varE=SS/rchisq(df=DF,n=1)
-        samplesVarE[i]=varE
+         DF=n
+	 varE=SS/rchisq(df=DF,n=1)
+        }
+	samplesVarE[i]=varE
   
 	## computing posterior means 
 	if(i>burnIn&(i%%thin==0)){
@@ -139,9 +149,7 @@ BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
   } 
 
  if(verbose){
-   message('Time Effects= ', timeEffects)
-   message('Time Prob= ', timeProb)
-   message('Time Apply= ', timeApply)
+   message('Time per cycle= ', time0-proc.time()[3], ' varE: ',round(varE,4))
  }
  return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,
 	     	samplesVarB=samplesVarB,samplesB=samplesB,samplesVarE=samplesVarE))
@@ -198,9 +206,13 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 
  #Need to convert to numeric because if XX is sparse, the result is an object 
  #of class dgeMatrix
- if (fixVarE) {RSS=vy*(n-1)*(1-R2)} else {RSS=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)}
+ if (fixVarE){
+	 RSS=vy*(n-1)*(1-R2)
+ }else{
+	 RSS=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)
+ }
+ 
  RSS=as.numeric(RSS)
-	message(RSS)
 
  varE=RSS/n
 	
@@ -219,7 +231,8 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
  for(i in 1:nIter){        
 	  ## Sampling effects
 	  timeIn=proc.time()[3]
-	  
+	  time0=timeIn
+	 
 	  if(is(XX,"dgCMatrix"))
 	  {
 	  	#Sparse matrix
@@ -229,9 +242,11 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	  	tmp=sample_effects_new(C=XX,rhs=Xy,b=b,d=d,B0=B,varE=varE,varB=varB[d],RSS=RSS)
 	  }
 	  
-      b=tmp[[1]]
-      if (fixVarE) {RSS=vy*(n-1)*(1-R2)} else {RSS=tmp[[2]]}
-      #RSS=ifelse(fixVarE, RSS, tmp[[2]])
+        b=tmp[[1]]
+        if(!fixVarE) {
+	   RSS=tmp[[2]]
+        }
+     
 	 message(RSS)
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
 	## End of C-code
@@ -268,13 +283,17 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	
 	# Sampling the error variance
   	#RSS2=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)
-	SS=RSS
+	
+	if(!fixVarE){
+	 SS=RSS
 	 message(SS)
 	#print(c(RSS,RSS2)/n)
-        DF=n
-	varE=SS/rchisq(df=DF,n=1)
-        samplesVarE[i]=varE
-  
+         DF=n
+	 varE=SS/rchisq(df=DF,n=1)
+        }
+	samplesVarE[i]=varE
+        
+	 
 	## computing posterior means 
 	if(i>burnIn&(i%%thin==0)){
 	 postMeanVarB= postMeanVarB+varB*weightPostMeans
@@ -289,9 +308,7 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
   } 
 
  if(verbose){
-   message('Time Effects= ', timeEffects)
-   message('Time Prob= ', timeProb)
-   message('Time Apply= ', timeApply)
+   message('Time per cycle= ', time0-proc.time()[3], ' varE: ',round(varE,4))
  }
  return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,
 	     	samplesVarB=samplesVarB,samplesB=samplesB,samplesVarE=samplesVarE))
