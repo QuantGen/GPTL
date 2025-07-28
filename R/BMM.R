@@ -200,6 +200,7 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
  #of class dgeMatrix
  if (fixVarE) {RSS=vy*(n-1)*(1-R2)} else {RSS=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)}
  RSS=as.numeric(RSS)
+	message(RSS)
 
  varE=RSS/n
 	
@@ -230,6 +231,7 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	  
       b=tmp[[1]]
       if (!fixVarE) {RSS=tmp[[2]]}
+	 message(RSS)
 	 timeEffects=timeEffects+(proc.time()[3]-timeIn)
 	## End of C-code
 	 samplesB[i,]=b
@@ -266,6 +268,7 @@ BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	# Sampling the error variance
   	#RSS2=vy*(n-1)+crossprod(b,XX)%*%b-2*crossprod(b,Xy)
 	SS=RSS
+	 message(SS)
 	#print(c(RSS,RSS2)/n)
         DF=n
 	varE=SS/rchisq(df=DF,n=1)
