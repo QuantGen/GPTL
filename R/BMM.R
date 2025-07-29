@@ -141,12 +141,14 @@ if(fixVarE){
 		 POST.PROB[tmp,k]=POST.PROB[tmp,k]+weightPostMeans
 	  }
         } 
-	if(verbose){ message(' Cycle: ',' Variance of Effects ', varB) }
+	if(verbose){ 
+		
+		    message(' Cycle: i ',' varE=',round(varE,4),'; varB=', paste(round(varB,6),collapse=' , '),'; Time=',round(proc.time()[3]-time0,4),' sec.') 
+	   
+		   }
   } 
 
- if(verbose){
-   message('Time per cycle= ', proc.time()[3]-time0, ' varE: ',round(varE,4))
- }
+
  return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,
 	     	samplesVarB=samplesVarB,samplesB=samplesB,samplesVarE=samplesVarE))
 }
