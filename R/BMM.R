@@ -141,7 +141,7 @@ if(fixVarE){
 		 POST.PROB[tmp,k]=POST.PROB[tmp,k]+weightPostMeans
 	  }
         } 
-	if(verbose){ print(i) }
+	if(verbose){ message(' Cycle: ',' Variance of Effects ', varB) }
   } 
 
  if(verbose){
