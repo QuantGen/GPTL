@@ -143,7 +143,7 @@ if(fixVarE){
         } 
 	if(verbose){ 
 		
-		    message(' Cycle: i ',' varE=',round(varE,4),'; varB=', paste(round(varB,6),collapse=' , '),'; Time=',round(proc.time()[3]-time0,4),' sec.') 
+		    message(' Cycle: ',i,' varE=',round(varE,4),'; varB=', paste(round(varB,8),collapse=' , '),'; Time=',round(proc.time()[3]-time0,4),' sec.') 
 	   
 		   }
   } 
