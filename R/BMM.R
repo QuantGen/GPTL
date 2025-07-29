@@ -75,6 +75,7 @@ if(fixVarE){
  for(i in 1:nIter){        
 	  ## Sampling effects
 	  timeIn=proc.time()[3]
+	  time0=timeIn
 	  
 	  if(is(XX,"dgCMatrix"))
 	  {
@@ -97,7 +98,7 @@ if(fixVarE){
 	 PROBS[k,]=dnorm(b,mean=B[,k],sd=sqrt(varB[k]))#*compProb[k]	
 	 }
  	timeProb=timeProb+(proc.time()[3]-timeIn)
-	tiemIn=proc.time()[3] 
+	timeIn=proc.time()[3] 
 	  #d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
 	  # d=sampleComp(PROBS)
 	  d=rMultinom(PROBS)
@@ -144,9 +145,7 @@ if(fixVarE){
   } 
 
  if(verbose){
-   message('Time Effects= ', timeEffects)
-   message('Time Prob= ', timeProb)
-   message('Time Apply= ', timeApply)
+   message('Time per cycle= ', proc.time()[3]-time0, ' varE: ',round(varE,4))
  }
  return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,
 	     	samplesVarB=samplesVarB,samplesB=samplesB,samplesVarE=samplesVarE))
@@ -229,6 +228,7 @@ if(fixVarE){
  for(i in 1:nIter){        
 	  ## Sampling effects
 	  timeIn=proc.time()[3]
+	  time0=timeIn
 	  
 	  if(is(XX,"dgCMatrix"))
 	  {
@@ -251,7 +251,7 @@ if(fixVarE){
 	 PROBS[k,]=dnorm(b,mean=B[,k],sd=sqrt(varB[k]))#*compProb[k]	
 	 }
  	timeProb=timeProb+(proc.time()[3]-timeIn)
-	tiemIn=proc.time()[3] 
+	timeIn=proc.time()[3] 
 	  #d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
 	  # d=sampleComp(PROBS)
 	  d=rMultinom(PROBS)
@@ -299,9 +299,7 @@ if(fixVarE){
   } 
 
  if(verbose){
-   message('Time Effects= ', timeEffects)
-   message('Time Prob= ', timeProb)
-   message('Time Apply= ', timeApply)
+   message('Time per cycle= ', proc.time()[3]-time0, ' varE: ',round(varE,4))
  }
  return(list(b=postMeanB,POST.PROB=POST.PROB,postMeanVarB=postMeanVarB,postProb=postProb,
 	     	samplesVarB=samplesVarB,samplesB=samplesB,samplesVarE=samplesVarE))
@@ -364,7 +362,7 @@ BMM1=function(XX,Xy,my,vy,n,B=matrix(nrow=ncol(XX),ncol=1,0),nIter=150,burnIn=50
 	 PROBS[k,]=dnorm(b,mean=B[,k],sd=sqrt(varB[k]))#*compProb[k]	
 	 }
  	timeProb=timeProb+(proc.time()[3]-timeIn)
-	tiemIn=proc.time()[3] 
+	timeIn=proc.time()[3] 
 	  #d=apply(FUN=sample,x=1:nComp,X=PROBS,size=1,MARGIN=1,replace=TRUE)
 	  # d=sampleComp(PROBS)
 	  d=rMultinom(PROBS)
