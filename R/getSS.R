@@ -52,7 +52,7 @@
   rownames(XX)=rownames(ld)
   colnames(XX)=colnames(ld)
 
-  Xy=diag(XX)*beta
+  Xy=Matrix::diag(XX)*beta
   names(Xy)=rownames(gwas)
 
   out=list(XX=XX,Xy=Xy,n=mean(gwas$n),B=B)
