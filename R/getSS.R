@@ -7,8 +7,12 @@
 
  getSS=function(ld,gwas,B=NULL,verbose=TRUE){
  
+  if (is.null(B)) {
+      snp_list=intersect(rownames(ld),gwas$id)
+  } else {
+      snp_list=Reduce(intersect, list(rownames(ld),gwas$id,rownames(B)))
+  }
   
-  snp_list=Reduce(intersect, list(rownames(ld),gwas$id,rownames(B)))
 
   if(is.null(rownames(ld))){
     message('The LD reference panel must have SNP IDs as rownames')
@@ -28,7 +32,12 @@
       stop("No matched SNPs in LD, GWAS, and prior\n")
    }else{
     if(verbose){
-        message(' There were ',length(snp_list), ' in common between the LD reference panel, the GWAS and, the prior.')
+        if (is.null(B)) {
+              message(' There were ',length(snp_list), ' in common between the LD reference panel, and the GWAS.')
+        } else {
+              message(' There were ',length(snp_list), ' in common between the LD reference panel, the GWAS and, the prior.')
+        }
+        
    }
   }
 
@@ -64,6 +73,6 @@
       out=list(XX=XX,Xy=Xy,n=mean(gwas$n))
   } else {
       out=list(XX=XX,Xy=Xy,n=mean(gwas$n),B=B)
-         }
+  }
   return(out)
 }
