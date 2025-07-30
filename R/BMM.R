@@ -109,7 +109,7 @@ if(fixVarE){
 		tmp=(d==k)
 		DF=sum(tmp)
 		 
-		if(!fixVarB[k])){
+		if(!fixVarB[k]){
 		 	SS=S0.b[k]
 		 	if(DF>0){
 			 bStar=b[tmp]-B[tmp,k]
