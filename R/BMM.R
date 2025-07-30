@@ -12,7 +12,7 @@
 
 BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	        nComp=matrix(ncol(B)), K=1/nComp, df0.E=5, S0.E=vy*(1-R2)*df0.E, df0.b=rep(10,nComp), 
-	        priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE, fixVarE=FALSE){
+	        priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE, fixVarE=FALSE,fixVarB=rep(FALSE,nComp)){
 
  if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
 	
@@ -106,15 +106,18 @@ if(fixVarE){
 	
 	 ## Sampling the variance and the prior probabilities of the mixture components
 	 for(k in 1:nComp){
-		 tmp=(d==k)
-		 DF=sum(tmp)
-		 SS=S0.b[k]
-		 if(DF>0){
+		tmp=(d==k)
+		DF=sum(tmp)
+		 
+		if(!fixVarB[k])){
+		 	SS=S0.b[k]
+		 	if(DF>0){
 			 bStar=b[tmp]-B[tmp,k]
 			 SS=SS+sum(bStar^2)
-		 }	 
-		 varB[k]=SS/rchisq(df=DF+df0.b[k],n=1) 
-		 counts[k]=DF
+		 	}	 
+		 	varB[k]=SS/rchisq(df=DF+df0.b[k],n=1) 
+		}
+		counts[k]=DF
 	 }
 	 samplesVarB[i,]=varB
 	
