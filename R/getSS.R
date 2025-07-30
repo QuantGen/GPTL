@@ -5,7 +5,7 @@
  # it matches the arguments (based on rownames, i.e., snp ids) and computes
  # sufficient statistics (X'X and X'y)
 
- getSS=function(ld,gwas,B,verbose=TRUE){
+ getSS=function(ld,gwas,B=NULL,verbose=TRUE){
  
   
   snp_list=Reduce(intersect, list(rownames(ld),gwas$id,rownames(B)))
@@ -19,9 +19,9 @@
   }
 
 
- if(is.null(rownames(B))){
-    message('The prior means must have SNP IDs as rownames')
- }
+ #if(is.null(rownames(B))){
+ #   message('The prior means must have SNP IDs as rownames')
+ #}
 
 
   if (length(snp_list) == 0){ 
@@ -34,12 +34,16 @@
 
   ld=ld[snp_list,snp_list,drop = FALSE]
   gwas=gwas[snp_list,,drop = FALSE]
-  B=B[snp_list,,drop = FALSE]
-
+  if (!is.null(B)) {
+      B=B[snp_list,,drop = FALSE]
+  }
   p=nrow(gwas)
 
-  stopifnot(all(all(rownames(B)==rownames(gwas)),all(rownames(gwas)==rownames(ld))))
-
+  stopifnot(all(rownames(gwas)==rownames(ld)))
+  
+  if (!is.null(B)) {
+      stopifnot(all(all(rownames(B)==rownames(gwas)),all(rownames(gwas)==rownames(ld))))
+  }
 
   allele_freq=gwas$allele_freq
   beta=gwas$beta
@@ -55,6 +59,11 @@
   Xy=Matrix::diag(XX)*beta
   names(Xy)=rownames(gwas)
 
-  out=list(XX=XX,Xy=Xy,n=mean(gwas$n),B=B)
+  
+  if (is.null(B)) {
+      out=list(XX=XX,Xy=Xy,n=mean(gwas$n))
+  } else {
+      out=list(XX=XX,Xy=Xy,n=mean(gwas$n),B=B)
+         }
   return(out)
 }
