@@ -45,7 +45,6 @@
   beta=gwas$beta
   n_gwas=gwas$n
   V=(2 * allele_freq * (1-allele_freq))
-
   D=Diagonal(x=sqrt(V)*sqrt(gwas$n))
 
   XX=(D%*%ld)
@@ -53,7 +52,7 @@
   rownames(XX)=rownames(ld)
   colnames(XX)=colnames(ld)
 
-  Xy=V*beta
+  Xy=Matrix::diag(XX)*beta
   names(Xy)=rownames(gwas)
 
   out=list(XX=XX,Xy=Xy,n=mean(gwas$n),B=B)
