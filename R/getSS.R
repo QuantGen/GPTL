@@ -13,6 +13,7 @@ getSS=function(ld,gwas,B=NULL,verbose=TRUE){
     if(is.null(rownames(gwas))){
         stop('The GWAS table (gwas) must have SNP IDs as rownames')
     }
+    gwas=as.data.frame(gwas)
 
     if (!all(c('beta', 'se', 'n', 'allele_freq') %in% colnames(gwas))) {
         stop("Must provide GWAS results that consist of columns: beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency)\n")
