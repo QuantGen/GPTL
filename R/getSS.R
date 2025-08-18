@@ -70,7 +70,7 @@ getSS=function(ld,gwas,B=NULL,verbose=TRUE){
     beta=gwas$beta
     n_gwas=gwas$n
     V=(2 * allele_freq * (1-allele_freq))
-    D=Diagonal(x=sqrt(V)*sqrt(gwas$n))
+    D=Matrix::Diagonal(x=sqrt(V)*sqrt(gwas$n))
 
     XX=(D%*%ld)
     XX=XX%*%D
