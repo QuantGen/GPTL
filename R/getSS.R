@@ -6,12 +6,16 @@
  # sufficient statistics (X'X and X'y) and prior estimats (B) (if provided).
 
 getSS=function(ld,gwas,B=NULL,verbose=TRUE){
-    if(is.null(rownames(ld))){
-        stop('The LD reference panel (ld) must have SNP IDs as rownames')
+    if(is.null(rownames(ld)) | is.null(colnames(ld))){
+        stop('The LD reference panel (ld) must have SNP IDs as rownames and colnames\n')
+    }
+
+    if(!all(rownames(ld)==colnames(ld))){
+        stop('The rownames and colnames in LD reference panel (ld) not match\n')
     }
 
     if(is.null(rownames(gwas))){
-        stop('The GWAS table (gwas) must have SNP IDs as rownames')
+        stop('The GWAS table (gwas) must have SNP IDs as rownames\n')
     }
     gwas=as.data.frame(gwas)
 
@@ -46,9 +50,9 @@ getSS=function(ld,gwas,B=NULL,verbose=TRUE){
     }else{
         if(verbose){
             if (is.null(B)) {
-                message(' There were ',length(snp_list), ' in common between the LD reference panel, and the GWAS.')
+                message(' There were ',length(snp_list), ' in common between the LD reference panel, and the GWAS.\n')
             } else {
-                message(' There were ',length(snp_list), ' in common between the LD reference panel, the GWAS and, the prior.')
+                message(' There were ',length(snp_list), ' in common between the LD reference panel, the GWAS and, the prior.\n')
             }
         }
     }
