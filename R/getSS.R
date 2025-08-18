@@ -23,19 +23,21 @@ getSS=function(ld,gwas,B=NULL,verbose=TRUE){
             if (is.null(names(B))) {
                 stop("The prior estimates vector (B) must have SNP IDs as names\n")
             }
-        } else if (is.matrix(B) | is.data.frame(B) | is.data.table(B)) {
+            Bnames=names(B)
+        } else if (is.matrix(B) | is.data.frame(B)) {
             if (is.null(rownames(B))) {
                 stop("The prior estimates matrix (B) must have SNP IDs as rownames\n")
             }
+            Bnames=rownames(B)
         } else {
-            stop("B must be in one of these formats: vector, matrix, data.frame, data.table\n")
+            stop("B must be in one of these formats: vector, matrix, data.frame\n")
         }
     }
     
     if (is.null(B)) {
         snp_list=intersect(rownames(ld),rownames(gwas))
     } else {
-        snp_list=Reduce(intersect, list(rownames(ld),rownames(gwas),rownames(B)))
+        snp_list=Reduce(intersect, list(rownames(ld),rownames(gwas),Bnames))
     }
     
     if (length(snp_list) == 0){ 
