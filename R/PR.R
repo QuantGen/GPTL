@@ -51,7 +51,7 @@ PR <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4,
   Xy=Xy[snp_list,,drop = FALSE]
   b=b[snp_list,,drop = FALSE]
 
-  p=length(Xy)
+  p=nrow(XX)
   b0=rep(0,p)
   
   diagXX=as.vector(Matrix::diag(XX))
