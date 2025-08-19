@@ -1,15 +1,45 @@
-PR.SS<- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4, maxIter=500, returnPath=TRUE) {
+PR<- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4, maxIter=500, returnPath=TRUE) {
   #alpha=0 -> Ridge; alpha=1 -> Lasso
 
   if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
   
-  if (!all(rownames(XX) == colnames(XX))) stop("Rowname and colname in XX not match\n")
+  if(is.null(rownames(XX)) | is.null(colnames(XX))){
+    stop('XX must have variant IDs as row and column names\n')
+  }
+    
+  if (!all(rownames(XX) == colnames(XX))) stop("Row and column names in XX not match\n")
+
+  if(is.null(names(Xy))){
+    stop('Xy must have variant IDs as names\n')
+  }
+
+  if (is.vector(b)) {
+    if (is.null(names(b))) {
+      stop("The prior estimates vector (b) must have variant IDs as names\n")
+    }
+    b=as.data.frame(b)
+  } else if (is.matrix(b) | is.data.frame(b)) {
+    if (is.null(rownames(b))) {
+      stop("The prior estimates matrix (b) must have variant IDs as row names\n")
+    }
+    b=as.data.frame(b)
+  } else {
+    stop("b must be in one of these formats: vector, matrix, data.frame\n")
+  }
   
   snp_list=Reduce(intersect, list(rownames(XX),names(Xy),names(b)))
-  if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
+  
+  if (length(snp_list) == 0){ 
+    stop("No matched variants in XX, Xy, and prior\n")
+  }else{
+    if(verbose){
+      message(' There were ',length(snp_list), ' variants in common between XX, Xy, and the prior.\n')
+    }
+  }
+  
   XX=XX[snp_list,snp_list,drop = FALSE]
-  Xy=Xy[snp_list]
-  b=b[snp_list]
+  Xy=Xy[snp_list,,drop = FALSE]
+  b=b[snp_list,,drop = FALSE]
 
   p=length(Xy)
   b0=rep(0,p)
@@ -82,7 +112,7 @@ PR.SS<- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-
 }
 
 
-PR<- function(ld, gwas, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4, maxIter=500, returnPath=TRUE) {
+PR.ld<- function(ld, gwas, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4, maxIter=500, returnPath=TRUE) {
   #alpha=0 -> Ridge; alpha=1 -> Lasso
 
   if (!all(rownames(ld) == colnames(ld))) stop("Rowname and colname in LD not match\n")
