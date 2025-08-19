@@ -66,7 +66,7 @@ BMM=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 
  B=as.matrix(B)
  # nIter=150;burnIn=50;R2=.5;nComp=matrix(ncol(B));df0.E=5;S0.E=vy*R2*df0.E;df0.b=rep(5,nComp);alpha=.1;my=mean(y); vy=var(y); B=cbind(rep(0,p),-1,1)
- p=length(Xy) 
+ p=nrow(XX)
  b=rowMeans(B)
  d=rep(1,p) # indicator variable for the group
  POST.PROB=matrix(nrow=p,ncol=nComp,0)
