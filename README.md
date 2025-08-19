@@ -143,7 +143,7 @@ BMM.SS() function takes as inputs the sufficient statistics derived from the tar
 
 ```R
 fm_BMM=BMM(XX=XX_t, Xy=Xy_t, my=mean(y_t), vy=var(y_t), nIter=12000, burnIn=2000, thin=5,
-               verbose=FALSE, B=cbind(prior,0), n=nrow(X_t))
+           verbose=FALSE, B=cbind(prior,0), n=nrow(X_t))
 str(fm_BMM)
 #> List of 7
 #>  $ b           : Named num [1:1279] -0.00131 0.01974 0.00557 0.00333 -0.00142 ...
