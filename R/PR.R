@@ -13,12 +13,13 @@ PR <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4,
     if (is.null(names(Xy))) {
       stop("Xy must have variant IDs as names\n")
     }
-    Xy=as.data.frame(Xy)
   } else if (is.matrix(Xy) | is.data.frame(Xy)) {
     if (is.null(rownames(Xy))) {
       stop("Xy must have variant IDs as row names\n")
     }
-    Xy=as.data.frame(Xy)
+    XyName=rownames(Xy)
+    Xy=as.vector(as.matrix(Xy))
+    names(Xy)=XyName
   } else {
     stop("Xy must be in one of these formats: vector, matrix, data.frame\n")
   }
@@ -27,17 +28,18 @@ PR <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4,
     if (is.null(names(b))) {
       stop("The prior estimates vector (b) must have variant IDs as names\n")
     }
-    b=as.data.frame(b)
   } else if (is.matrix(b) | is.data.frame(b)) {
     if (is.null(rownames(b))) {
       stop("The prior estimates matrix (b) must have variant IDs as row names\n")
     }
-    b=as.data.frame(b)
+    bName=rownames(b)
+    b=as.vector(as.matrix(b))
+    names(b)=bName
   } else {
     stop("b must be in one of these formats: vector, matrix, data.frame\n")
   }
   
-  snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(b)))
+  snp_list=Reduce(intersect, list(rownames(XX),names(Xy),names(b)))
   
   if (length(snp_list) == 0){ 
     stop("No matched variants in XX, Xy, and prior\n")
@@ -48,8 +50,8 @@ PR <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4,
   }
   
   XX=XX[snp_list,snp_list,drop = FALSE]
-  Xy=Xy[snp_list,,drop = FALSE]
-  b=b[snp_list,,drop = FALSE]
+  Xy=Xy[snp_list]
+  b=b[snp_list]
 
   p=nrow(XX)
   b0=rep(0,p)
