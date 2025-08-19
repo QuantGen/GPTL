@@ -1,6 +1,6 @@
-\name{BMM.SS}
-\alias{BMM.SS}
-\title{Transfer Learning using Bayesian model with an informative finite mixture prior (sufficient statistics)}
+\name{BMM}
+\alias{BMM}
+\title{Transfer Learning using Bayesian model with an informative finite mixture prior}
 \description{
     Performs Bayesian regressions with an informative finite mixture prior that shrink estimates towards prior values, taking sufficient statistics as inputs.
 }
