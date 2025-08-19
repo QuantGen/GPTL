@@ -3,23 +3,23 @@ GD<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, retu
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
 
     if(is.null(rownames(XX)) | is.null(colnames(XX))){
-        stop('XX must have SNP IDs as rownames and colnames\n')
+        stop('XX must have variant IDs as row and column names\n')
     }
     
-    if (!all(rownames(XX) == colnames(XX))) stop("Rownames and colnames in XX not match\n")
+    if (!all(rownames(XX) == colnames(XX))) stop("Row and column names in XX not match\n")
 
     if(is.null(names(Xy))){
-        stop('Xy must have SNP IDs as names\n')
+        stop('Xy must have variant IDs as names\n')
     }
 
     if (is.vector(b)) {
         if (is.null(names(b))) {
-            stop("The prior estimates vector (b) must have SNP IDs as names\n")
+            stop("The prior estimates vector (b) must have variant IDs as names\n")
         }
         b=as.data.frame(b)
     } else if (is.matrix(b) | is.data.frame(b)) {
         if (is.null(rownames(b))) {
-            stop("The prior estimates matrix (b) must have SNP IDs as rownames\n")
+            stop("The prior estimates matrix (b) must have variant IDs as row names\n")
         }
         b=as.data.frame(b)
     } else {
@@ -29,10 +29,10 @@ GD<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, retu
     snp_list=Reduce(intersect, list(rownames(XX),names(Xy),rownames(b)))
 
     if (length(snp_list) == 0){ 
-        stop("No matched SNPs in XX, Xy, and prior\n")
+        stop("No matched variants in XX, Xy, and prior\n")
     }else{
         if(verbose){
-            message(' There were ',length(snp_list), ' in common between XX, Xy, and the prior.\n')
+            message(' There were ',length(snp_list), ' variants in common between XX, Xy, and the prior.\n')
         }
     }
     
