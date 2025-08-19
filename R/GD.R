@@ -1,11 +1,41 @@
-GD.SS<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, returnPath=FALSE){
+GD<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, returnPath=FALSE, ,verbose=TRUE){
 
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
+
+    if(is.null(rownames(XX)) | is.null(colnames(XX))){
+        stop('XX must have SNP IDs as rownames and colnames\n')
+    }
     
-    if (!all(rownames(XX) == colnames(XX))) stop("Rowname and colname in XX not match\n")
+    if (!all(rownames(XX) == colnames(XX))) stop("Rownames and colnames in XX not match\n")
+
+    if(is.null(names(Xy))){
+        stop('Xy must have SNP IDs as names\n')
+    }
+
+    if (is.vector(b)) {
+        if (is.null(names(b))) {
+            stop("The prior estimates vector (b) must have SNP IDs as names\n")
+        }
+        b=as.data.frame(b)
+    } else if (is.matrix(b) | is.data.frame(b)) {
+        if (is.null(rownames(b))) {
+            stop("The prior estimates matrix (b) must have SNP IDs as rownames\n")
+        }
+        b=as.data.frame(b)
+    } else {
+        stop("b must be in one of these formats: vector, matrix, data.frame\n")
+    }
     
-    snp_list=Reduce(intersect, list(rownames(XX),names(Xy),names(b)))
-    if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
+    snp_list=Reduce(intersect, list(rownames(XX),names(Xy),rownames(b)))
+
+    if (length(snp_list) == 0){ 
+        stop("No matched SNPs in XX, Xy, and prior\n")
+    }else{
+        if(verbose){
+            message(' There were ',length(snp_list), ' in common between XX, Xy, and the prior.\n')
+        }
+    }
+    
     XX=XX[snp_list,snp_list,drop = FALSE]
     Xy=Xy[snp_list]
     b=b[snp_list]
@@ -79,7 +109,7 @@ GD.SS<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, r
 }
 
 
-GD<- function(ld, gwas, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, returnPath=FALSE){
+GD.ld<- function(ld, gwas, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, returnPath=FALSE){
     
     if (!all(rownames(ld) == colnames(ld))) stop("Rowname and colname in LD not match\n")
 
