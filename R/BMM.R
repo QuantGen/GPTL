@@ -50,7 +50,7 @@ BMM=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
  	stop("B must be in one of these formats: vector, matrix, data.frame\n")
  }
 	
- snp_list=Reduce(intersect, list(rownames(XX),names(Xy),rownames(B)))
+ snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(B)))
 
  if (length(snp_list) == 0){ 
  	stop("No matched variants in XX, Xy, and prior\n")
