@@ -1,6 +1,6 @@
-\name{PR.SS}
-\alias{PR.SS}
-\title{Transfer Learning using penalized regressions (sufficient statistics)}
+\name{PR}
+\alias{PR}
+\title{Transfer Learning using penalized regressions}
 \description{
     Performs penalized regressions that shrinkage estimates towards prior value, taking sufficient statistics as inputs.
 }
