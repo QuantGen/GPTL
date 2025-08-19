@@ -5,7 +5,7 @@
     Performs Gradient Descent with Early Stopping, taking sufficient statistics as inputs.
 }
 \usage{
-GD.SS(XX, Xy, b, nIter = 10, learning_rate = 1/50, returnPath = FALSE ,verbose=TRUE)
+GD.SS(XX, Xy, b, nIter = 10, learning_rate = 1/50, returnPath = FALSE, verbose=TRUE)
 }
 \arguments{
     \item{XX}{A (p x p) matrix, with row and column names being variant IDs. XX=crossprod(X), with X an genotype matrix of dimension n times p.}
