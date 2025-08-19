@@ -27,7 +27,7 @@ PR <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4,
     stop("b must be in one of these formats: vector, matrix, data.frame\n")
   }
   
-  snp_list=Reduce(intersect, list(rownames(XX),names(Xy),names(b)))
+  snp_list=Reduce(intersect, list(rownames(XX),names(Xy),rownames(b)))
   
   if (length(snp_list) == 0){ 
     stop("No matched variants in XX, Xy, and prior\n")
