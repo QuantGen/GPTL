@@ -112,10 +112,10 @@ Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the sourc
 
 ### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
-GD.SS() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
+GD() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
-fm_GDES=GD.SS(XX=XX_t, Xy=Xy_t, b=prior, nIter=100, returnPath=T, learning_rate=1/50)
+fm_GDES=GD(XX=XX_t, Xy=Xy_t, b=prior, nIter=100, returnPath=T, learning_rate=1/50)
 dim(fm_GDES)
 #> [1] 1279  100
 ```
