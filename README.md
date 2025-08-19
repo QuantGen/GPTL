@@ -120,18 +120,12 @@ dim(fm_GDES)
 #> [1] 1279  100
 ```
 
-Alternatively, GD() function takes as input a LD reference panel and GWAS results from the target population, and a vector of initial values (prior).
-
-```R
-fm_GDES2=GD(ld=ld, gwas=gwas, b=prior, nIter=100, returnPath=T, learning_rate=1/50)
-```
-
 ### Transfer Learning using penalized regressions (*TL-PR*)
 
 PR.SS() function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$ and $\alpha$, enabling users to select the optimal model based on cross-validation.
 
 ```R
-fm_PR=PR.SS(XX=XX_t, Xy=Xy_t, b=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
+fm_PR=PR(XX=XX_t, Xy=Xy_t, b=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
@@ -144,19 +138,12 @@ str(fm_PR)
 #>  $ conv_iter: num [1:100] 6 6 6 6 7 7 7 7 7 7 ...
 ```
 
-Alternatively, PR() function takes as input a LD reference panel and GWAS results from the target population, a vector of initial values (prior), and regularization parameters.
-
-```R
-fm_PR2=PR(ld=ld, gwas=gwas, b=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
-         maxIter=1000, returnPath=FALSE)
-```
-
 ### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
 BMM.SS() function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
 ```R
-fm_BMM=BMM.SS(XX=XX_t, Xy=Xy_t, my=mean(y_t), vy=var(y_t), nIter=12000, burnIn=2000, thin=5,
+fm_BMM=BMM(XX=XX_t, Xy=Xy_t, my=mean(y_t), vy=var(y_t), nIter=12000, burnIn=2000, thin=5,
                verbose=FALSE, B=cbind(prior,0), n=nrow(X_t))
 str(fm_BMM)
 #> List of 7
@@ -167,13 +154,6 @@ str(fm_BMM)
 #>  $ samplesVarB : num [1:12000, 1:2] 0.000655 0.000675 0.000647 0.000699 0.000708 ...
 #>  $ samplesB    : num [1:12000, 1:1279] 0.002978 0.038193 -0.015793 -0.003802 0.000238 ...
 #>  $ samplesVarE : num [1:12000] 0.643 0.582 0.549 0.629 0.604 ...
-```
-
-Alternatively, BMM() function takes as input a LD reference panel and GWAS results from the target population, a matrix of initial values (prior), and parameters that control the algorithm.
-
-```R
-fm_BMM2=BMM(ld=ld, gwas=gwas, B=cbind(prior,0), my=mean(y_t), vy=var(y_t), nIter=12000, burnIn=2000, thin=5,
-               verbose=FALSE, n=nrow(X_t))
 ```
 
 System Requirements
