@@ -36,7 +36,7 @@ GD<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, retu
         stop("b must be in one of these formats: vector, matrix, data.frame\n")
     }
     
-    snp_list=Reduce(intersect, list(rownames(XX),names(Xy),rownames(b)))
+    snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(b)))
 
     if (length(snp_list) == 0){ 
         stop("No matched variants in XX, Xy, and prior\n")
