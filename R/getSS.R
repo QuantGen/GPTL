@@ -2,8 +2,8 @@
     #  ld reference panel (ld a square symmetric correlation matrix),
     #  gwas results 
     #  And prior estimats (B)
- # it matches the arguments (based on rownames, i.e., snp ids) and computes
- # sufficient statistics (X'X and X'y) and prior estimats (B) (if provided).
+# it matches the arguments (based on rownames, i.e., snp ids) and computes
+# sufficient statistics (X'X and X'y) and prior estimats (B) (if provided).
 
 getSS=function(ld,gwas,B=NULL,verbose=TRUE){
     if(is.null(rownames(ld)) | is.null(colnames(ld))){
