@@ -9,8 +9,18 @@ PR <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4,
     
   if (!all(rownames(XX) == colnames(XX))) stop("Row and column names in XX not match\n")
 
-  if(is.null(names(Xy))){
-    stop('Xy must have variant IDs as names\n')
+  if (is.vector(Xy)) {
+    if (is.null(names(Xy))) {
+      stop("Xy must have variant IDs as names\n")
+    }
+    Xy=as.data.frame(Xy)
+  } else if (is.matrix(Xy) | is.data.frame(Xy)) {
+    if (is.null(rownames(Xy))) {
+      stop("Xy must have variant IDs as row names\n")
+    }
+    Xy=as.data.frame(Xy)
+  } else {
+    stop("Xy must be in one of these formats: vector, matrix, data.frame\n")
   }
 
   if (is.vector(b)) {
