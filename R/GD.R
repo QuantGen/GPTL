@@ -50,7 +50,7 @@ GD<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, retu
     Xy=Xy[snp_list,,drop = FALSE]
     b=b[snp_list,,drop = FALSE]
 
-    p=length(Xy)
+    p=nrow(XX)
     b0=rep(0,p)
   	
     previous_lambda=0
