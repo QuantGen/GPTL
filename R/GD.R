@@ -1,4 +1,4 @@
-GD<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, returnPath=FALSE, ,verbose=TRUE){
+GD<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, returnPath=FALSE, verbose=TRUE){
 
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
 
@@ -37,8 +37,8 @@ GD<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, retu
     }
     
     XX=XX[snp_list,snp_list,drop = FALSE]
-    Xy=Xy[snp_list]
-    b=b[snp_list]
+    Xy=Xy[snp_list,,drop = FALSE]
+    b=b[snp_list,,drop = FALSE]
 
     p=length(Xy)
     b0=rep(0,p)
