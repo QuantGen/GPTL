@@ -26,12 +26,13 @@ BMM=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
  	if (is.null(names(Xy))) {
  		stop("Xy must have variant IDs as names\n")
  	}
- 	Xy=as.data.frame(Xy)
  } else if (is.matrix(Xy) | is.data.frame(Xy)) {
  	if (is.null(rownames(Xy))) {
  		stop("Xy must have variant IDs as row names\n")
  	}
- 	Xy=as.data.frame(Xy)
+ 	XyName=rownames(Xy)
+    Xy=as.vector(as.matrix(Xy))
+    names(Xy)=XyName
  } else {
  	stop("Xy must be in one of these formats: vector, matrix, data.frame\n")
  }
@@ -50,7 +51,7 @@ BMM=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
  	stop("B must be in one of these formats: vector, matrix, data.frame\n")
  }
 	
- snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(B)))
+ snp_list=Reduce(intersect, list(rownames(XX),names(Xy),rownames(B)))
 
  if (length(snp_list) == 0){ 
  	stop("No matched variants in XX, Xy, and prior\n")
@@ -61,7 +62,7 @@ BMM=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
  }
 	
  XX=XX[snp_list,snp_list,drop = FALSE]
- Xy=Xy[snp_list,,drop = FALSE]
+ Xy=Xy[snp_list]
  B=B[snp_list,,drop = FALSE]
 
  B=as.matrix(B)
