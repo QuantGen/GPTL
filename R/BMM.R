@@ -10,18 +10,48 @@
 #  To do: sample error variance ; add prior probabilities for the mixtures (right now equivalent to 1/nClasses); priors for the variances
 ##
 
-BMM.SS=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
+BMM=function(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	        nComp=matrix(ncol(B)), K=1/nComp, df0.E=5, S0.E=vy*(1-R2)*df0.E, df0.b=rep(10,nComp), 
 	        priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE, fixVarE=FALSE,fixVarB=rep(FALSE,nComp)){
 
  if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
-	
- if (!all(rownames(XX) == colnames(XX))) stop("Rowname and colname in XX not match\n")
+
+ if(is.null(rownames(XX)) | is.null(colnames(XX))){
+ 	stop('XX must have variant IDs as row and column names\n')
+ }
+    
+ if (!all(rownames(XX) == colnames(XX))) stop("Row and column names in XX not match\n")
+
+ if(is.null(names(Xy))){
+ 	stop('Xy must have variant IDs as names\n')
+ }
+
+ if (is.vector(B)) {
+ 	if (is.null(names(B))) {
+ 		stop("The prior estimates vector (B) must have variant IDs as names\n")
+ 	}
+ 	B=as.data.frame(B)
+ } else if (is.matrix(B) | is.data.frame(B)) {
+ 	if (is.null(rownames(B))) {
+ 		stop("The prior estimates matrix (B) must have variant IDs as row names\n")
+ 	}
+ 	B=as.data.frame(B)
+ } else {
+ 	stop("B must be in one of these formats: vector, matrix, data.frame\n")
+ }
 	
  snp_list=Reduce(intersect, list(rownames(XX),names(Xy),rownames(B)))
- if (length(snp_list) == 0) stop("No matched SNPs in XX, Xy, and prior\n")
+
+ if (length(snp_list) == 0){ 
+ 	stop("No matched variants in XX, Xy, and prior\n")
+ }else{
+ 	if(verbose){
+ 		message(' There were ',length(snp_list), ' variants in common between XX, Xy, and the prior.\n')
+ 	}
+ }
+	
  XX=XX[snp_list,snp_list,drop = FALSE]
- Xy=Xy[snp_list]
+ Xy=Xy[snp_list,,drop = FALSE]
  B=B[snp_list,,drop = FALSE]
 
  B=as.matrix(B)
@@ -157,7 +187,7 @@ if(fixVarE){
 }
 
 
-BMM=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
+BMM.ld=function(ld, gwas, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
 	        nComp=matrix(ncol(B)), K=1/nComp, df0.E=5, S0.E=vy*(1-R2)*df0.E, df0.b=rep(10,nComp), 
 	        priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE, fixVarE=FALSE){
 
