@@ -78,7 +78,7 @@ head(gwas, 3)
 #> wPt.6348       0.00989    0.01162    15000      0.63647
 ```
 
-In this study we generated LD reference panels for African American and Hispanic ancestry sample using the All of Us (CDRv7, Controlled Tier) data, available at [Link](https://doi.org/10.5281/zenodo.16923734).
+In this study we generated LD reference panels for African American and Hispanic ancestry populations using the All of Us (CDRv7, Controlled Tier) data, available at [Link](https://doi.org/10.5281/zenodo.16923734).
 
 getSS() function takes as input the LD reference panel and GWAS results. The function returns the sufficient statistics (**X'X** and **X'y**).
 
