@@ -1,4 +1,4 @@
-PR_TEST <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4, maxIter=500, returnPath=TRUE, verbose=TRUE) {
+PR_TEST <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=1e-4, maxIter=500, returnPath=FALSE, verbose=TRUE) {
   #alpha=0 -> Ridge; alpha=1 -> Lasso
 
   if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
@@ -60,8 +60,8 @@ PR_TEST <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=
   
   if(is.null(lambda)){
     if (alpha == 0) {
-      grid.min=1
       grid.max=10000
+      grid.min=1
       grid=exp(seq(from=log(grid.max),to=log(grid.min),length=nLambda))
       K=mean(diagXX)
       lambda=K*grid
@@ -109,6 +109,12 @@ PR_TEST <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=
     }
   }
 
+  num_not_conv=sum(conv_iter == maxIter)
+
+  if (num_not_conv > 0) {
+    message(' There were ', num_not_conv, ' models reached maximum iterations (', maxIter, ') and not converged, check output for details.\n')
+  }
+  
   if (returnPath) {
     return(list(B=B[,,,drop=TRUE], lambda=lambda, alpha=alpha, conv_iter=conv_iter))
   } else {
