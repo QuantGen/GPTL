@@ -60,7 +60,7 @@ PR_TEST <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=
   
   if(is.null(lambda)){
     if (alpha == 0) {
-      grid.min=2
+      grid.min=1
       grid.max=10000
       grid=exp(seq(from=log(grid.max),to=log(grid.min),length=nLambda))
       K=mean(diagXX)
