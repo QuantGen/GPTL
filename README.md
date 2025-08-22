@@ -62,7 +62,7 @@ XX_t=crossprod(X_t)
 Xy_t=crossprod(X_t, y_t)
 ```
 
-Alternatively, one can provide a LD reference panel (i.e., a matrix of correlations between the variants) and GWAS results (including variants allele frequencies, estimated effects, and SEs) if the sufficient statistics (**X'X** and **X'y**) or individual genotype and phenotype (**X** and **y**) for the target population are not available.
+Alternatively, one can provide a LD reference panel (i.e., a matrix of correlations between the variants) and GWAS results (including variants allele frequencies, estimated effects, and SEs) if the sufficient statistics (**X'X** and **X'y**) or individual genotype and phenotype (**X** and **y**) for the target population are not available. In this study we generated LD reference panels for African American and Hispanic ancestry sample using the All of Us (CDRv7, Controlled Tier) data.
 
 ```R
 str(ld)
