@@ -54,7 +54,7 @@ PR_TEST <- function(XX, Xy, b, lambda=NULL, nLambda=30, alpha=0, conv_threshold=
   b=b[snp_list]
 
   p=nrow(XX)
-  b0=rep(0,p)
+  b0=b
   
   diagXX=as.vector(Matrix::diag(XX))
   
