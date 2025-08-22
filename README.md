@@ -62,7 +62,7 @@ XX_t=crossprod(X_t)
 Xy_t=crossprod(X_t, y_t)
 ```
 
-Alternatively, one can provide a LD reference panel (i.e., a matrix of correlations between the variants) and GWAS results (including variants allele frequencies, estimated effects, and SEs) if the sufficient statistics (**X'X** and **X'y**) or individual genotype and phenotype (**X** and **y**) for the target population are not available. In this study we generated LD reference panels for African American and Hispanic ancestry sample using the All of Us (CDRv7, Controlled Tier) data.
+Alternatively, one can provide a LD reference panel (i.e., a matrix of correlations between the variants) and GWAS results (including variants allele frequencies, estimated effects, and SEs) if the sufficient statistics (**X'X** and **X'y**) or individual genotype and phenotype (**X** and **y**) for the target population are not available.
 
 ```R
 str(ld)
@@ -77,6 +77,8 @@ head(gwas, 3)
 #> wPt.8463       -0.01228   0.01206    15000      0.44582
 #> wPt.6348       0.00989    0.01162    15000      0.63647
 ```
+
+In this study we generated LD reference panels for African American and Hispanic ancestry sample using the All of Us (CDRv7, Controlled Tier) data, available at [Link](https://doi.org/10.5281/zenodo.16923734).
 
 getSS() function takes as input the LD reference panel and GWAS results. The function returns the sufficient statistics (**X'X** and **X'y**).
 
