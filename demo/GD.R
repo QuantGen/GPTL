@@ -16,7 +16,7 @@ if(FALSE){
  signal=X%*%b
  y=signal+rnorm(nrow(X),sd=sd(signal))
 
- bHat1=coef(lm(y~X))
+ bHat1=coef(lm(y~X-1))
 
  XX=crossprod(X)
  Xy=crossprod(X,y)
@@ -28,9 +28,9 @@ if(FALSE){
  prior=rep(0,5)
  names(prior)=paste0('snp_', 1:5)
 
- bHat2=GD(XX,Xy,lambda=0,nIter=100,learning_rate=.1);plot(bHat1,bHat2,cex=1.5,col=2);abline(a=0,b=1)
-
- fm_GDES=GD(XX=XX_t, Xy=Xy_t, b=prior, learning_rate=1/50, nIter=100, returnPath=T)
+ bHat2=GD(XX=XX, Xy=Xy, b=prior, learning_rate=1/50, nIter=100, returnPath=F)
+ 
+ plot(bHat1,bHat2,cex=1.5,col=2);abline(a=0,b=1)
 
 ## Ridge Regression problem
 
