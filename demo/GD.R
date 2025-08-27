@@ -18,8 +18,12 @@ if(FALSE){
 
  bHat1=coef(lm(y~X))
 
- XX=crossprod(cbind(1,X),cbind(1,X))
- Xy=crossprod(cbind(1,X),y)
+ XX=crossprod(X)
+ Xy=crossprod(X,y)
+
+ colnames(XX)=paste0('snp_', 1:5)
+ rownames(XX)=paste0('snp_', 1:5)
+ rownames(Xy)=paste0('snp_', 1:5)
 
  bHat2=GD(XX,Xy,lambda=0,nIter=100,learning_rate=.1);plot(bHat1,bHat2,cex=1.5,col=2);abline(a=0,b=1)
 
