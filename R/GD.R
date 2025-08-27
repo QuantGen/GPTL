@@ -352,13 +352,11 @@ GD_sparse<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/50,
             for(i in 2:ncol(B))
             {
               B[,i,h]=.Call("GRAD_DESC_sparse",C@x,C@p,C@i,Xy, B[,i-1,h],p, 1, LR)
-              #B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
             }
          }else{
          	 #Inefficient, but it is just for testing purposes
              C<-as(XX,"dgCMatrix")
              B[,1,h]=.Call("GRAD_DESC_sparse",C@x,C@p,C@i,Xy, b+0,p, nIter, LR)
-            #B[,1,h]=.Call("GRAD_DESC",XX, Xy, b+0,p, nIter, LR)
         }
     }
     if(returnPath){
