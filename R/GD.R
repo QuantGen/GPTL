@@ -312,8 +312,7 @@ GD1<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/50,
     }
   
     B=B[,,,drop=TRUE]
-
-  
+    
     return(B)
 }
 
@@ -374,6 +373,5 @@ GD_sparse<- function(XX,Xy,p=ncol(XX),b=rep(0,p), nIter=10,learning_rate=1/50,
   
     B=B[,,,drop=TRUE]
 
-  
     return(B)
 }
