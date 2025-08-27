@@ -144,8 +144,8 @@ str(fm_PR)
 BMM.SS() function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
 ```R
-fm_BMM=BMM(XX=XX_t, Xy=Xy_t, my=mean(y_t), vy=var(y_t), B=cbind(prior,0), n=nrow(X_t), nIter=12000, burnIn=2000, thin=5,
-           verbose=FALSE)
+fm_BMM=BMM(XX=XX_t, Xy=Xy_t, my=mean(y_t), vy=var(y_t), B=cbind(prior,0), n=nrow(X_t),
+           nIter=12000, burnIn=2000, thin=5, verbose=FALSE)
 str(fm_BMM)
 #> List of 7
 #>  $ b           : Named num [1:1279] -0.00131 0.01974 0.00557 0.00333 -0.00142 ...
