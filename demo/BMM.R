@@ -1,7 +1,9 @@
 
  
-  library(remotes)
-install_github('https://github.com/QuantGen/GPTL')
+if(FALSE){
+ library(remotes)
+ install_github('https://github.com/quantGen/GPTL')
+ }
 
  library(GPTL)
  library(BGLR)
@@ -30,10 +32,6 @@ install_github('https://github.com/QuantGen/GPTL')
 
  system.time( 
      tmp<-BMM(C=C,rhs=rhs,my=mean(y),vy=var(y),n=n,verbose=FALSE,
-              B0=cbind(rep(0,p),-1,1),nIter=1100,burnIn=100) 
-            )
- system.time( 
-     tmp2<-BMM_old(C=C,rhs=rhs,my=mean(y),vy=var(y),n=n,verbose=FALSE,
               B0=cbind(rep(0,p),-1,1),nIter=1100,burnIn=100) 
             )
 
