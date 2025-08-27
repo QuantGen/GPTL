@@ -104,7 +104,7 @@ We estimated effects using a Bayesian shrinkage estimation method (a Bayesian mo
 
 ```R
 ETA=list(list(X=X_s, model="BRR"))
-fm=BGLR(y=y_s, response_type = "gaussian", ETA = ETA, nIter = 12000, burnIn = 2000, verbose = FALSE)
+fm=BGLR(y=y_s, ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
 prior=fm$ETA[[1]]$b
 names(prior)=colnames(X_s)
 ```
