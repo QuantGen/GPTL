@@ -7,6 +7,6 @@ Authors@R: c(
     person("Hao", "Wu", email = "wuhao12@msu.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7570-190X")),
     person("Gustavo", "de los Campos", email = "gustavoc@msu.edu", role = c("aut")))
 Depends: R (>= 3.0.0)
-Imports: methods
-Suggests: BGLR, Matrix, remotes
+Imports: methods, Matrix
+Suggests: BGLR, remotes
 URL: https://github.com/QuantGen/GPTL
