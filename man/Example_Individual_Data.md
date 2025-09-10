@@ -1,4 +1,11 @@
-### Loading the package
+### GPTL using individual genetype and phenotype data
+
+The following example illustrate how GPTL software works when one has access to individual genetype and phenotype data. Here we use the [wheat](https://doi.org/10.1104/pp.105.063438) data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
+
+**1. Data Preparation**
+
+
+#### Loading the package
 
 ```R
 library(GPTL)
