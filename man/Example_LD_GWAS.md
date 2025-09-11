@@ -4,51 +4,60 @@ The following example illustrate how GPTL software works when using an LD refere
 
 **1. Data Preparation**
 
+We use a toy data set of LD matrix, GWAS results, and prior effects, including 1947 variants (first 10 LD blocks in chromosome 1 of All of Us African American LD reference panel). The whole LD reference panels and GWAS results are at [Link](https://doi.org/10.5281/zenodo.16923734) and [Link](https://doi.org/10.5281/zenodo.17087604).
+
 ```R
 library(GPTL)
+library(Matrix)
 data(toyData)
-y=wheat.Y[,1]
-X=scale(wheat.X, center=TRUE, scale=TRUE)
 
-CLUSTER=kmeans(X,2)
-table(CLUSTER$cluster)
-#>   1   2 
-#> 346 253 
+LD[1:3,1:3]
+#> 3 x 3 sparse Matrix of class "dgCMatrix"
+#>              JHU_1.737262  rs114339855 JHU_1.761190
+#> JHU_1.737262  1.000000000 0.0010638559 0.0015435403
+#> rs114339855   0.001063856 1.0000000000 0.0003776402
+#> JHU_1.761190  0.001543540 0.0003776402 1.0000000000
+
+head(gwas, 3)
+#>                        id chr a1 a0        beta        se     n allele_freq
+#> JHU_1.737262 JHU_1.737262   1  A  G  0.06759564 0.1091687 39302  0.06583625
+#> rs114339855   rs114339855   1  G  T -0.18147248 0.1860653 39302  0.02037881
+#> JHU_1.761190 JHU_1.761190   1  T  C  0.16778221 0.1603125 39302  0.02787886
+
+str(prior)
+#>  Named num [1:1947] 0 0.000592 0 0 0 ...
+#>  - attr(*, "names")= chr [1:1947] "JHU_1.737262" "rs114339855" "JHU_1.761190" "JHU_1.761763" ...
 ```
 
-We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). 
+Here *LD* is a sparse LD reference matrix in "dgCMatrix" class, with row and column names as variant ID. *gwas* is a GWAS result data frame, where columns of **beta** (estimated effects), **se** (standard errors), **n** (sample sizes), **allele_freq** (allele frequency), and variant ID as row names are required. *prior* is a vector of prior effects estimated in the source population, with names as variant ID.
+
+We use *getSS()* function to compute the sufficient statistics (**X'X** and **X'y**) based on the LD matrix, GWAS results (and prior effects, to algin the variants).
 
 ```R
-Xs=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE);ys=y[CLUSTER$cluster == 1]
-Xt=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE);yt=y[CLUSTER$cluster == 2]
-```
-
-We estimated prior effects from the source data set using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package). Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
-
-```R
-ETA=list(list(X=Xs, model="BRR"))
-fm=BGLR(y=ys, ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
-prior=fm$ETA[[1]]$b
-names(prior)=colnames(Xs)
-```
-
-We further split the target data set into (i) a training set (40%), (ii) a calibration set (40%), and (iii) a testing set (20%), and compute the sufficient statistics (**X'X** and **X'y**) for the each of sets.
-
-```R
-set.seed(1234)
-sets=as.integer(as.factor(cut(runif(nrow(Xt)),breaks=c(0,quantile(runif(nrow(Xt)),prob=c(.4,.8)),1.1))))
-Xt_train=Xt[sets==1,];yt_train=yt[sets==1];XXt_train=crossprod(Xt_train);Xyt_train=crossprod(Xt_train, yt_train)
-Xt_cali=Xt[sets==2,];yt_cali=yt[sets==2];XXt_cali=crossprod(Xt_cali);Xyt_cali=crossprod(Xt_cali, yt_cali);yyt_cali=crossprod(yt_cali)
-Xt_test=Xt[sets==3,];yt_test=yt[sets==3];XXt_test=crossprod(Xt_test);Xyt_test=crossprod(Xt_test, yt_test);yyt_test=crossprod(yt_test)
+SS=getSS(ld=LD,gwas=gwas,B=prior)
+#>  There were 1719 variant in common between the LD reference panel, the GWAS and, the prior.
+str(SS)
+#> List of 4
+#>  $ XX:Formal class 'dgCMatrix' [package "Matrix"] with 6 slots
+#>   .. ..@ i       : int [1:604305] 0 1 2 3 4 0 1 2 3 4 ...
+#>   .. ..@ p       : int [1:1720] 0 5 10 15 20 25 259 493 727 961 ...
+#>   .. ..@ Dim     : int [1:2] 1719 1719
+#>   .. ..@ Dimnames:List of 2
+#>   .. .. ..$ : chr [1:1719] "JHU_1.737262" "rs114339855" "JHU_1.761190" "JHU_1.761763" ...
+#>   .. .. ..$ : chr [1:1719] "JHU_1.737262" "rs114339855" "JHU_1.761190" "JHU_1.761763" ...
+#>   .. ..@ x       : num [1:604305] 4834.29 2.93 4.95 11.57 13.34 ...
+#>   .. ..@ factors : list()
+#>  $ Xy: Named num [1:1719] 327 -285 357 115 301 ...
+#>   ..- attr(*, "names")= chr [1:1719] "JHU_1.737262" "rs114339855" "JHU_1.761190" "JHU_1.761763" ...
+#>  $ n : num 39302
+#>  $ B :'data.frame':	1719 obs. of  1 variable:
+#>   ..$ B: num [1:1719] 0 0.000592 0 0 0 ...
 ```
 
 **2. PGS Estimation Using GPTL**
 
-- #### Loading the package
 
-```R
-library(GPTL)
-```
+
 
 - #### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
