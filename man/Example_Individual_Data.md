@@ -16,37 +16,33 @@ table(CLUSTER$cluster)
 #> 346 253 
 ```
 
-We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). 
+We use samples in cluster 2 as the source data set (where information is transferred) and samples in cluster 1 as the target data set (where the PGS will be used). 
 
 ```R
-X_s=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE)
-y_s=y[CLUSTER$cluster == 1]
-
-X_t=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE)
-y_t=y[CLUSTER$cluster == 2]
+Xs=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE);ys=y[CLUSTER$cluster == 2]
+Xt=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE);yt=y[CLUSTER$cluster == 1]
 ```
 
-We compute the sufficient statistics (**X'X** and **X'y**) for the target data set.
+We estimated prior effects from the source data set using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package). Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
 
 ```R
-XX_t=crossprod(X_t)
-Xy_t=crossprod(X_t, y_t)
-```
-
-**2. Prior Estimation**
-
-We estimated prior effects from the source data set using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package).
-
-```R
-ETA=list(list(X=X_s, model="BRR"))
-fm=BGLR(y=y_s, ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
+ETA=list(list(X=Xs, model="BRR"))
+fm=BGLR(y=ys, ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
 prior=fm$ETA[[1]]$b
-names(prior)=colnames(X_s)
+names(prior)=colnames(Xs)
 ```
 
-Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
+We further split the target data set into (i) a training set (40%), (ii) a calibration set (40%), and (iii) a testing set (20%), and compute the sufficient statistics (**X'X** and **X'y**) for the each of sets.
 
-**3. PGS Estimation**
+```R
+set.seed(123)
+sets=as.integer(as.factor(cut(runif(nrow(Xt)),breaks=c(0,quantile(runif(nrow(Xt)),prob=c(.4,.8)),1.1))))
+Xt_train=Xt[sets==1,];yt_train=yt[sets==1];XXt_train=crossprod(Xt_train);Xyt_train=crossprod(Xt_train, yt_train)
+Xt_cali=Xt[sets==1,];yt_cali=yt[sets==1];XXt_cali=crossprod(Xt_cali);Xyt_cali=crossprod(Xt_cali, yt_cali)
+Xt_test=Xt[sets==1,];yt_test=yt[sets==1];XXt_test=crossprod(Xt_test);Xyt_test=crossprod(Xt_test, yt_test)
+```
+
+**2. PGS Estimation Using GPTL**
 
 #### Loading the package
 
@@ -59,10 +55,16 @@ library(GPTL)
 GD() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
-fm_GDES=GD(XX=XX_t, Xy=Xy_t, b=prior, learning_rate=1/50, nIter=100, returnPath=T)
+fm_GDES=GD(XX=XXt_train, Xy=Xyt_train, b=prior, learning_rate=1/50, nIter=100, returnPath=T)
 dim(fm_GDES)
 #> [1] 1279  100
 ```
+
+We evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (nIter).
+
+
+
+
 
 #### Transfer Learning using penalized regressions (*TL-PR*)
 
