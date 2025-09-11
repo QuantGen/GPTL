@@ -56,7 +56,7 @@ str(SS)
 
 **2. PGS Estimation Using GPTL**
 
-The PGS estimation processes are similar to [Example_Individual_Data]() (except for *BMM()*). Therefore, here we only illustrate how GPTL software works, without showing the details of calibration-testing processes.
+The PGS estimation processes are similar to [Example_Individual_Data](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md) (except for *BMM()*). Therefore, here we only illustrate how GPTL software works, without showing the details of calibration-testing processes.
 
 - #### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
