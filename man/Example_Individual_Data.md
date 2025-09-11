@@ -107,47 +107,43 @@ opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
 ```
 
 <p align="left">
-    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/GDES_plot.png" alt="Description" width="400">
+    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/PR_plot.png" alt="Description" width="400">
 </p>
 
 We then re-estimate the PGS effects using both the training and calibration sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_GDES_final=GD(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, learning_rate=1/50, nIter=opt_nIter, returnPath=F)
-getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
-#> [1] 0.4334093
+fm_PR_final=PR(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, alpha=0, lambda=opt_lambda, conv_threshold=1e-4,
+            maxIter=1000, returnPath=FALSE)
+getCor(XXt_test, Xyt_test, yyt_test, fm_PR_final$B)
+#> [1] 0.6141271
 ```
 
-
-
-```R
-
-
-```
-
-
-#### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
+- #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
 BMM() function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
+BMM() only requires a single run of the algorithm because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using both the training and calibration sets, and evaluate the final prediction accuracy in the testing set.
+
 ```R
-fm_BMM=BMM(XX=XXt_train, Xy=Xyt_train, my=mean(yt_train), vy=var(yt_train), B=cbind(prior,0), n=nrow(Xt_train),
+fm_BMM=BMM(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, my=mean(c(yt_train,yt_cali)), vy=var(c(yt_train,yt_cali)n), B=cbind(prior,0), n=nrow(Xt_train)+nrow(Xt_cali),
            nIter=12000, burnIn=2000, thin=5, verbose=FALSE)
 str(fm_BMM)
 #> List of 7
-#>  $ b           : Named num [1:1279] -0.00131 0.01974 0.00557 0.00333 -0.00142 ...
+#>  $ b           : Named num [1:1279] -0.020117 0.017591 0.019884 0.003021 -0.000865 ...
 #>   ..- attr(*, "names")= chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
-#>  $ POST.PROB   : num [1:1279, 1:2] 0.429 0.537 0.482 0.482 0.49 ...
-#>  $ postMeanVarB: num [1:2] 0.00159 0.00194
-#>  $ postProb    : num [1:2] 0.499 0.501
-#>  $ samplesVarB : num [1:12000, 1:2] 0.000703 0.000793 0.000812 0.0009 0.000918 ...
-#>  $ samplesB    : num [1:12000, 1:1279] 0.00358 -0.07363 -0.01596 -0.02647 -0.06138 ...
+#>  $ POST.PROB   : num [1:1279, 1:2] 0.436 0.522 0.479 0.505 0.504 ...
+#>  $ postMeanVarB: num [1:2] 0.0014 0.00235
+#>  $ postProb    : num [1:2] 0.5 0.5
+#>  $ samplesVarB : num [1:12000, 1:2] 0.000726 0.000718 0.000772 0.000746 0.000772 ...
+#>  $ samplesB    : num [1:12000, 1:1279] 0.0204 -0.0154 -0.0104 -0.0226 0.0205 ...
+#>  $ samplesVarE : num [1:12000] 0.593 0.537 0.524 0.585 0.458 ...
+getCor(XXt_test, Xyt_test, yyt_test, fm_BMM$b)
+#> [1] 0.635143
 ```
 
-```R
-Cor_BMM=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_BMM$b)
 
-```
+
 
 
 
