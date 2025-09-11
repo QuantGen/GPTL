@@ -64,6 +64,7 @@ We evaluate the prediction accuracy in the calibration set to select the optimal
 
 ```R
 Cor_GDES=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_GDES)
+plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20)
 opt_nIter=which.max(Cor_GDES)
 ```
 
