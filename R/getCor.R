@@ -1,4 +1,4 @@
-getCor=function(XX,Xy,yy,B){
+getCor=function(XX, Xy, yy, B, verbose=FALSE){
  
  if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
 
