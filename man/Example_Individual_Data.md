@@ -68,6 +68,8 @@ plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20)
 opt_nIter=which.max(Cor_GDES)
 ```
 
+<a href="url"><img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/GDES_plot.png" align="left" height="48" width="48" ></a>
+
 ![](https://github.com/QuantGen/GPTL/blob/main/man/plots/GDES_plot.png)
 
 
