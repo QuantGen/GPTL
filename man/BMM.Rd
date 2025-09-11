@@ -7,7 +7,7 @@
 \usage{
 BMM(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
        nComp=matrix(ncol(B)), K=1/nComp, df0.E=5, S0.E=vy*(1-R2)*df0.E, df0.b=rep(10,nComp), 
-       priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE)
+       priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), fixVarE=FALSE, fixVarB=rep(FALSE,nComp), verbose=TRUE)
 }
 \arguments{
     \item{XX}{A (p x p) matrix, with row and column names being variant IDs. XX=crossprod(X), with X an genotype matrix of dimension n times p.}
@@ -27,6 +27,8 @@ BMM(XX, Xy, B, my, vy, n, nIter=150, burnIn=50, thin=5, R2=0.25,
     \item{df0.b}{A numeric vector of length nComp, the parameter for the Dirichlet prior assigned to the prior information.}
     \item{priorProb}{A numeric vector of length nComp, the mixture prior (\eqn{\pi}).}
     \item{priorCounts}{(integer) Counts of the mixture prior (\eqn{\pi}).}
+    \item{fixVarE}{(logical) if TRUE the error variance is fixed and computed depending on R2, default FALSE.}
+    \item{fixVarB}{(logical) if TRUE the effects variance for each prior component is fixed and computed depending on R2, default FALSE.}
     \item{verbose}{(logical) if TRUE the iteration history is printed, default TRUE.}
 }
 \value{
