@@ -8,15 +8,16 @@
 getCor(XX, Xy, yy, B, verbose=FALSE)
 }
 \arguments{
-    \item{ld}{A (p x p) matrix, with row and column names being variant IDs. LD reference matrix.}
-    \item{gwas}{A (p x 4) matrix or data.frame, with row names being variant IDs. GWAS results must consist of four columns: beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency).}
-    \item{B}{(optional) A numeric vector of length p, with names being variant IDs. Alternatively, \code{B} can be a (p x k) matrix or data.frame, with row names being variant IDs, and each column being a source of prior information.}
-    \item{verbose}{(logical) if TRUE the algorithm history is printed, default TRUE.}
+    \item{XX}{A (p x p) matrix, with row and column names being variant IDs. XX=crossprod(X), with X an genotype matrix of dimension n times p.}
+    \item{Xy}{A numeric vector of length p, with names being variant IDs. Xy=crossprod(X,y).}
+    \item{yy}{A numeric value. yy=crossprod(y).}
+    \item{B}{(matrix) A matrix includes the estimated effects for each estimates (one row per SNP, one column per estimates), with row names being variant IDs.}
+    \item{verbose}{(logical) if TRUE the history is printed, default FALSE.}
 }
 \value{
-    Sufficient statistics (XX and Xy) and prior (if provided) will be computed for all the common variants in \code{ld}, \code{gwas}, and \code{B} (if provided).
+    Prediction correlationwill be computed for all the common variants in \code{XX}, \code{Xy}, and \code{B}.
 
-    If \code{B} is provided, a list with four entries:
+    A list with four entries:
     \itemize{
         \item \code{XX}: A matrix of XX.
         \item \code{Xy}: A numeric vector of Xy.
