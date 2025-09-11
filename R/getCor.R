@@ -56,5 +56,5 @@ getCor=function(XX,Xy,yy,B){
 	 b=B[,i]
 	 Cor[i]=crossprod(b,Xy)/sqrt(yy*t(b)%*%XX%*%b)
  }
- Cor
+ return(Cor)
 }
