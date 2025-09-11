@@ -142,4 +142,4 @@ getCor(XXt_test, Xyt_test, yyt_test, fm_BMM$b)
 #> [1] 0.635143
 ```
 
-[Back to Home](https://github.com/QuantGen/GPTL)
+[Back to Home](https://github.com/QuantGen/GPTL/blob/main/README.md)
