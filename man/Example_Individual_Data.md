@@ -44,13 +44,13 @@ Xt_test=Xt[sets==3,];yt_test=yt[sets==3];XXt_test=crossprod(Xt_test);Xyt_test=cr
 
 **2. PGS Estimation Using GPTL**
 
-#### Loading the package
+- #### Loading the package
 
 ```R
 library(GPTL)
 ```
 
-#### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
+- #### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
 GD() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
 
@@ -82,31 +82,53 @@ getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
 
-PR() function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$ and $\alpha$, enabling users to select the optimal model based on cross-validation.
+PR() function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$, enabling users to select the optimal model based on cross-validation.
 
 ```R
 fm_PR=PR(XX=XXt_train, Xy=Xyt_train, b=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
-#>  $ B        : num [1:1279, 1:100] 0.002611 0.003227 -0.00547 -0.00045 -0.000568 ...
+#>  $ B        : num [1:1279, 1:100] 0.01565 0.015802 -0.005457 0.002243 0.000514 ...
 #>   ..- attr(*, "dimnames")=List of 2
 #>   .. ..$ : chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
-#>   .. ..$ : chr [1:100] "lambda_4614.6071" "lambda_4407.4852" "lambda_4209.5668" "lambda_4020.443" ...
-#>  $ lambda   : num [1:100] 4615 4407 4210 4020 3840 ...
+#>   .. ..$ : chr [1:100] "lambda_158389.9608" "lambda_144319.0332" "lambda_131498.1281" "lambda_119816.1968" ...
+#>  $ lambda   : num [1:100] 158390 144319 131498 119816 109172 ...
 #>  $ alpha    : num 0
-#>  $ conv_iter: num [1:100] 10 10 10 10 11 11 12 12 12 13 ...
+#>  $ conv_iter: num [1:100] 3 3 3 3 3 3 3 3 3 3 ...
 ```
+
+We evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (lambda).
 
 ```R
 Cor_PR=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_PR$B)
+plot(x=log(fm_PR$lambda), y=Cor_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20)
+opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
+```
+
+<p align="left">
+    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/GDES_plot.png" alt="Description" width="400">
+</p>
+
+We then re-estimate the PGS effects using both the training and calibration sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+
+```R
+fm_GDES_final=GD(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, learning_rate=1/50, nIter=opt_nIter, returnPath=F)
+getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
+#> [1] 0.4334093
+```
+
+
+
+```R
+
 
 ```
 
 
 #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
-BMM.SS() function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
+BMM() function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
 ```R
 fm_BMM=BMM(XX=XXt_train, Xy=Xyt_train, my=mean(yt_train), vy=var(yt_train), B=cbind(prior,0), n=nrow(Xt_train),
