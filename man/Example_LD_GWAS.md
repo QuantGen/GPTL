@@ -60,7 +60,7 @@ The PGS estimation processes are similar to [Example_Individual_Data](https://gi
 
 - #### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
-*GD()* function takes as input the above derived sufficient statistics prior effects. The function returns regression coefficient values over the gradient descent cycles.
+*GD()* function takes as input the above derived sufficient statistics and prior effects. The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
 fm_GDES=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learning_rate=1/50, nIter=100, returnPath=T)
@@ -70,7 +70,7 @@ dim(fm_GDES)
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
 
-*PR()* function takes as inputs the above derived sufficient statistics prior effects, plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$, enabling users to select the optimal model based on cross-validation.
+*PR()* function takes as inputs the above derived sufficient statistics and prior effects, plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$, enabling users to select the optimal model based on cross-validation.
 
 ```R
 fm_PR=PR(XX=SS$XX, Xy=SS$Xy, b=SS$B, alpha=0, nLambda=100, conv_threshold=1e-4,
@@ -88,7 +88,7 @@ str(fm_PR)
 
 - #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
-*BMM()* function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
+*BMM()* function takes as inputs the above derived sufficient statistics prior, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
 *BMM()* only requires a single run of the algorithm because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using both the training and calibration sets, and evaluate the final prediction accuracy in the testing set.
 
