@@ -8,7 +8,7 @@ GDXy=function(X,y,centerX=TRUE,scaleX=FALSE,...){
     XX=crossprod(X)
     Xy=crossprod(X,y)
 
-    B=GD.SS(XX=XX,Xy=Xy,...)
+    B=GD(XX=XX,Xy=Xy,...)
 
     return(B)
 }
