@@ -68,7 +68,14 @@ plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20)
 opt_nIter=which.max(Cor_GDES)
 ```
 
-![[<https://github.com/QuantGen/GPTL/blob/main/man/plots/GDES_plot.png>|400]]
+[
+    <img
+        src="MY_SRC_HERE" 
+        width=70%
+        title="My Image"
+        alt="My Image"
+    />
+](https://github.com/QuantGen/GPTL/blob/main/man/plots/GDES_plot.png)
 
 We then re-estimate the PGS effects using both the training and calibration sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
