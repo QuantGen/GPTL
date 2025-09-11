@@ -123,7 +123,7 @@ getCor(XXt_test, Xyt_test, yyt_test, fm_PR_final$B)
 
 *BMM()* function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
-*BMM()* only requires a single run of the algorithm because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using both the training and calibration sets, and evaluate the final prediction accuracy in the testing set.
+*BMM()* only requires a single run of the algorithm (when the input **X'X** is dense) because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using both the training and calibration sets, and evaluate the final prediction accuracy in the testing set.
 
 ```R
 fm_BMM=BMM(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, my=mean(c(yt_train,yt_cali)), vy=var(c(yt_train,yt_cali)), B=cbind(prior,0), n=nrow(Xt_train)+nrow(Xt_cali),
