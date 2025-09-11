@@ -90,11 +90,11 @@ str(fm_PR)
 
 *BMM()* function takes as inputs the above derived sufficient statistics prior, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
-*BMM()* only requires a single run of the algorithm because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using both the training and calibration sets, and evaluate the final prediction accuracy in the testing set.
+When using sparse **X'X** as inputs for *BMM()*, variance parameters cannot be properly updated due to ignoring the LD between LD blocks. Therefore, in this circumstance, we suggest fixing the error and effects variances (by setting function parameters *fixVarE=FALSE, fixVarB=rep(FALSE,nComp)*). The error and effects variances will be computed based on *R2* parameters and we can profile *R2* over a grid of values (e.g., {0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5}). The optimal *R2* value can be selected in a calibration set (not shown here).
 
 ```R
-fm_BMM=BMM(XX=SS$XX, Xy=SS$Xy, my=my, vy=vy, B=cbind(SS$B,0), n=N,
-           nIter=12000, burnIn=2000, thin=5, verbose=FALSE)
+fm_BMM=BMM(XX=SS$XX, Xy=SS$Xy, my=my, vy=vy, B=cbind(SS$B,0), n=N, nComp=ncol(B),
+           nIter=12000, burnIn=2000, thin=5, fixVarE=TRUE, fixVarB=rep(TRUE,nComp), verbose=FALSE)
 str(fm_BMM)
 #> List of 7
 #>  $ b           : Named num [1:1279] -0.020117 0.017591 0.019884 0.003021 -0.000865 ...
