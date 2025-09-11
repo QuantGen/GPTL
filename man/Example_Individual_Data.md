@@ -38,8 +38,8 @@ We further split the target data set into (i) a training set (40%), (ii) a calib
 set.seed(123)
 sets=as.integer(as.factor(cut(runif(nrow(Xt)),breaks=c(0,quantile(runif(nrow(Xt)),prob=c(.4,.8)),1.1))))
 Xt_train=Xt[sets==1,];yt_train=yt[sets==1];XXt_train=crossprod(Xt_train);Xyt_train=crossprod(Xt_train, yt_train)
-Xt_cali=Xt[sets==1,];yt_cali=yt[sets==1];XXt_cali=crossprod(Xt_cali);Xyt_cali=crossprod(Xt_cali, yt_cali)
-Xt_test=Xt[sets==1,];yt_test=yt[sets==1];XXt_test=crossprod(Xt_test);Xyt_test=crossprod(Xt_test, yt_test)
+Xt_cali=Xt[sets==1,];yt_cali=yt[sets==1];XXt_cali=crossprod(Xt_cali);Xyt_cali=crossprod(Xt_cali, yt_cali);yyt_cali=crossprod(yt_cali)
+Xt_test=Xt[sets==1,];yt_test=yt[sets==1];XXt_test=crossprod(Xt_test);Xyt_test=crossprod(Xt_test, yt_test);yyt_test=crossprod(yt_test)
 ```
 
 **2. PGS Estimation Using GPTL**
@@ -62,7 +62,10 @@ dim(fm_GDES)
 
 We evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (nIter).
 
+```R
+Cor_GDES=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_GDES)
 
+```
 
 
 
