@@ -16,11 +16,11 @@ table(CLUSTER$cluster)
 #> 346 253 
 ```
 
-We use samples in cluster 2 as the source data set (where information is transferred) and samples in cluster 1 as the target data set (where the PGS will be used). 
+We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). 
 
 ```R
-Xs=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE);ys=y[CLUSTER$cluster == 2]
-Xt=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE);yt=y[CLUSTER$cluster == 1]
+Xs=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE);ys=y[CLUSTER$cluster == 1]
+Xt=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE);yt=y[CLUSTER$cluster == 2]
 ```
 
 We estimated prior effects from the source data set using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package). Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
@@ -35,11 +35,11 @@ names(prior)=colnames(Xs)
 We further split the target data set into (i) a training set (40%), (ii) a calibration set (40%), and (iii) a testing set (20%), and compute the sufficient statistics (**X'X** and **X'y**) for the each of sets.
 
 ```R
-set.seed(123)
+set.seed(1234)
 sets=as.integer(as.factor(cut(runif(nrow(Xt)),breaks=c(0,quantile(runif(nrow(Xt)),prob=c(.4,.8)),1.1))))
 Xt_train=Xt[sets==1,];yt_train=yt[sets==1];XXt_train=crossprod(Xt_train);Xyt_train=crossprod(Xt_train, yt_train)
-Xt_cali=Xt[sets==1,];yt_cali=yt[sets==1];XXt_cali=crossprod(Xt_cali);Xyt_cali=crossprod(Xt_cali, yt_cali);yyt_cali=crossprod(yt_cali)
-Xt_test=Xt[sets==1,];yt_test=yt[sets==1];XXt_test=crossprod(Xt_test);Xyt_test=crossprod(Xt_test, yt_test);yyt_test=crossprod(yt_test)
+Xt_cali=Xt[sets==2,];yt_cali=yt[sets==2];XXt_cali=crossprod(Xt_cali);Xyt_cali=crossprod(Xt_cali, yt_cali);yyt_cali=crossprod(yt_cali)
+Xt_test=Xt[sets==3,];yt_test=yt[sets==3];XXt_test=crossprod(Xt_test);Xyt_test=crossprod(Xt_test, yt_test);yyt_test=crossprod(yt_test)
 ```
 
 **2. PGS Estimation Using GPTL**
@@ -64,8 +64,17 @@ We evaluate the prediction accuracy in the calibration set to select the optimal
 
 ```R
 Cor_GDES=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_GDES)
-
+opt_nIter=which.max(Cor_GDES)
 ```
+
+We then re-estimate the PGS effects using both the training and calibration sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+
+```R
+fm_GDES_final=GD(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, learning_rate=1/50, nIter=opt_nIter, returnPath=F)
+getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
+#> [1] 0.4334093
+```
+
 
 
 
@@ -74,7 +83,7 @@ Cor_GDES=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_GDES)
 PR.SS() function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$ and $\alpha$, enabling users to select the optimal model based on cross-validation.
 
 ```R
-fm_PR=PR(XX=XX_t, Xy=Xy_t, b=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
+fm_PR=PR(XX=XXt_train, Xy=Xyt_train, b=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
@@ -87,12 +96,18 @@ str(fm_PR)
 #>  $ conv_iter: num [1:100] 10 10 10 10 11 11 12 12 12 13 ...
 ```
 
+```R
+Cor_PR=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_PR$B)
+
+```
+
+
 #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
 BMM.SS() function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
 ```R
-fm_BMM=BMM(XX=XX_t, Xy=Xy_t, my=mean(y_t), vy=var(y_t), B=cbind(prior,0), n=nrow(X_t),
+fm_BMM=BMM(XX=XXt_train, Xy=Xyt_train, my=mean(yt_train), vy=var(yt_train), B=cbind(prior,0), n=nrow(Xt_train),
            nIter=12000, burnIn=2000, thin=5, verbose=FALSE)
 str(fm_BMM)
 #> List of 7
@@ -103,7 +118,12 @@ str(fm_BMM)
 #>  $ postProb    : num [1:2] 0.499 0.501
 #>  $ samplesVarB : num [1:12000, 1:2] 0.000703 0.000793 0.000812 0.0009 0.000918 ...
 #>  $ samplesB    : num [1:12000, 1:1279] 0.00358 -0.07363 -0.01596 -0.02647 -0.06138 ...
+```
 
+```R
+Cor_BMM=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_BMM$b)
+
+```
 
 
 
