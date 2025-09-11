@@ -52,7 +52,7 @@ getSS=function(ld,gwas,B=NULL,verbose=TRUE){
             if (is.null(B)) {
                 message(' There were ',length(snp_list), ' variants in common between the LD reference panel, and the GWAS.\n')
             } else {
-                message(' There were ',length(snp_list), ' variant in common between the LD reference panel, the GWAS and, the prior.\n')
+                message(' There were ',length(snp_list), ' variant in common between the LD reference panel, the GWAS, and the prior.\n')
             }
         }
     }
