@@ -52,7 +52,7 @@ library(GPTL)
 
 - #### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
-GD() function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
+*GD()* function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
 fm_GDES=GD(XX=XXt_train, Xy=Xyt_train, b=prior, learning_rate=1/50, nIter=100, returnPath=T)
@@ -82,7 +82,7 @@ getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
 
-PR() function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$, enabling users to select the optimal model based on cross-validation.
+*PR()* function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$, enabling users to select the optimal model based on cross-validation.
 
 ```R
 fm_PR=PR(XX=XXt_train, Xy=Xyt_train, b=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
@@ -121,9 +121,9 @@ getCor(XXt_test, Xyt_test, yyt_test, fm_PR_final$B)
 
 - #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
-BMM() function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
+*BMM()* function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
-BMM() only requires a single run of the algorithm because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using both the training and calibration sets, and evaluate the final prediction accuracy in the testing set.
+*BMM()* only requires a single run of the algorithm because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using both the training and calibration sets, and evaluate the final prediction accuracy in the testing set.
 
 ```R
 fm_BMM=BMM(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, my=mean(c(yt_train,yt_cali)), vy=var(c(yt_train,yt_cali)n), B=cbind(prior,0), n=nrow(Xt_train)+nrow(Xt_cali),
