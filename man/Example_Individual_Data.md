@@ -126,7 +126,7 @@ getCor(XXt_test, Xyt_test, yyt_test, fm_PR_final$B)
 *BMM()* only requires a single run of the algorithm because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using both the training and calibration sets, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_BMM=BMM(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, my=mean(c(yt_train,yt_cali)), vy=var(c(yt_train,yt_cali)n), B=cbind(prior,0), n=nrow(Xt_train)+nrow(Xt_cali),
+fm_BMM=BMM(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, my=mean(c(yt_train,yt_cali)), vy=var(c(yt_train,yt_cali)), B=cbind(prior,0), n=nrow(Xt_train)+nrow(Xt_cali),
            nIter=12000, burnIn=2000, thin=5, verbose=FALSE)
 str(fm_BMM)
 #> List of 7
