@@ -5,8 +5,8 @@ The following example illustrate how GPTL software works when using an LD refere
 **1. Data Preparation**
 
 ```R
-library(BGLR)
-data(wheat)
+library(GPTL)
+data(toyData)
 y=wheat.Y[,1]
 X=scale(wheat.X, center=TRUE, scale=TRUE)
 
