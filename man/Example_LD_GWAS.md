@@ -29,7 +29,9 @@ str(prior)
 #>  - attr(*, "names")= chr [1:1947] "JHU_1.737262" "rs114339855" "JHU_1.761190" "JHU_1.761763" ...
 ```
 
-Here *LD* is a sparse LD reference matrix in "dgCMatrix" class, with row and column names as variant ID. *gwas* is a GWAS result data frame, where columns of **beta** (estimated effects), **se** (standard errors), **n** (sample sizes), **allele_freq** (allele frequency), and variant ID as row names are required. *prior* is a vector of prior effects estimated in the source population, with names as variant ID.
+- *LD* is a sparse LD reference matrix in "dgCMatrix" class, with row and column names as variant ID.
+- *gwas* is a GWAS result data frame, where columns of **beta** (estimated effects), **se** (standard errors), **n** (sample sizes), **allele_freq** (allele frequency), and variant ID as row names are required.
+- *prior* is a vector of prior effects estimated in the source population, with names as variant ID.
 
 We use *getSS()* function to compute the sufficient statistics (**X'X** and **X'y**) based on the LD matrix, GWAS results (and prior effects, to algin the variants).
 
