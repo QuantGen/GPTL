@@ -84,7 +84,7 @@ BMM_Block=function(XX, Xy, B, my, vy, n, nIter=1200, burnIn=200, thin=5, R2=0.25
 			rownames(Bblk)=snps
 		}
 
-		fm=BMM(XX=XXblk, Xy=Xyblk, B=Bblk, n=n, my=my, vy=vy, nIter=nIter, burnIn=burnIn, thin=5, R2=R2/nrow(XX)*length(snps), verbose=FALSE)
+		fm=BMM(XX=XXblk, Xy=Xyblk, B=Bblk, n=n, my=my, vy=vy, nIter=nIter, burnIn=burnIn, thin=5, R2=R2/nrow(XX)*length(snps), fixVarE=FALSE, fixVarB=rep(FALSE,ncol(B)), verbose=FALSE)
 		
 		b[snps]=fm$b
 		POST.PROB[ld_index == blk,]=fm$POST.PROB
