@@ -91,7 +91,7 @@ BMM_Block=function(XX, Xy, B, my, vy, n, nIter=1200, burnIn=200, thin=5, R2=0.25
 		MeanVarB[blk,]=fm$postMeanVarB
 		MeanVarE[blk]=mean(fm$samplesVarE)
 
-		TimeOut=proc.time()[3]
+		timeOut=proc.time()[3]
 
 		if (verbose) {
 			message(' Block ', blk, '/', nBlocks, ' varE=', round(MeanVarE[blk],4), '; varB=[', paste(round(MeanVarB[blk,],8),collapse=' , '),']; Time=',round(timeOut-timeIn, 4),' sec.')
