@@ -76,7 +76,7 @@ BMM_Block=function(XX, Xy, B, my, vy, n, nIter=1200, burnIn=200, thin=5, R2=0.25
 		Bblk=B[snps,]
 		Xyblk=Xy[snps]
 
-		if (length(snps==1)) {
+		if (length(snps)==1) {
 			XXblk=as.matrix(XXblk)
 			colnames(XXblk)=snps
             rownames(XXblk)=snps
