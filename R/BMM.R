@@ -71,7 +71,10 @@ BMM=function(XX, Xy, B, my, vy, n, nIter=1200, burnIn=200, thin=5, R2=0.25,
  b=rowMeans(B)
  d=rep(1,p) # indicator variable for the group
  POST.PROB=matrix(nrow=p,ncol=nComp,0)
- 
+
+ if (any(fixVarB)) {
+	 df0.b[fixVarB]=1e6
+ }
  # dividing R2/10 assumes that most of the vairance is between components.
  if(is(XX,"dgCMatrix"))
  {
