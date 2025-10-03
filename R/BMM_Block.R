@@ -1,6 +1,7 @@
 BMM_Block=function(XX, Xy, B, my, vy, n, nIter=1200, burnIn=200, thin=5, R2=0.25,
 	        nComp=matrix(ncol(B)), K=1/nComp, df0.E=5, S0.E=vy*(1-R2)*df0.E, df0.b=rep(10,nComp), 
-	        priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE) {
+	        priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), 
+			fixVarE=FALSE, fixVarB=rep(FALSE,ncol(B)), verbose=TRUE) {
 	
 	if(!(is(XX,"dgCMatrix"))) stop("XX must be a dgCMatrix\n")
 
@@ -54,6 +55,8 @@ BMM_Block=function(XX, Xy, B, my, vy, n, nIter=1200, burnIn=200, thin=5, R2=0.25
  	B=B[snp_list,,drop = FALSE]
 
  	B=as.matrix(B)
+
+	diagXX=as.vector(Matrix::diag(XX))
 	
 	ld_index=get_block_ids(XX)
 	nBlocks=max(ld_index)
@@ -76,6 +79,9 @@ BMM_Block=function(XX, Xy, B, my, vy, n, nIter=1200, burnIn=200, thin=5, R2=0.25
 		Bblk=B[snps,]
 		Xyblk=Xy[snps]
 
+		diagXXblk=as.vector(Matrix::diag(XXblk))
+		R2blk=R2*sum(diagXXblk)/sum(diagXX)
+
 		if (length(snps)==1) {
 			XXblk=as.matrix(XXblk)
 			colnames(XXblk)=snps
@@ -84,7 +90,7 @@ BMM_Block=function(XX, Xy, B, my, vy, n, nIter=1200, burnIn=200, thin=5, R2=0.25
 			rownames(Bblk)=snps
 		}
 
-		fm=BMM(XX=XXblk, Xy=Xyblk, B=Bblk, n=n, my=my, vy=vy, nIter=nIter, burnIn=burnIn, thin=5, R2=R2/nrow(XX)*length(snps), fixVarE=FALSE, fixVarB=rep(FALSE,ncol(B)), verbose=FALSE)
+		fm=BMM(XX=XXblk, Xy=Xyblk, B=Bblk, n=n, my=my, vy=vy, nIter=nIter, burnIn=burnIn, thin=5, R2=R2blk, fixVarE=fixVarE, fixVarB=fixVarB, verbose=FALSE)
 		
 		b[snps]=fm$b
 		POST.PROB[ld_index == blk,]=fm$POST.PROB
