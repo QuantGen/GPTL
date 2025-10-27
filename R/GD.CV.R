@@ -15,7 +15,7 @@ GD.CV=function(X,y,nTst=round(nrow(X)*0.2),nRep=10,nIter=100,seed=12345,...){
 		tst=sample(1:n,size=nTst)
 		trn=(1:n)[-tst]
 
-		B=GDXy(X=X[trn,],y=y[trn],nIter=nIter+1,b=b,returnPath=TRUE)[,-1]
+		B=GDXy(X=X[trn,],y=y[trn],nIter=nIter+1,b=b,returnPath=TRUE,...)[,-1]
 		for(j in 1:nIter){
 			COR[i,j]=cor(y[tst],X[tst,]%*%B[,j])
 		}
