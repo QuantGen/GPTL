@@ -20,7 +20,10 @@ GD.CV=function(X,y,nTst=round(nrow(X)*0.2),nRep=10,nIter=100,seed=12345,...){
 			COR[i,j]=cor(y[tst],X[tst,]%*%B[,j])
 		}
 	}
-	DF=data.frame(Interation=1:nIter,Cor=colMeans(COR),SD=apply(FUN=sd,X=COR,MARGIN=2))
-	return(DF)
+	COR=data.frame(Interation=1:nIter,Cor=colMeans(COR),SD=apply(FUN=sd,X=COR,MARGIN=2))
+	nOptim=which.max(COR$Cor)
+	b=GDXy(X=X[trn,],y=y[trn],nIter=nOptim+1,b=b,...)
+	
+	return(list(b=b,nOptim=nOptim,COR=COR))
 }
 
