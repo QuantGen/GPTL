@@ -1,7 +1,7 @@
 PR <- function(XX, Xy, b=NULL, lambda=NULL, nLambda=30, alpha=0, convThreshold=1e-4, maxIter=500, returnPath=FALSE, verbose=TRUE) {
   #alpha=0 -> Ridge; alpha=1 -> Lasso
 
-  if(!(is(XX,"matrix") | is(XX,"dgCMatrix") | (nrow(XX)==ncol(XX)))) stop("XX must be a square matrix or dgCMatrix\n")
+    if(!(is(XX,"matrix") | is(XX,"dgCMatrix") | (nrow(XX)==ncol(XX)))) stop("XX must be a square matrix or dgCMatrix\n")
     if(!(is(Xy,"vector") | is(Xy,"matrix") | is(Xy,"data.frame"))) stop("Xy must be in one of these formats: vector, matrix or data.frame with single column\n")
     
     if(is.null(b)){
