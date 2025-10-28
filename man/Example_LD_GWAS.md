@@ -67,7 +67,7 @@ The PGS estimation processes are similar to [Example_Individual_Data](https://gi
 ```R
 fm_GDES=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learningRate=1/50, nIter=100, returnPath=T)
 dim(fm_GDES)
-#> [1] 1719  100
+#> [1] 1719  101
 ```
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
