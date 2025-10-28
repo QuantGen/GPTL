@@ -83,7 +83,8 @@ GD<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, lambda0=1, 
             	{
             		B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
             	}
-            }            
+            }
+            B=B[,-1,]
          }else{
          	if(is(XX,"dgCMatrix"))
          	{
@@ -98,14 +99,14 @@ GD<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, lambda0=1, 
     
     
     if(returnPath){
-      iterations=c('prior' , paste0('iter_',1:nIter))
+      iterations=paste0('iter_',1:nIter)
     }else{
       iterations=paste0('iter_',nIter)
     }
     
     dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
   
-    B=B[,-1,,drop=TRUE]
+    B=B[,,,drop=TRUE]
     
     return(B)
 }
