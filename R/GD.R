@@ -1,4 +1,4 @@
-GD<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, returnPath=FALSE, verbose=TRUE){
+GD<- function(XX, Xy, b, nIter=10, learningRate=1/50, lambda=0, lambda0=1, returnPath=FALSE, verbose=TRUE){
 
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix") | (nrow(XX)==ncol(XX)))) stop("XX must be a square matrix or dgCMatrix\n")
     if(!(is(Xy,"vector") | is(Xy,"matrix") | is(Xy,"data.frame"))) stop("Xy must be in one of these formats: vector, matrix or data.frame with single column\n")
@@ -54,11 +54,11 @@ GD<- function(XX, Xy, b, nIter=10, learning_rate=1/50, lambda=0, lambda0=1, retu
     	{	
     	    #Sparse matrix
         	Matrix::diag(XX)<-Matrix::diag(XX) + (lambda[h]- previous_lambda)
-        	LR=learning_rate/mean(Matrix::diag(XX))
+        	LR=learningRate/mean(Matrix::diag(XX))
         }else{
         	#Dense matrix
         	diag(XX)=diag(XX)+(lambda[h]- previous_lambda)
-        	LR=learning_rate/mean(diag(XX))
+        	LR=learningRate/mean(diag(XX))
         }
   
         if( lambda0>0 ){    
