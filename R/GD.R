@@ -98,7 +98,7 @@ GD<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, lambda0=1, 
     
     
     if(returnPath){
-      iterations=paste0('iter_',1:nIter)
+      iterations=paste0('iter_',0:nIter)
     }else{
       iterations=paste0('iter_',nIter)
     }
