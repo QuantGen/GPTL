@@ -75,7 +75,7 @@ dim(fm_GDES)
 *PR()* function takes as inputs the above derived sufficient statistics and prior effects, plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$, enabling users to select the optimal model based on cross-validation.
 
 ```R
-fm_PR=PR(XX=SS$XX, Xy=SS$Xy, b=SS$B, alpha=0, nLambda=100, conv_threshold=1e-4,
+fm_PR=PR(XX=SS$XX, Xy=SS$Xy, b=SS$B, alpha=0, nLambda=100, convThreshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
