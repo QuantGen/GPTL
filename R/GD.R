@@ -105,7 +105,7 @@ GD<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, lambda0=1, 
     
     dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
   
-    B=B[,,,drop=TRUE]
+    B=B[,-1,,drop=TRUE]
     
     return(B)
 }
