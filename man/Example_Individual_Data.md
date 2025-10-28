@@ -57,15 +57,15 @@ library(GPTL)
 ```R
 fm_GDES=GD(XX=XXt_train, Xy=Xyt_train, b=prior, learningRate=1/50, nIter=100, returnPath=T)
 dim(fm_GDES)
-#> [1] 1279  101
+#> [1] 1279  100
 ```
 
 We evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (nIter).
 
 ```R
 Cor_GDES=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_GDES)
-plot(0:100, Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20)
-opt_nIter=which.max(Cor_GDES)-1
+plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20)
+opt_nIter=which.max(Cor_GDES)
 ```
 
 <p align="left">
