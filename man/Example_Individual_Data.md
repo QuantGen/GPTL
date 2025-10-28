@@ -55,7 +55,7 @@ library(GPTL)
 *GD()* function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
-fm_GDES=GD(XX=XXt_train, Xy=Xyt_train, b=prior, learning_rate=1/50, nIter=100, returnPath=T)
+fm_GDES=GD(XX=XXt_train, Xy=Xyt_train, b=prior, learningRate=1/50, nIter=100, returnPath=T)
 dim(fm_GDES)
 #> [1] 1279  100
 ```
