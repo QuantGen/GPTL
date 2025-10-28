@@ -77,7 +77,7 @@ We then re-estimate the PGS effects using both the training and calibration sets
 ```R
 fm_GDES_final=GD(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, learningRate=1/50, nIter=opt_nIter, returnPath=F)
 getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
-#> [1] 0.4318031
+#> [1] 0.61598
 ```
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
@@ -116,7 +116,7 @@ We then re-estimate the PGS effects using both the training and calibration sets
 fm_PR_final=PR(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, alpha=0, lambda=opt_lambda, convThreshold=1e-4,
             maxIter=1000, returnPath=FALSE)
 getCor(XXt_test, Xyt_test, yyt_test, fm_PR_final$B)
-#> [1] 0.4202875
+#> [1] 0.6128757
 ```
 
 - #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
@@ -139,7 +139,7 @@ str(fm_BMM)
 #>  $ samplesB    : num [1:12000, 1:1279] -0.0232 -0.0401 -0.0131 -0.0179 -0.0306 ...
 #>  $ samplesVarE : num [1:12000] 0.72 0.657 0.66 0.674 0.661 ...
 getCor(XXt_test, Xyt_test, yyt_test, fm_BMM$b)
-#> [1] 0.410943
+#> [1] 0.6310396
 ```
 
 [Back to Homepage](https://github.com/QuantGen/GPTL/blob/main/README.md)
