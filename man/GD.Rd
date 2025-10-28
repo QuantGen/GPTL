@@ -5,12 +5,12 @@
     Performs Gradient Descent with Early Stopping, taking sufficient statistics as inputs.
 }
 \usage{
-GD(XX, Xy, b, nIter = 10, learningRate = 1/50, returnPath = FALSE, verbose=TRUE)
+GD(XX, Xy, b=NULL, nIter = 10, learningRate = 1/50, returnPath = FALSE, verbose=TRUE)
 }
 \arguments{
     \item{XX}{A (p x p) matrix, with row and column names being variant IDs. XX=crossprod(X), with X an genotype matrix of dimension n times p.}
     \item{Xy}{A numeric vector of length p, with names being variant IDs. Xy=crossprod(X,y).}
-    \item{b}{A numeric vector of length p, with names being variant IDs. Alternatively, \code{b} can be a (p x 1) matrix or data.frame, with row names being variant IDs. Prior estimates.}
+    \item{b}{A numeric vector of length p, with names being variant IDs. Alternatively, \code{b} can be a (p x 1) matrix or data.frame, with row names being variant IDs. Prior estimates. Default Null priors (0).}
     \item{nIter}{(integer) Number of iterations that the algorithm will run.}
     \item{learningRate}{(integer) Step size of the algorithm.}
     \item{returnPath}{(logical) if TRUE the iteration history is printed, default FASLE.}
