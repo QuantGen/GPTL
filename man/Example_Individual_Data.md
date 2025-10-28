@@ -75,7 +75,7 @@ opt_nIter=which.max(Cor_GDES)
 We then re-estimate the PGS effects using both the training and calibration sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_GDES_final=GD(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, learning_rate=1/50, nIter=opt_nIter, returnPath=F)
+fm_GDES_final=GD(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, learningRate=1/50, nIter=opt_nIter, returnPath=F)
 getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
 #> [1] 0.4318031
 ```
@@ -85,7 +85,7 @@ getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
 *PR()* function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$, enabling users to select the optimal model based on cross-validation.
 
 ```R
-fm_PR=PR(XX=XXt_train, Xy=Xyt_train, b=prior, alpha=0, nLambda=100, conv_threshold=1e-4,
+fm_PR=PR(XX=XXt_train, Xy=Xyt_train, b=prior, alpha=0, nLambda=100, convThreshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
@@ -113,7 +113,7 @@ opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
 We then re-estimate the PGS effects using both the training and calibration sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_PR_final=PR(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, alpha=0, lambda=opt_lambda, conv_threshold=1e-4,
+fm_PR_final=PR(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, alpha=0, lambda=opt_lambda, convThreshold=1e-4,
             maxIter=1000, returnPath=FALSE)
 getCor(XXt_test, Xyt_test, yyt_test, fm_PR_final$B)
 #> [1] 0.4202875
