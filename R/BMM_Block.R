@@ -66,7 +66,7 @@ BMM_Block=function(XX, Xy, B, my, vy, n, nIter=1200, burnIn=200, thin=5, R2=0.25
 
 		XXblk=XX[snps,snps]
 		Bblk=B[snps,]
-		Xyblk=Xy[snps]
+		Xyblk=Xy[snps,]
 
 		diagXXblk=as.vector(Matrix::diag(XXblk))
 		R2blk=R2*sum(diagXXblk)/sum(diagXX)
