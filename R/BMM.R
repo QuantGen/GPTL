@@ -14,58 +14,48 @@ BMM=function(XX, Xy, B, my, vy, n, nIter=1200, burnIn=200, thin=5, R2=0.25,
 	        nComp=matrix(ncol(B)), K=1/nComp, df0.E=5, S0.E=vy*(1-R2)*df0.E, df0.b=rep(10,nComp), 
 	        priorProb=rep(1/nComp,nComp), priorCounts=rep(2*nComp,nComp), verbose=TRUE, fixVarE=FALSE,fixVarB=rep(FALSE,nComp)){
 
- if(!(is(XX,"matrix") | is(XX,"dgCMatrix"))) stop("XX must be a matrix or dgCMatrix\n")
-
- if(is.null(rownames(XX)) | is.null(colnames(XX))){
- 	stop('XX must have variant IDs as row and column names\n')
- }
+ if(!(is(XX,"matrix") | is(XX,"dgCMatrix") | (nrow(XX)==ncol(XX)))) stop("XX must be a square matrix or dgCMatrix\n")
+    if(!(is(Xy,"vector") | is(Xy,"matrix") | is(Xy,"data.frame"))) stop("Xy must be in one of these formats: vector, matrix or data.frame with single column\n")
     
- if (!all(rownames(XX) == colnames(XX))) stop("Row and column names in XX not match\n")
+    if(is.null(B)){
+        B=rep(0, nrow(XX))
+        names(B)=rownames(XX)
+    }
 
- if (is.vector(Xy)) {
- 	if (is.null(names(Xy))) {
- 		stop("Xy must have variant IDs as names\n")
- 	}
- } else if (is.matrix(Xy) | is.data.frame(Xy)) {
- 	if (is.null(rownames(Xy))) {
- 		stop("Xy must have variant IDs as row names\n")
- 	}
- 	XyName=rownames(Xy)
-    Xy=as.vector(as.matrix(Xy))
-    names(Xy)=XyName
- } else {
- 	stop("Xy must be in one of these formats: vector, matrix, data.frame\n")
- }
+    if(!(is(B,"vector") | is(B,"matrix") | is(B,"data.frame"))) stop("The prior estimates (B) must be in one of these formats: vector, matrix or data.frame with single column\n")
 
- if (is.vector(B)) {
- 	if (is.null(names(B))) {
- 		stop("The prior estimates vector (B) must have variant IDs as names\n")
- 	}
- 	B=as.data.frame(B)
- } else if (is.matrix(B) | is.data.frame(B)) {
- 	if (is.null(rownames(B))) {
- 		stop("The prior estimates matrix (B) must have variant IDs as row names\n")
- 	}
- 	B=as.data.frame(B)
- } else {
- 	stop("B must be in one of these formats: vector, matrix, data.frame\n")
- }
-	
- snp_list=Reduce(intersect, list(rownames(XX),names(Xy),rownames(B)))
+    Xy=as.matrix(Xy)
+    B=as.matrix(B)
 
- if (length(snp_list) == 0){ 
- 	stop("No matched variants in XX, Xy, and prior\n")
- }else{
- 	if(verbose){
- 		message(' There were ',length(snp_list), ' variants in common between XX, Xy, and the prior.\n')
- 	}
- }
-	
- XX=XX[snp_list,snp_list,drop = FALSE]
- Xy=Xy[snp_list]
- B=B[snp_list,,drop = FALSE]
+    nameWarningFlag=0
+    if(is.null(rownames(XX)) | is.null(colnames(XX)) | is.null(rownames(Xy)) | is.null(rownames(B))){
+        warning('Variant IDs are missing in one or more of inputs: XX, Xy, or B\n')
+        nameWarningFlag=1
+    }
 
- B=as.matrix(B)
+    snp_list=Reduce(intersect, list(rownames(XX),rownames(Xy),rownames(B)))
+    if (length(snp_list) == 0){ 
+        warning('Variant IDs are not matching between inputs: XX, Xy, or B\n')
+        nameWarningFlag=1
+    }
+
+    if (nrow(XX)!=nrow(Xy) | nrow(XX)!=nrow(B)){
+        stop('Distinct number of variants detected in inputs: XX, Xy, and B, while variant IDs are missing in one or more of inputs: XX, Xy, or B\n')
+    }
+
+    if (nameWarningFlag==0){
+        XX=XX[snp_list,snp_list,drop = FALSE]
+        Xy=Xy[snp_list,,drop = FALSE]
+        B=B[snp_list,,drop = FALSE]
+        if(verbose){
+            message(length(snp_list), ' variants in common between XX, Xy, and B are retained\n')
+        }
+    } else {
+        if(verbose){
+            message(nrow(XX), ' variants are retained\n')
+        }
+    }
+
  # nIter=150;burnIn=50;R2=.5;nComp=matrix(ncol(B));df0.E=5;S0.E=vy*R2*df0.E;df0.b=rep(5,nComp);alpha=.1;my=mean(y); vy=var(y); B=cbind(rep(0,p),-1,1)
  p=nrow(XX)
  b=rowMeans(B)
