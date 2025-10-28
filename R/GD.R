@@ -46,7 +46,7 @@ GD<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, lambda0=1, 
     b0=rep(0,p)
   	
     previous_lambda=0
-    B=array(dim=c(p,ifelse(returnPath,nIter,1),length(lambda)))
+    B=array(dim=c(p,ifelse(returnPath,nIter+1,1),length(lambda)))
 
     for(h in 1:length(lambda))
     {
@@ -88,17 +88,17 @@ GD<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, lambda0=1, 
          	if(is(XX,"dgCMatrix"))
          	{
          		#Sparse matrix
-             	B[,1,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, b+0,p, nIter, LR)
+             	B[,1,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, b+0,p, nIter+1, LR)
             }else{
             	#Dense matrix
-            	B[,1,h]=.Call("GRAD_DESC",XX, Xy, b+0,p, nIter, LR)
+            	B[,1,h]=.Call("GRAD_DESC",XX, Xy, b+0,p, nIter+1, LR)
             }
         }
     }
     
     
     if(returnPath){
-      iterations=paste0('iter_',1:nIter)
+      iterations=c('prior' , paste0('iter_',1:nIter))
     }else{
       iterations=paste0('iter_',nIter)
     }
