@@ -83,6 +83,7 @@ getSS=function(ld,gwas,B=NULL,verbose=TRUE){
 
     Xy=Matrix::diag(XX)*beta
     names(Xy)=rownames(gwas)
+    Xy=as.matrix(Xy)
   
     if (is.null(B)) {
         out=list(XX=XX,Xy=Xy,n=mean(gwas$n))
