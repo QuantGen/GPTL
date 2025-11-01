@@ -1,5 +1,5 @@
 
-GD.CV=function(X,y,nTst=round(nrow(X)*0.2),nRep=10,nIter=100,seed=12345,...){
+GD.CV=function(X,y,nTst=round(nrow(X)*0.2),nRep=10,nIter=100,seed=12345,b=rep(0,ncol(X)),...){
 
 	COR=matrix(nrow=nRep,ncol=nIter)
 	set.seed(seed)
