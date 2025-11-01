@@ -1,6 +1,7 @@
 importFrom("methods", "as", "is")
 importFrom("stats", "cor", "dnorm", "rchisq", "rgamma", "rnorm",
              "runif", "sd")
+export(GD.CV)
 export(getSS)             
 export(GD)
 export(PR)
