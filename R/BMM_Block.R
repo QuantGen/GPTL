@@ -28,7 +28,7 @@ BMM_Block=function(XX, Xy, B, my, vy, n, nIter=1200, burnIn=200, thin=5, R2=0.25
         nameWarningFlag=1
     }
 
-    if (nrow(XX)!=nrow(Xy) | nrow(XX)!=nrow(B)){
+    if ((nrow(XX)!=nrow(Xy) | nrow(XX)!=nrow(b)) & (nameWarningFlag==1)){
         stop('Distinct number of variants detected in inputs: XX, Xy, and B, while variant IDs are missing in one or more of inputs: XX, Xy, or B\n')
     }
 
