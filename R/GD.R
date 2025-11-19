@@ -25,7 +25,7 @@ GD<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, lambda0=1, 
         nameWarningFlag=1
     }
 
-    if (nrow(XX)!=nrow(Xy) | nrow(XX)!=nrow(b)){
+    if ((nrow(XX)!=nrow(Xy) | nrow(XX)!=nrow(b)) & (nameWarningFlag==1)){
         stop('Distinct number of variants detected in inputs: XX, Xy, and b, while variant IDs are missing in one or more of inputs: XX, Xy, or b\n')
     }
 
