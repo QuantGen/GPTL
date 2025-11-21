@@ -72,12 +72,12 @@ opt_nIter=which.max(Cor_GDES)
     <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/GDES_plot.png" alt="Description" width="400">
 </p>
 
-We then re-estimate the PGS effects using both the training and calibration sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_GDES_final=GD(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, learningRate=1/50, nIter=opt_nIter, returnPath=F)
+fm_GDES_final=GD(XX=XXt_train, Xy=Xyt_train, b=prior, learningRate=1/50, nIter=opt_nIter, returnPath=F)
 getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
-#> [1] 0.61598
+#> [1] 0.6364298
 ```
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
@@ -89,11 +89,11 @@ fm_PR=PR(XX=XXt_train, Xy=Xyt_train, b=prior, alpha=0, nLambda=100, convThreshol
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
-#>  $ B        : num [1:1279, 1:100] -0.030243 0.012444 0.028643 0.000624 -0.002359 ...
+#>  $ B        : num [1:1279, 1:100] 0.015507 0.017122 -0.007943 -0.000096 0.003377 ...
 #>   ..- attr(*, "dimnames")=List of 2
 #>   .. ..$ : chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
-#>   .. ..$ : chr [1:100] "lambda_219760.0169" "lambda_200237.1427" "lambda_182448.6268" "lambda_166240.3936" ...
-#>  $ lambda   : num [1:100] 219760 200237 182449 166240 151472 ...
+#>   .. ..$ : chr [1:100] "lambda_256131.6607" "lambda_233377.6299" "lambda_212645.0045" "lambda_193754.2083" ...
+#>  $ lambda   : num [1:100] 256132 233378 212645 193754 176542 ...
 #>  $ alpha    : num 0
 #>  $ conv_iter: num [1:100] 3 3 3 3 3 3 3 3 3 3 ...
 ```
@@ -110,36 +110,36 @@ opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
     <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/PR_plot.png" alt="Description" width="400">
 </p>
 
-We then re-estimate the PGS effects using both the training and calibration sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_PR_final=PR(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, b=prior, alpha=0, lambda=opt_lambda, convThreshold=1e-4,
+fm_PR_final=PR(XX=XXt_train, Xy=Xyt_train, b=prior, alpha=0, lambda=opt_lambda, convThreshold=1e-4,
             maxIter=1000, returnPath=FALSE)
 getCor(XXt_test, Xyt_test, yyt_test, fm_PR_final$B)
-#> [1] 0.6128757
+#> [1] 0.628841
 ```
 
 - #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
 *BMM()* function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
-*BMM()* only requires a single run of the algorithm (when the input **X'X** is dense) because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using both the training and calibration sets, and evaluate the final prediction accuracy in the testing set.
+*BMM()* only requires a single run of the algorithm (when the input **X'X** is dense) because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using the training set, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_BMM=BMM(XX=XXt_train+XXt_cali, Xy=Xyt_train+Xyt_cali, my=mean(c(yt_train,yt_cali)), vy=var(c(yt_train,yt_cali)), B=cbind(prior,0), n=nrow(Xt_train)+nrow(Xt_cali),
+fm_BMM=BMM(XX=XXt_train, Xy=Xyt_train, my=mean(yt_train), vy=var(yt_train), B=cbind(prior,0), n=nrow(Xt_train),
            nIter=12000, burnIn=2000, thin=5, verbose=FALSE)
 str(fm_BMM)
 #> List of 7
-#>  $ b           : Named num [1:1279] -0.00229 0.0161 0.0066 0.0024 0.00101 ...
+#>  $ b           : Named num [1:1279] -0.00942 0.01315 0.00791 0.00285 0.00434 ...
 #>   ..- attr(*, "names")= chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
-#>  $ POST.PROB   : num [1:1279, 1:2] 0.441 0.532 0.477 0.503 0.508 ...
-#>  $ postMeanVarB: num [1:2] 0.00169 0.00185
-#>  $ postProb    : num [1:2] 0.498 0.502
-#>  $ samplesVarB : num [1:12000, 1:2] 0.000672 0.000675 0.00075 0.000775 0.000821 ...
-#>  $ samplesB    : num [1:12000, 1:1279] -0.0232 -0.0401 -0.0131 -0.0179 -0.0306 ...
-#>  $ samplesVarE : num [1:12000] 0.72 0.657 0.66 0.674 0.661 ...
+#>  $ POST.PROB   : num [1:1279, 1:2] 0.445 0.497 0.482 0.499 0.493 ...
+#>  $ postMeanVarB: num [1:2] 0.00142 0.00149
+#>  $ postProb    : num [1:2] 0.5 0.5
+#>  $ samplesVarB : num [1:12000, 1:2] 0.000559 0.000546 0.00057 0.000528 0.000522 ...
+#>  $ samplesB    : num [1:12000, 1:1279] 0.04545 0.01208 -0.04309 0.00146 0.01017 ...
+#>  $ samplesVarE : num [1:12000] 0.643 0.623 0.933 0.647 0.693 ...
 getCor(XXt_test, Xyt_test, yyt_test, fm_BMM$b)
-#> [1] 0.6310396
+#> [1] 0.6166595
 ```
 
 [Back to Homepage](https://github.com/QuantGen/GPTL/blob/main/README.md)
