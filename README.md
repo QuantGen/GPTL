@@ -10,7 +10,6 @@ GPTL is an R package that implements several methods for Genomic Prediction usin
 - Install the package from GitHub
 
 `
-# install.packages("remotes")
 remotes::install_github("QuantGen/GPTL")
 `
 
