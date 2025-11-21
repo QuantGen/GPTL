@@ -11,14 +11,14 @@ library(GPTL)
 data(wheatSumStats)
 library(Matrix)
 
-wheat.LD[1:3,1:3]
+wheat_LD[1:3,1:3]
 #> 3 x 3 sparse Matrix of class "dgCMatrix"
 #>            wPt.1171   c.312549   c.306034
 #> wPt.1171 1.00000000 0.34408250 0.06038764
 #> c.312549 0.34408250 1.00000000 0.03293636
 #> c.306034 0.06038764 0.03293636 1.00000000
 
-head(wheat.GWAS, 3)
+head(wheat_GWAS, 3)
 #>                        id chr a1 a0        beta        se     n allele_freq
 #> JHU_1.737262 JHU_1.737262   1  A  G  0.06759564 0.1091687 39302  0.06583625
 #> rs114339855   rs114339855   1  G  T -0.18147248 0.1860653 39302  0.02037881
