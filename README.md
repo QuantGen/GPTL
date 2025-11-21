@@ -25,5 +25,5 @@ remotes::install_github("QuantGen/GPTL")
 
 ## System Requirements
 
-- Depends: R (>= 3.5.0)\
+- Depends: R (>= 3.5.0)
 - This package is compatible with Windows, Mac, and Linux operating systems and has been tested on Windows 7 & 10, macOS Sequoia & Sonoma, and Linux CentOS 7.
