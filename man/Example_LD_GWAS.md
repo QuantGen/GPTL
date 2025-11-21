@@ -6,7 +6,7 @@ The following example illustrate how GPTL software works when using an LD refere
 
 We use a toy data set of LD matrix, GWAS results, and prior effects, including 1947 variants (first 10 LD blocks in chromosome 1 of All of Us African American LD reference panel). The whole LD reference panels and GWAS results are at [Link](https://doi.org/10.5281/zenodo.16923734) and [Link](https://doi.org/10.5281/zenodo.17087604).
 
-```R
+```r
 library(GPTL)
 library(Matrix)
 data(toyData)
