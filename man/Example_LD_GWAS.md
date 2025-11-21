@@ -19,24 +19,24 @@ wheat_LD[1:3,1:3]
 #> c.306034 0.06038764 0.03293636 1.00000000
 
 head(wheat_GWAS, 3)
-#>                        id chr a1 a0        beta        se     n allele_freq
-#> JHU_1.737262 JHU_1.737262   1  A  G  0.06759564 0.1091687 39302  0.06583625
-#> rs114339855   rs114339855   1  G  T -0.18147248 0.1860653 39302  0.02037881
-#> JHU_1.761190 JHU_1.761190   1  T  C  0.16778221 0.1603125 39302  0.02787886
+#>                id        beta        se   n  allele_freq
+#> wPt.0538 wPt.0538 -0.44041492 0.1480735 167 -0.016200800
+#> wPt.8463 wPt.8463  0.02897992 0.2338454 167 -0.010473125
+#> wPt.6348 wPt.6348  0.11440060 0.1528133 167 -0.005124139
 
-str(prior)
-#>  Named num [1:1947] 0 0.000592 0 0 0 ...
-#>  - attr(*, "names")= chr [1:1947] "JHU_1.737262" "rs114339855" "JHU_1.761190" "JHU_1.761763" ...
+str(wheat_PRIOR)
+#>  Named num [1:1279] 0.01508 0.01603 -0.00451 0.00243 0.00337 ...
+#>  - attr(*, "names")= chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
 ```
 
-- *LD* is a sparse LD reference matrix in "dgCMatrix" class, with row and column names as variant ID.
-- *gwas* is a GWAS result data frame, where columns of **beta** (estimated effects), **se** (standard errors), **n** (sample sizes), **allele_freq** (allele frequency), and variant ID as row names are required.
-- *prior* is a vector of prior effects estimated in the source population, with names as variant ID.
+- *wheat_LD* is a sparse LD reference matrix in "dgCMatrix" class, with row and column names as variant ID.
+- *wheat_GWAS* is a GWAS result data frame, where columns of **beta** (estimated effects), **se** (standard errors), **n** (sample sizes), **allele_freq** (allele frequency), and variant ID as row names are required.
+- *wheat_PRIOR* is a vector of prior effects estimated in the source population, with names as variant ID.
 
 We use *getSS()* function to compute the sufficient statistics (**X'X** and **X'y**) based on the LD matrix, GWAS results (and prior effects, to algin the variants).
 
 ```R
-SS=getSS(ld=LD,gwas=gwas,B=prior)
+SS=getSS(ld=wheat_LD,gwas=wheat_GWAS,B=wheat_PRIOR)
 #>  There were 1719 variant in common between the LD reference panel, the GWAS and the prior.
 str(SS)
 #> List of 4
