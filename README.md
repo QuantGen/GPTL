@@ -2,7 +2,7 @@
 
 GPTL is an R package that implements several methods for Genomic Prediction using Transfer Learning, including
 -  *TL-GDES*: A Gradient Descent Algorithm with Early Stopping.
--  *TL-PR*: A Penalized regression with srhinkage towards a prior mean (e.g., estimates derived from another data set).
+-  *TL-PR*: A Penalized regression with shrinkage towards a prior mean (e.g., estimates derived from another data set).
 -  *TL-BMM*: A Bayesian model with a finite mixture prior that allows TL from multiple prior sources of information.
 
 ## Getting Started
@@ -13,9 +13,9 @@ GPTL is an R package that implements several methods for Genomic Prediction usin
 # install.packages("remotes")
 remotes::install_github("QuantGen/GPTL")
 ```
-<br/>
-     This should take less than 30 seconds for a typical computer when including installation of all non-base dependencies.
-     This package should be compatible with Windows, Mac, and Linux operating systems and has been tested on Windows 7 & 10, macOS Sequoia & Sonoma, and Linux CentOS 7.
+  This should take less than 30 seconds for a typical computer when including installation of all non-base dependencies.
+
+  This package should be compatible with Windows, Mac, and Linux operating systems and has been tested on Windows 7 & 10, macOS Sequoia & Sonoma, and Linux CentOS 7.
 
 - System Requirements
 
