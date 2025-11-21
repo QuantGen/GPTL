@@ -4,21 +4,21 @@ The following example illustrate how GPTL software works when using an LD refere
 
 **1. Data Preparation**
 
-We use a toy data set of LD matrix, GWAS results, and prior effects, including 1947 variants (first 10 LD blocks in chromosome 1 of All of Us African American LD reference panel). The whole LD reference panels and GWAS results are at [Link](https://doi.org/10.5281/zenodo.16923734) and [Link](https://doi.org/10.5281/zenodo.17087604).
+We use a toy data set of LD matrix, GWAS results, prior effects, and individual validation/testing data. These statistics were generated based on the wheat data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
 
 ```r
 library(GPTL)
-data(toyData)
+data(wheatSumStats)
 library(Matrix)
 
-LD[1:3,1:3]
+wheat.LD[1:3,1:3]
 #> 3 x 3 sparse Matrix of class "dgCMatrix"
-#>              JHU_1.737262  rs114339855 JHU_1.761190
-#> JHU_1.737262  1.000000000 0.0010638559 0.0015435403
-#> rs114339855   0.001063856 1.0000000000 0.0003776402
-#> JHU_1.761190  0.001543540 0.0003776402 1.0000000000
+#>            wPt.1171   c.312549   c.306034
+#> wPt.1171 1.00000000 0.34408250 0.06038764
+#> c.312549 0.34408250 1.00000000 0.03293636
+#> c.306034 0.06038764 0.03293636 1.00000000
 
-head(gwas, 3)
+head(wheat.GWAS, 3)
 #>                        id chr a1 a0        beta        se     n allele_freq
 #> JHU_1.737262 JHU_1.737262   1  A  G  0.06759564 0.1091687 39302  0.06583625
 #> rs114339855   rs114339855   1  G  T -0.18147248 0.1860653 39302  0.02037881
