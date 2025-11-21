@@ -8,8 +8,8 @@ We use a toy data set of LD matrix, GWAS results, and prior effects, including 1
 
 ```r
 library(GPTL)
-library(Matrix)
 data(toyData)
+library(Matrix)
 
 LD[1:3,1:3]
 #> 3 x 3 sparse Matrix of class "dgCMatrix"
