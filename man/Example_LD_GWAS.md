@@ -65,7 +65,7 @@ str(SS)
 *GD()* function takes as input the above derived sufficient statistics and prior effects. The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
-fm_GDES=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learningRate=1/10, nIter=100, returnPath=T)
+fm_GDES=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learningRate=1/100, nIter=100, returnPath=T)
 dim(fm_GDES)
 #> [1] 1279  100
 ```
@@ -81,9 +81,9 @@ opt_nIter=which.max(Cor_GDES)
 We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_GDES_final=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learningRate=1/10, nIter=opt_nIter, returnPath=F)
+fm_GDES_final=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learningRate=1/100, nIter=opt_nIter, returnPath=F)
 cor(wheat_TST.X %*% fm_GDES_final, wheat_TST.y)
-#> [1] 0.6364298
+#> [1] 0.606333
 ```
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
@@ -95,35 +95,65 @@ fm_PR=PR(XX=SS$XX, Xy=SS$Xy, b=SS$B, alpha=0, nLambda=100, convThreshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
-#>  $ B        : num [1:1719, 1:100] 7.56e-06 5.86e-04 8.27e-06 2.66e-06 6.96e-06 ...
+#>  $ B        : num [1:1279, 1:100] 0.01322 0.03397 -0.00585 0.00464 0.00775 ...
 #>   ..- attr(*, "dimnames")=List of 2
-#>   .. ..$ : chr [1:1719] "JHU_1.737262" "rs114339855" "JHU_1.761190" "JHU_1.761763" ...
-#>   .. ..$ : chr [1:100] "lambda_86445040.9413" "lambda_78765501.7566" "lambda_71768191.6674" "lambda_65392503.3211" ...
-#>  $ lambda   : num [1:100] 86445041 78765502 71768192 65392503 59583214 ...
+#>   .. ..$ : chr [1:1279] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
+#>   .. ..$ : chr [1:100] "lambda_617943.6592" "lambda_563047.2476" "lambda_513027.682" "lambda_467451.7167" ...
+#>  $ lambda   : num [1:100] 617944 563047 513028 467452 425925 ...
 #>  $ alpha    : num 0
-#>  $ conv_iter: num [1:100] 2 2 2 2 3 3 3 3 3 3 ...
+#>  $ conv_iter: num [1:100] 3 3 3 3 3 3 3 3 3 3 ...
+```
+
+We evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (lambda).
+
+```R
+Cor_PR=cor(wheat_VLD.X %*% fm_PR$B, wheat_VLD.y)
+plot(x=log(fm_PR$lambda), y=Cor_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20)
+opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
+```
+
+We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+
+```R
+fm_PR_final=PR(XX=SS$XX, Xy=SS$Xy, b=SS$B, alpha=0, lambda=opt_lambda, convThreshold=1e-4,
+            maxIter=1000, returnPath=FALSE)
+cor(wheat_TST.X %*% fm_PR_final$B, wheat_TST.y)
+#> [1] 0.5645487
 ```
 
 - #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
 *BMM()* function takes as inputs the above derived sufficient statistics prior, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
-When using sparse **X'X** as inputs for *BMM()*, variance parameters cannot be properly updated due to ignoring the LD between LD blocks. Therefore, in this circumstance, we suggest fixing the error and effects variances (by setting function parameters *fixVarE=FALSE, fixVarB=rep(FALSE,nComp)*). The error and effects variances will be computed based on *R2* parameters and we can profile *R2* over a grid of values (e.g., {0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5}). The optimal *R2* value can be selected in a calibration set (not shown here).
+When using sparse **X'X** as inputs for *BMM()*, variance parameters cannot be properly updated due to ignoring the LD between LD blocks. Therefore, in this circumstance, we suggest fixing the error and effects variances (by setting function parameters *fixVarE=FALSE, fixVarB=rep(FALSE,nComp)*). The error and effects variances will be computed based on *R2* parameters and we can profile *R2* over a grid of values (e.g., {0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5}). The optimal *R2* value can be selected in a calibration set.
 
 ```R
-fm_BMM=BMM(XX=SS$XX, Xy=SS$Xy, my=my, vy=vy, B=cbind(SS$B,0), n=N,
+R2s=c(0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5)
+B_BMM=matrix(nrow=nrow(SS$XX), ncol=length(R2s))
+for (i in 1:length(R2s)) {
+    fm_BMM=BMM(XX=SS$XX, Xy=SS$Xy, B=cbind(SS$B,0), n=SS$n, R2=R2s[i],
            nIter=12000, burnIn=2000, thin=5, fixVarE=TRUE, fixVarB=rep(TRUE,2), verbose=FALSE)
-str(fm_BMM)
-#> List of 7
-#>  $ b           : Named num [1:1719] 0.0454 -0.0768 0.0818 0.021 0.041 ...
-#>   ..- attr(*, "names")= chr [1:1719] "JHU_1.737262" "rs114339855" "JHU_1.761190" "JHU_1.761763" ...
-#>  $ POST.PROB   : num [1:1719, 1:2] 0.481 0.513 0.498 0.492 0.488 ...
-#>  $ postMeanVarB: num [1:2] 0.0177 0.0177
-#>  $ postProb    : num [1:2] 0.501 0.499
-#>  $ samplesVarB : num [1:12000, 1:2] 0.0177 0.0177 0.0177 0.0177 0.0177 ...
-#>  $ samplesB    : num [1:12000, 1:1719] -0.00363 0.00521 0.03518 0.02083 0.15977 ...
-#>  $ samplesVarE : num [1:12000] 40 40 40 40 40 ...
+    B_BMM[,i]=fm_BMM$b
+}
 ```
+
+We evaluate the prediction accuracy in the calibration set to select the optimal *R2* parameter.
+
+```R
+Cor_BMM=cor(wheat_VLD.X %*% B_BMM, wheat_VLD.y)
+plot(x=R2s, y=Cor_BMM, xlab='R2', ylab='Prediction Corr.', pch=20)
+opt_R2=R2s[which.max(Cor_BMM)]
+```
+
+We then re-estimate the PGS effects using the training set, with the optimal *R2* parameter, and evaluate the final prediction accuracy in the testing set.
+
+```R
+fm_BMM_final=BMM(XX=SS$XX, Xy=SS$Xy, B=cbind(SS$B,0), n=SS$n, R2=opt_R2,
+           nIter=12000, burnIn=2000, thin=5, fixVarE=TRUE, fixVarB=rep(TRUE,2), verbose=FALSE)
+cor(wheat_TST.X %*% fm_BMM_final$b, wheat_TST.y)
+#> [1] 0.5363532
+```
+
 
 [Back to Homepage](https://github.com/QuantGen/GPTL/blob/main/README.md)
 
