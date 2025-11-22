@@ -21,17 +21,22 @@ remotes::install_github("QuantGen/GPTL")
      [AA reference](https://zenodo.org/records/16923735/files/LD_MAP_AA.csv) (~3.5G);
      `wget https://zenodo.org/records/16923735/files/LD_MAP_AA.csv`
      
-     [AMR reference](https://www.dropbox.com/s/uv5ydr4uv528lca/ldblk_1kg_amr.tar.gz?dl=0 "AMR reference") (~3.84G);
-     `tar -zxvf ldblk_1kg_amr.tar.gz`
-        
-     [EAS reference](https://www.dropbox.com/s/7ek4lwwf2b7f749/ldblk_1kg_eas.tar.gz?dl=0 "EAS reference") (~4.33G);
-     `tar -zxvf ldblk_1kg_eas.tar.gz`
-        
-     [EUR reference](https://www.dropbox.com/s/mt6var0z96vb6fv/ldblk_1kg_eur.tar.gz?dl=0 "EUR reference") (~4.56G);
-     `tar -zxvf ldblk_1kg_eur.tar.gz`
+     [Hispanic reference](https://) (~3.84G);
+     `wget `
+  
+    LD reference panels constructed using the UK Biobank samples:
+    
+     [AMR reference](https://) (~3.5G);
+     `wget `
      
-     [SAS reference](https://www.dropbox.com/s/hsm0qwgyixswdcv/ldblk_1kg_sas.tar.gz?dl=0 "SAS reference") (~5.60G);
-     `tar -zxvf ldblk_1kg_sas.tar.gz`
+     [AFR reference](https://) (~3.84G);
+     `wget `
+
+     [EUR reference](https://) (~3.84G);
+     `wget `
+
+        
+   
 
 ## Examples
 
