@@ -35,11 +35,11 @@ remotes::install_github("QuantGen/GPTL")
      [EUR reference](https://) (~3.84G);
      `wget `
 
-        
+## Using PROSPER   
    
+efovbsjlbfvlws
 
 ## Examples
-
 
 - [1. GPTL using individual genotype and phenotype data](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md)
 - [2. GPTL using LD reference panel and GWAS results](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md)
@@ -48,3 +48,7 @@ remotes::install_github("QuantGen/GPTL")
 
 - Depends: R (>= 3.5.0)
 - This package is compatible with Windows, Mac, and Linux operating systems and has been tested on Windows 7 & 10, macOS Sequoia & Sonoma, and Linux CentOS 7.
+
+## Support
+
+Please direct any problems or questions to Hao Wu (hwuwu95@gmail.com) and Gustavo de los Campos (gustavoc@msu.edu).
