@@ -69,7 +69,7 @@ opt_nIter=which.max(Cor_GDES)
 ```
 
 <p align="left">
-    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/GDES_plot.png" alt="Description" width="400">
+    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E1_GDES.png" alt="Description" width="400">
 </p>
 
 We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
@@ -107,7 +107,7 @@ opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
 ```
 
 <p align="left">
-    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/PR_plot.png" alt="Description" width="400">
+    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E1_PR.png" alt="Description" width="400">
 </p>
 
 We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
