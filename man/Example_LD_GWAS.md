@@ -65,9 +65,25 @@ str(SS)
 *GD()* function takes as input the above derived sufficient statistics and prior effects. The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
-fm_GDES=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learningRate=1/50, nIter=100, returnPath=T)
+fm_GDES=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learningRate=1/10, nIter=100, returnPath=T)
 dim(fm_GDES)
 #> [1] 1279  100
+```
+
+We evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (nIter).
+
+```R
+Cor_GDES=cor(wheat_VLD.X %*% fm_GDES, wheat_VLD.y)
+plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20)
+opt_nIter=which.max(Cor_GDES)
+```
+
+We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+
+```R
+fm_GDES_final=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learningRate=1/10, nIter=opt_nIter, returnPath=F)
+cor(wheat_TST.X %*% fm_GDES_final, wheat_TST.y)
+#> [1] 0.6364298
 ```
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
