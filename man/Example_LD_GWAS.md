@@ -78,6 +78,10 @@ plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20)
 opt_nIter=which.max(Cor_GDES)
 ```
 
+<p align="left">
+    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E2_GDES.png" alt="Description" width="400">
+</p>
+
 We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
@@ -112,6 +116,10 @@ plot(x=log(fm_PR$lambda), y=Cor_PR, xlab='log(lambda)', ylab='Prediction Corr.',
 opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
 ```
 
+<p align="left">
+    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E2_PR.png" alt="Description" width="400">
+</p>
+
 We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
@@ -145,6 +153,10 @@ plot(x=R2s, y=Cor_BMM, xlab='R2', ylab='Prediction Corr.', pch=20)
 opt_R2=R2s[which.max(Cor_BMM)]
 ```
 
+<p align="left">
+    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E2_BMM.png" alt="Description" width="400">
+</p>
+
 We then re-estimate the PGS effects using the training set, with the optimal *R2* parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
@@ -153,7 +165,6 @@ fm_BMM_final=BMM(XX=SS$XX, Xy=SS$Xy, B=cbind(SS$B,0), n=SS$n, R2=opt_R2,
 cor(wheat_TST.X %*% fm_BMM_final$b, wheat_TST.y)
 #> [1] 0.5363532
 ```
-
 
 [Back to Homepage](https://github.com/QuantGen/GPTL/blob/main/README.md)
 
