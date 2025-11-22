@@ -126,7 +126,7 @@ getCor(XXt_test, Xyt_test, yyt_test, fm_PR_final$B)
 *BMM()* only requires a single run of the algorithm (when the input **X'X** is dense) because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using the training set, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_BMM=BMM(XX=XXt_train, Xy=Xyt_train, B=cbind(prior,0), n=nrow(Xt_train),
+fm_BMM=BMM(XX=XXt_train, Xy=Xyt_train, my=mean(yt_train), vy=var(yt_train), B=cbind(prior,0), n=nrow(Xt_train),
            nIter=12000, burnIn=2000, thin=5, verbose=FALSE)
 str(fm_BMM)
 #> List of 7
