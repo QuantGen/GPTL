@@ -35,7 +35,7 @@ remotes::install_github("QuantGen/GPTL")
      [EUR reference](https://) (~3.84G);
      `wget `
 
-## Using PROSPER   
+## Using GPTL   
    
 efovbsjlbfvlws
 
