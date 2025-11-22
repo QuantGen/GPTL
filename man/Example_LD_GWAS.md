@@ -4,7 +4,7 @@ The following example illustrate how GPTL software works when using an LD refere
 
 **1. Data Preparation**
 
-We use a toy data set `data(wheatSumStats)` of LD matrix, GWAS results, prior effects, and individual validation/testing data. These statistics were generated based on the wheat data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
+We use a toy data set `wheatSumStats` of LD matrix `wheat_LD`, GWAS results `wheat_GWAS`, prior effects `wheat_PRIOR`, and individual validation/testing data `wheat_VLD.X, wheat_VLD.y, wheat_TST.X, wheat_TST.y`. These statistics were generated based on the wheat data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
 
 ```r
 library(GPTL)
