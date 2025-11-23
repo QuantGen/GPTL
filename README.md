@@ -19,21 +19,18 @@ remotes::install_github("QuantGen/GPTL")
     LD reference panels constructed using the All of Us (CDRv7, Controlled Tier) samples:
     
      [AA reference](https://zenodo.org/records/16923735/files/LD_MAP_AA.csv) (~3.5G);
-     `wget https://zenodo.org/records/16923735/files/LD_MAP_AA.csv`; `tar -zxvf AA_AOU.tar.gz`
+     `wget https://zenodo.org/records/16923735/files/AA_AOU.tar.gz`; `tar -zxvf AA_AOU.tar.gz`
      
      [Hispanic reference](https://) (~3.84G);
-     `wget `
+     `wget `; `tar -zxvf HIS_AOU.tar.gz`
   
     LD reference panels constructed using the UK Biobank samples:
     
-     [AMR reference](https://) (~3.5G);
-     `wget `
+     [AFR reference](https://) (~3.5G);
+     `wget `; `tar -zxvf AFR_UKB.tar.gz`
      
-     [AFR reference](https://) (~3.84G);
-     `wget `
-
-     [EUR reference](https://) (~3.84G);
-     `wget `
+     [AMR reference](https://) (~3.84G);
+     `wget `; `tar -zxvf AMR_UKN.tar.gz`
 
 ## Using GPTL   
    
