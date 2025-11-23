@@ -18,19 +18,19 @@ remotes::install_github("QuantGen/GPTL")
 
     LD reference panels constructed using the All of Us (CDRv7, Controlled Tier) samples:
     
-     [AA reference](https://zenodo.org/records/16923735/files/LD_MAP_AA.csv) (~3.5G);
-     `wget https://zenodo.org/records/16923735/files/AA_AOU.tar.gz`; `tar -zxvf AA_AOU.tar.gz`
+     [AA reference](https://zenodo.org/records/17686189/files/AA_AOU.tar.gz) (~3.5G);
+     `wget https://zenodo.org/records/17686189/files/AA_AOU.tar.gz`; `tar -zxvf AA_AOU.tar.gz`
      
-     [Hispanic reference](https://) (~3.84G);
-     `wget `; `tar -zxvf HIS_AOU.tar.gz`
+     [Hispanic reference](https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz) (~2.7G);
+     `wget https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz`; `tar -zxvf HIS_AOU.tar.gz`
   
     LD reference panels constructed using the UK Biobank samples:
     
-     [AFR reference](https://) (~3.5G);
-     `wget `; `tar -zxvf AFR_UKB.tar.gz`
+     [AFR reference](https://zenodo.org/records/17686189/files/AFR_UKB.tar.gz) (~5.1G);
+     `wget https://zenodo.org/records/17686189/files/AFR_UKB.tar.gz`; `tar -zxvf AFR_UKB.tar.gz`
      
-     [AMR reference](https://) (~3.84G);
-     `wget `; `tar -zxvf AMR_UKN.tar.gz`
+     [AMR reference](https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz) (~4.3G);
+     `wget https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz`; `tar -zxvf AMR_UKB.tar.gz`
 
 ## Using GPTL   
    
