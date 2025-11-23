@@ -16,10 +16,10 @@ remotes::install_github("QuantGen/GPTL")
 
 - Download the LD reference panels and extract files:
 
-    LD reference panels constructed using the All of Us Verison 7 samples:
+    LD reference panels constructed using the All of Us (CDRv7, Controlled Tier) samples:
     
      [AA reference](https://zenodo.org/records/16923735/files/LD_MAP_AA.csv) (~3.5G);
-     `wget https://zenodo.org/records/16923735/files/LD_MAP_AA.csv`
+     `wget https://zenodo.org/records/16923735/files/LD_MAP_AA.csv`; `tar -zxvf AA_AOU.tar.gz`
      
      [Hispanic reference](https://) (~3.84G);
      `wget `
