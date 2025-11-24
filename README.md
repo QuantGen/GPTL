@@ -5,6 +5,10 @@ GPTL is an R package that implements several methods for Genomic Prediction usin
 -  *TL-PR*: A Penalized regression with shrinkage towards a prior mean (e.g., estimates derived from another data set).
 -  *TL-BMM*: A Bayesian model with a finite mixture prior that allows TL from multiple prior sources of information.
 
+## Citation
+
+[Wu et.al](https://doi.org/10.1101/2025.10.08.25337572)
+
 ## Installation
 
 - Install the package from GitHub
