@@ -21,8 +21,8 @@ serving the illustration of the three TL-PGS methods.
 We estimated prior effects from the source group using a Bayesian shrinkage estimation method 
 (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the BGLR R-package). 
   
-We split the target group into (i) a training set (60%), (ii) a calibration set (20%), and (iii) a 
-testing set (20%). We conducted GWAS and derived LD matrix using the training set.
+We split the target group into (i) a training set (60/100), (ii) a calibration set (20/100), and (iii) a 
+testing set (20/100). We conducted GWAS and derived LD matrix using the training set.
 
 }
 
