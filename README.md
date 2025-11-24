@@ -5,7 +5,7 @@ GPTL is an R package that implements several methods for Genomic Prediction usin
 -  *TL-PR*: A Penalized regression with shrinkage towards a prior mean (e.g., estimates derived from another data set).
 -  *TL-BMM*: A Bayesian model with a finite mixture prior that allows TL from multiple prior sources of information.
 
-## Getting Started
+## Installation
 
 - Install the package from GitHub
 
@@ -13,6 +13,13 @@ GPTL is an R package that implements several methods for Genomic Prediction usin
 # install.packages("remotes")
 remotes::install_github("QuantGen/GPTL")
 ```
+
+## Using GPTL   
+   
+GPTL offers three polygenic score methods using Transfer Learning. The functions `GD()`, `PR()`, and `BMM()` implement GDES, PR, and BMM, respectively.
+
+These functions take as input the prior estimates from the source population(s) and sufficient statistics for the target population. The sufficient statistics (𝑿′𝑿, 𝑿′𝒚) can be computed from individual
+genotype-phenotype data or from GWAS results and an LD reference panel.
 
 - Download the LD reference panels and extract files:
 
@@ -32,9 +39,7 @@ remotes::install_github("QuantGen/GPTL")
      [AMR reference](https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz) (~4.3G);
      `wget https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz`; `tar -zxvf AMR_UKB.tar.gz`
 
-## Using GPTL   
-   
-efovbsjlbfvlws
+
 
 ## Examples
 
