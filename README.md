@@ -20,7 +20,7 @@ GPTL offers three polygenic score methods using Transfer Learning. The functions
 
 These functions take as input the prior estimates from the source population(s) and sufficient statistics for the target population. The sufficient statistics (𝑿′𝑿, 𝑿′𝒚) can be computed from individual genotype-phenotype data or from GWAS results and an LD reference panel.
 
-We have provided below two examples (#Examples) to illustrate how these functions work with individual genotype-phenotype data or with GWAS results and an LD reference panel. We also provided repositories for LD reference panels constructed using the All of Us and UK Biobank cohorts, separately.
+We have provided below two [examples] (#Examples) to illustrate how these functions work with individual genotype-phenotype data or with GWAS results and an LD reference panel. We also provided repositories for LD reference panels constructed using the All of Us and UK Biobank cohorts, separately.
 
 - Download the LD reference panels and extract files:
 
