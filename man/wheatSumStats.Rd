@@ -33,13 +33,19 @@ testing set (20/100). We conducted GWAS and derived LD matrix using the training
 \format{
 
 The vector wheat_PRIOR contains prior estimates.
+
 The dgCMatrix wheat_LD contains LD matrix.
+
 The data.frame wheat_GWAS contains GWAS result, with five columns: id (variant ID), beta (variant 
 effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele 
 frequency), and rownames as id.
+
 The matrix wheat_VLD.X contains validation genetypes.
+
 The vector wheat_VLD.y contains validation phenotypes.
+
 The matrix wheat_TST.X contains testing genetypes.
+
 The vector wheat_TST.y contains testing phenotypes.
 
 }
