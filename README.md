@@ -7,7 +7,7 @@ GPTL is an R package that implements several methods for Genomic Prediction usin
 
 ## Citation
 
-[Wu et.al](https://doi.org/10.1101/2025.10.08.25337572)
+Please cite [Wu et.al](https://doi.org/10.1101/2025.10.08.25337572) for the GPTL package.
 
 ## Installation
 
