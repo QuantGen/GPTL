@@ -20,11 +20,11 @@ remotes::install_github("QuantGen/GPTL")
 
 ## Using GPTL   
    
-GPTL offers three polygenic score methods using Transfer Learning. The functions `GD()`, `PR()`, and `BMM()` implement Gradient Descent with Early Stopping, Penalized Regression, and Bayesian Mixture model, respectively.
+GPTL offers three polygenic score methods using Transfer Learning (TL). The functions `GD()`, `PR()`, and `BMM()` implement Gradient Descent with Early Stopping, Penalized Regression, and Bayesian Mixture model, respectively.
 
-These functions take as input the prior estimates for the variants from the source population(s) and sufficient statistics for the target population. The sufficient statistics (𝑿′𝑿, 𝑿′𝒚) can be computed from individual genotype-phenotype data or from GWAS results and an LD reference panel.
+These functions take as input SNP effects estimates from a source population (used as prior values to the TL algorithm) and sufficient (or summary) statistics from the target population. The sufficient statistics (𝑿′𝑿, 𝑿′𝒚) can be computed from individual genotype-phenotype data or reconstructed from GWAS results and an LD reference panel.
 
-We have provided below two [examples](#Examples) to illustrate how these functions work with individual genotype-phenotype data or with GWAS results and an LD reference panel. We also provided repositories for LD reference panels constructed using the All of Us and UK Biobank cohorts, separately.
+We have provided below two [examples](#Examples) illustrating how these functions work with individual genotype-phenotype data or with GWAS results and an LD reference panel. We also provided repositories for LD reference panels constructed using the All of Us and UK Biobank cohorts, separately.
 
 - Download the LD reference panels and extract files:
 
