@@ -32,7 +32,9 @@ We provide below two links to human LD reference panels derived using All of Us 
     
   - **[African American reference](https://zenodo.org/records/17686189/files/AA_AOU.tar.gz)** (~3.5G)
     
-    ```r wget https://zenodo.org/records/17686189/files/AA_AOU.tar.gz`; `tar -zxvf AA_AOU.tar.gz```
+    ```r
+      wget https://zenodo.org/records/17686189/files/AA_AOU.tar.gz`; `tar -zxvf AA_AOU.tar.gz
+    ```
 
   - **[Hispanic reference](https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz)** (~2.7G)
     
