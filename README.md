@@ -32,29 +32,39 @@ We provide below two links to human LD reference panels derived using All of Us 
     
   - **[African American reference](https://zenodo.org/records/17686189/files/AA_AOU.tar.gz)** (~3.5G)
     
-    ```r
-      wget https://zenodo.org/records/17686189/files/AA_AOU.tar.gz`; `tar -zxvf AA_AOU.tar.gz
+    ```bash
+      wget https://zenodo.org/records/17686189/files/AA_AOU.tar.gz
+      tar -zxvf AA_AOU.tar.gz
     ```
 
   - **[Hispanic reference](https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz)** (~2.7G)
-    
-     `wget https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz`; `tar -zxvf HIS_AOU.tar.gz`
+
+    ```bash
+     wget https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz
+     tar -zxvf HIS_AOU.tar.gz
+   ```
   
 #### LD reference panels constructed using the UK Biobank data:
     
-     [AFR reference](https://zenodo.org/records/17686189/files/AFR_UKB.tar.gz) (~5.1G);
-     `wget https://zenodo.org/records/17686189/files/AFR_UKB.tar.gz`; `tar -zxvf AFR_UKB.tar.gz`
+    - ***[AFR reference](https://zenodo.org/records/17686189/files/AFR_UKB.tar.gz)*** (~5.1G)
+
+    ```bash
+     wget https://zenodo.org/records/17686189/files/AFR_UKB.tar.gz
+     tar -zxvf AFR_UKB.tar.gz
+    ```
      
-     [AMR reference](https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz) (~4.3G);
-     `wget https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz`; `tar -zxvf AMR_UKB.tar.gz`
+     - ***[AMR reference](https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz)*** (~4.3G)
 
-
+    ```bash
+       wget https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz
+       tar -zxvf AMR_UKB.tar.gz
+   ```
 
 
 ## Examples
 
-- [1. GPTL using individual genotype-phenotype data](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md)
-- [2. GPTL using LD reference panel and GWAS results](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md)
+- **[1. GPTL using individual genotype-phenotype data](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md)**
+- **[2. GPTL using LD reference panel and GWAS results](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md)**
 
 ## System Requirements
 
