@@ -30,10 +30,12 @@ We provide below two links to human LD reference panels derived using All of Us 
 
 #### LD reference panels constructed using the All of Us data (CDRv7, Controlled Tier):
     
-     [AA reference](https://zenodo.org/records/17686189/files/AA_AOU.tar.gz) (~3.5G);
+  - **[African American reference](https://zenodo.org/records/17686189/files/AA_AOU.tar.gz)** (~3.5G)
+    
      `wget https://zenodo.org/records/17686189/files/AA_AOU.tar.gz`; `tar -zxvf AA_AOU.tar.gz`
-     
-     [Hispanic reference](https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz) (~2.7G);
+
+  - **[Hispanic reference](https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz)** (~2.7G)
+    
      `wget https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz`; `tar -zxvf HIS_AOU.tar.gz`
   
 #### LD reference panels constructed using the UK Biobank data:
