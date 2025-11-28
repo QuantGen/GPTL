@@ -24,11 +24,11 @@ GPTL offers three polygenic score methods using Transfer Learning (TL). The func
 
 These functions take as input SNP effects estimates from a source population (used as prior values to the TL algorithm) and sufficient (or summary) statistics from the target population. The sufficient statistics (𝑿′𝑿, 𝑿′𝒚) can be computed from individual genotype-phenotype data or reconstructed from GWAS results and an LD reference panel.
 
-We have provided below two [examples](#Examples) illustrating how these functions work with individual genotype-phenotype data or with GWAS results and an LD reference panel. We also provided repositories for LD reference panels constructed using the All of Us and UK Biobank cohorts, separately.
+We provide below two links to human LD reference panels derived using All of Us and UK-Biobank, and [examples](#Examples) illustrating how to use each of the functions included in GPTL. 
 
-- Download the LD reference panels and extract files:
+## Human LD reference panels
 
-    LD reference panels constructed using the All of Us (CDRv7, Controlled Tier) samples:
+#### LD reference panels constructed using the All of Us data (CDRv7, Controlled Tier):
     
      [AA reference](https://zenodo.org/records/17686189/files/AA_AOU.tar.gz) (~3.5G);
      `wget https://zenodo.org/records/17686189/files/AA_AOU.tar.gz`; `tar -zxvf AA_AOU.tar.gz`
@@ -36,13 +36,16 @@ We have provided below two [examples](#Examples) illustrating how these function
      [Hispanic reference](https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz) (~2.7G);
      `wget https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz`; `tar -zxvf HIS_AOU.tar.gz`
   
-    LD reference panels constructed using the UK Biobank samples:
+#### LD reference panels constructed using the UK Biobank data:
     
      [AFR reference](https://zenodo.org/records/17686189/files/AFR_UKB.tar.gz) (~5.1G);
      `wget https://zenodo.org/records/17686189/files/AFR_UKB.tar.gz`; `tar -zxvf AFR_UKB.tar.gz`
      
      [AMR reference](https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz) (~4.3G);
      `wget https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz`; `tar -zxvf AMR_UKB.tar.gz`
+
+
+
 
 ## Examples
 
@@ -56,4 +59,4 @@ We have provided below two [examples](#Examples) illustrating how these function
 
 ## Support
 
-Please direct any problems or questions to Hao Wu (hwuwu95@gmail.com) and Gustavo de los Campos (gustavoc@msu.edu).
+Please direct any problems or questions to Hao Wu (hwuwu95@gmail.com) or Gustavo de los Campos (gustavoc@msu.edu).
