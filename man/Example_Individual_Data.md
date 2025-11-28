@@ -2,6 +2,8 @@
 
 The following example illustrate how GPTL software works when one has access to individual genetype and phenotype data. Here we use the [wheat](https://doi.org/10.1104/pp.105.063438) data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
 
+This data set has two clear clusters, we use this to illustrate how to transfer learning from one population to improve prediction accuracy in another population.
+
 **1. Data Preparation**
 
 ```R
@@ -60,7 +62,7 @@ dim(fm_GDES)
 #> [1] 1279  100
 ```
 
-We evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (nIter).
+We evaluate the prediction accuracy in the calibration set to select the optimal number of gradient descent cycles (nIter).
 
 ```R
 Cor_GDES=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_GDES)
@@ -82,7 +84,7 @@ getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
 
-*PR()* function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$, enabling users to select the optimal model based on cross-validation.
+*PR()* function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero, i.e., L2 penalty, and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$, enabling users to select the optimal model based on cross-validation.
 
 ```R
 fm_PR=PR(XX=XXt_train, Xy=Xyt_train, b=prior, alpha=0, nLambda=100, convThreshold=1e-4,
@@ -98,7 +100,7 @@ str(fm_PR)
 #>  $ conv_iter: num [1:100] 3 3 3 3 3 3 3 3 3 3 ...
 ```
 
-We evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (lambda).
+Next, we evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (lambda).
 
 ```R
 Cor_PR=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_PR$B)
