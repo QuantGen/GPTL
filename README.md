@@ -30,14 +30,14 @@ We provide below two links to human LD reference panels derived using All of Us 
 
 #### LD reference panels constructed using the All of Us data (CDRv7, Controlled Tier)
     
-  - **[African American reference](https://zenodo.org/records/17686189/files/AA_AOU.tar.gz)** (~3.5G)
+  - **[African American](https://zenodo.org/records/17686189/files/AA_AOU.tar.gz)** (~3.5G)
     
     ```bash
       wget https://zenodo.org/records/17686189/files/AA_AOU.tar.gz
       tar -zxvf AA_AOU.tar.gz
     ```
 
-  - **[Hispanic reference](https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz)** (~2.7G)
+  - **[Hispanic](https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz)** (~2.7G)
 
    ```bash
      wget https://zenodo.org/records/17686189/files/HIS_AOU.tar.gz
@@ -46,19 +46,19 @@ We provide below two links to human LD reference panels derived using All of Us 
  
 #### LD reference panels constructed using the UK Biobank data
     
-   - **[AFR reference](https://zenodo.org/records/17686189/files/AFR_UKB.tar.gz)** (~5.1G)
+   - **[African](https://zenodo.org/records/17686189/files/AFR_UKB.tar.gz)** (~5.1G)
 
    ```bash
      wget https://zenodo.org/records/17686189/files/AFR_UKB.tar.gz
      tar -zxvf AFR_UKB.tar.gz
    ```
      
-   - **[AMR reference](https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz)** (~4.3G)
+   - **[American](https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz)** (~4.3G)
 
-    ```bash
+   ```bash
        wget https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz
        tar -zxvf AMR_UKB.tar.gz
-    ```
+   ```
 
 ## Examples
 
