@@ -56,8 +56,8 @@ We provide below two links to human LD reference panels derived using All of Us 
    - **[American](https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz)** (~4.3G)
 
    ```bash
-       wget https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz
-       tar -zxvf AMR_UKB.tar.gz
+     wget https://zenodo.org/records/17686189/files/AMR_UKB.tar.gz
+     tar -zxvf AMR_UKB.tar.gz
    ```
 
 ## Examples
