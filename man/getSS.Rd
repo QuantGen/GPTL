@@ -9,7 +9,7 @@ getSS(ld, gwas, B=NULL, verbose=TRUE)
 }
 \arguments{
     \item{ld}{A (p x p) matrix, with row and column names being variant IDs. LD reference matrix.}
-    \item{gwas}{A (p x 4) matrix or data.frame, with row names being variant IDs. GWAS results must consist of four columns: beta (variant effects), se (variant standard errors), n (sample sizes for GWAS), allele_freq (variant allele frequency).}
+    \item{gwas}{A (p x 4) matrix or data.frame, with row names being variant IDs. GWAS results must consist of three columns: beta (variant effects), n (sample sizes for GWAS), allele_freq (variant allele frequency).}
     \item{B}{(optional) A numeric vector of length p, with names being variant IDs. Alternatively, \code{B} can be a (p x k) matrix or data.frame, with row names being variant IDs, and each column being a source of prior information.}
     \item{verbose}{(logical) if TRUE the algorithm history is printed, default TRUE.}
 }
