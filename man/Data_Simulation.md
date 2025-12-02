@@ -16,7 +16,7 @@ nTarget=4000 # sample size for the target pouplation
 nQTN=50 # number of causal variants
 h2=0.3
  
-set.seed(19502)
+set.seed(1950)
 ```
 
 Simulating gentoypes for the source population.
