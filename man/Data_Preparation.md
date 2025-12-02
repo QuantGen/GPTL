@@ -1,5 +1,67 @@
 ### Simulating genotype and phenotype data as examples for GPTL
 
+The following script generates demo datasets to illustrate how GPTL software works when one has access to individual genetype and phenotype data
+
+simulates genotype and phenotype data that are used as examples. The simulated data sets are stored as **.RData** formats:
+
+- **Ind_SimData.RData**, including individual genotype and phenotype data for a source and a target population.
+
+- **Sum_SimData.RData**, including prior effects estimated from a source population, and LD reference panel, GWAS results, and individual calibrating/testing data for a target population.
+
+
+The following example illustrate how GPTL software works when one has access to individual genetype and phenotype data. Here we use the [wheat](https://doi.org/10.1104/pp.105.063438) data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
+
+This data set has two clear clusters, we use this to illustrate how to transfer learning from one population to improve prediction accuracy in another population.
+
+**1. Data Preparation**
+
+```R
+library(BGLR)
+data(wheat)
+y=wheat.Y[,1]
+X=scale(wheat.X, center=TRUE, scale=TRUE)
+
+CLUSTER=kmeans(X,centers=2,nstart=100)
+table(CLUSTER$cluster)
+#>   1   2 
+#> 346 253 
+```
+
+We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). 
+
+```R
+Xs=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE);ys=y[CLUSTER$cluster == 1]
+Xt=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE);yt=y[CLUSTER$cluster == 2]
+```
+
+We estimated prior effects from the source data set using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package). Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
+
+```R
+ETA=list(list(X=Xs, model="BRR"))
+fm=BGLR(y=ys, ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
+prior=fm$ETA[[1]]$b
+names(prior)=colnames(Xs)
+```
+
+We further split the target data set into (i) a training set (60%), (ii) a calibration set (20%), and (iii) a testing set (20%), and compute the sufficient statistics (**X'X** and **X'y**) for the each of sets.
+
+```R
+set.seed(1234)
+sets=as.integer(as.factor(cut(runif(nrow(Xt)),breaks=c(0,quantile(runif(nrow(Xt)),prob=c(.6,.8)),1.1))))
+Xt_train=Xt[sets==1,];yt_train=yt[sets==1];XXt_train=crossprod(Xt_train);Xyt_train=crossprod(Xt_train, yt_train)
+Xt_cali=Xt[sets==2,];yt_cali=yt[sets==2];XXt_cali=crossprod(Xt_cali);Xyt_cali=crossprod(Xt_cali, yt_cali);yyt_cali=crossprod(yt_cali)
+Xt_test=Xt[sets==3,];yt_test=yt[sets==3];XXt_test=crossprod(Xt_test);Xyt_test=crossprod(Xt_test, yt_test);yyt_test=crossprod(yt_test)
+```
+
+
+
+
+
+
+
+
+
+
 The following script simulates genotype and phenotype data that are used as examples. The simulated data sets are stored as **.RData** formats:
 
 - **Ind_SimData.RData**, including individual genotype and phenotype data for a source and a target population.
