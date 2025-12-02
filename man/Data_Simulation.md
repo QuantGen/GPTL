@@ -9,9 +9,6 @@ The following script simulates genotype and phenotype data that are used as exam
 Setting simulation parameters.
 
 ```R
-library(BGLR)
-library(GPTL)
- 
 nChr=5 # number of chromosomes
 p=500  # number of loci per chromosome
 nSource=10000 # sample size for the source populations
