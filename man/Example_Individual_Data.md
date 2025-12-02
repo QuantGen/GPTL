@@ -25,7 +25,7 @@ We estimated prior effects from the source data set using a Bayesian shrinkage e
 
 ```R
 LP=list(snps=list(X=scale(Xs,center=TRUE,scale=FALSE),model='BayesC'))
-fm=BLRXy(y=ys,ETA=LP,verbose=FALSE,nIter=6000,burnIn=1000,verbose=FALSE)
+fm=BLRXy(y=ys,ETA=LP,verbose=FALSE,nIter=6000,burnIn=1000)
 prior=fm$ETA[[1]]$b
 names(prior)=colnames(Xs)
 ```
