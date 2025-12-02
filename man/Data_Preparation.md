@@ -2,9 +2,9 @@
 
 The following script generates demo datasets to illustrate how GPTL software works when one has access to individual genetype and phenotype data or using an LD reference panel (internal or external) and GWAS summary statistics. The generated data sets are stored as **.RData** formats:
 
-- **Ind_DemoData.RData** (`data(Ind_DemoData)`), including individual genotype and phenotype data for a source and a target population, with the target population data being subset into training, calibrating, and testing sets.
+- `Ind_DemoData.RData`, including individual genotype and phenotype data for a source and a target population, with the target population data being subset into training, calibrating, and testing sets.
 
-- **Sum_DemoData.RData** (`data(Sum_DemoData)`), including prior effects estimated from a source population, and LD reference panel, GWAS summary statistics, and individual calibrating/testing data from a target population.
+- `Sum_DemoData.RData`, including prior effects estimated from a source population, and LD reference panel, GWAS summary statistics, and individual calibrating/testing data from a target population.
 
 Here we use the [wheat](https://doi.org/10.1104/pp.105.063438) data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
 
