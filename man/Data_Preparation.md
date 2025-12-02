@@ -1,19 +1,14 @@
 ### Simulating genotype and phenotype data as examples for GPTL
 
-The following script generates demo datasets to illustrate how GPTL software works when one has access to individual genetype and phenotype data
+The following script generates demo datasets to illustrate how GPTL software works when one has access to individual genetype and phenotype data or using an LD reference panel (internal or external) and GWAS summary statistics. The generated data sets are stored as **.RData** formats:
 
-simulates genotype and phenotype data that are used as examples. The simulated data sets are stored as **.RData** formats:
+- **Ind_DemoData.RData**, including individual genotype and phenotype data for a source and a target population, with the target population data being subset into training, calibrating, and testing sets.
 
-- **Ind_SimData.RData**, including individual genotype and phenotype data for a source and a target population.
+- **Sum_DemoData.RData**, including prior effects estimated from a source population, and LD reference panel, GWAS summary statistics, and individual calibrating/testing data from a target population.
 
-- **Sum_SimData.RData**, including prior effects estimated from a source population, and LD reference panel, GWAS results, and individual calibrating/testing data for a target population.
+Here we use the [wheat](https://doi.org/10.1104/pp.105.063438) data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
 
-
-The following example illustrate how GPTL software works when one has access to individual genetype and phenotype data. Here we use the [wheat](https://doi.org/10.1104/pp.105.063438) data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
-
-This data set has two clear clusters, we use this to illustrate how to transfer learning from one population to improve prediction accuracy in another population.
-
-**1. Data Preparation**
+This data set has two clear clusters, we use this to illustrate how to transfer learning from one source population to improve prediction accuracy in another target population.
 
 ```R
 library(BGLR)
@@ -28,6 +23,19 @@ table(CLUSTER$cluster)
 ```
 
 We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). 
+
+
+
+
+
+
+
+
+**1. Data Preparation**
+
+
+
+
 
 ```R
 Xs=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE);ys=y[CLUSTER$cluster == 1]
