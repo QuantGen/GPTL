@@ -2,12 +2,21 @@
 
 The following example illustrate how GPTL software works when one has access to individual genetype and phenotype data. Here we use the [simulated human genotype and phenotype data sets](https://github.com/QuantGen/GPTL/blob/main/man/Data_Simulation.md) (N: Source-10,000, Target-4,000), including 2450 variants.
 
-**1. Load Data**
+**1. Data Preparation**
 
 ```R
 library(GPTL)
 data(Ind_SimData)
 library(BGLR)
+```
+
+We compute the sufficient statistics (X'X and X'y) for the calibrating and testing sets in the target population.
+
+```R
+XXt_trn=crossprod(scale(Xt_trn,center=TRUE,scale=FALSE));Xyt_trn=crossprod(scale(Xt_trn,center=TRUE,scale=FALSE), yt_trn)
+XXt_cal=crossprod(scale(Xt_cal,center=TRUE,scale=FALSE));Xyt_cal=crossprod(scale(Xt_cal,center=TRUE,scale=FALSE), yt_cal);yyt_cal=crossprod(yt_cal)
+XXt_tst=crossprod(scale(Xt_tst,center=TRUE,scale=FALSE));Xyt_tst=crossprod(scale(Xt_tst,center=TRUE,scale=FALSE), yt_tst);yyt_tst=crossprod(yt_tst)
+
 ```
 
 **2. Prior Estimation**
@@ -28,15 +37,15 @@ names(prior)=colnames(Xs)
 *GD()* function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
-fm_GDES=GD(XX=XXt_train, Xy=Xyt_train, b=prior, learningRate=1/50, nIter=100, returnPath=T)
+fm_GDES=GD(XX=XXt_trn, Xy=Xyt_trn, b=prior, learningRate=1/100, nIter=100, returnPath=T)
 dim(fm_GDES)
-#> [1] 1279  100
+#> [1] 2450  100
 ```
 
-We evaluate the prediction accuracy in the calibration set to select the optimal number of gradient descent cycles (nIter).
+We evaluate the prediction accuracy in the calibrating set to select the optimal number of gradient descent cycles (nIter).
 
 ```R
-Cor_GDES=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_GDES)
+Cor_GDES=getCor(XXt_cal, Xyt_cal, yyt_cal, fm_GDES)
 plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20)
 opt_nIter=which.max(Cor_GDES)
 ```
