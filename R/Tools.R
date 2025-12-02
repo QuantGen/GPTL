@@ -150,21 +150,3 @@ mergeBlocks=function(R2,blocks,minSize){
     }
     return(blocks)
 }
-
-findFamilies=function(A,threshold){
-    familyID=rep(NA,ncol(A))
-    nextFamily=1
-    n=nrow(A)
-    A=I(A>threshold)
-    for(i in 1:n){
-        if(is.na(familyID[i])){
-            tmp=which(A[,i])
-            familyID[tmp]=nextFamily
-            nextFamily=nextFamily+1
-        }
-        if(!any(is.na(familyID))){
-            break()
-        }
-    }
-    return(familyID)
-}
