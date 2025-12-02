@@ -30,7 +30,7 @@ str(wheat_PRIOR)
 ```
 
 - *wheat_LD* is a sparse LD reference matrix in "dgCMatrix" class, with row and column names as variant ID.
-- *wheat_GWAS* is a GWAS result data frame, where columns of **beta** (estimated effects), **se** (standard errors), **n** (sample sizes), **allele_freq** (allele frequency), and variant ID as row names are required.
+- *wheat_GWAS* is a GWAS result data frame, where columns of **beta** (estimated effects), **n** (sample sizes), **allele_freq** (allele frequency), and variant ID as row names are required.
 - *wheat_PRIOR* is a vector of prior effects estimated in the source population, with names as variant ID.
 
 We use *getSS()* function to compute the sufficient statistics (**X'X** and **X'y**) based on the LD matrix, GWAS results (and prior effects, to algin the variants).
