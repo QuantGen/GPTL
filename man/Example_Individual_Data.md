@@ -37,7 +37,7 @@ names(prior)=colnames(Xs)
 *GD()* function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
-fm_GDES=GD(XX=XXt_trn, Xy=Xyt_trn, b=prior, learningRate=1/200, nIter=100, returnPath=T)
+fm_GDES=GD(XX=XXt_trn, Xy=Xyt_trn, b=prior, learningRate=1/1000, nIter=100, returnPath=T)
 dim(fm_GDES)
 #> [1] 2450  100
 ```
@@ -57,9 +57,9 @@ opt_nIter=which.max(Cor_GDES)
 We then re-estimate the PGS effects using both the training and calibrating sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_GDES_final=GD(XX=XXt_trn+XXt_cal, Xy=Xyt_trn+Xyt_cal, b=prior, learningRate=1/200, nIter=opt_nIter, returnPath=F)
+fm_GDES_final=GD(XX=XXt_trn+XXt_cal, Xy=Xyt_trn+Xyt_cal, b=prior, learningRate=1/1000, nIter=opt_nIter, returnPath=F)
 getCor(XXt_tst, Xyt_tst, yyt_tst, fm_GDES_final)
-#> [1] 0.1973647
+#> [1] 0.248867
 ```
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
@@ -71,11 +71,11 @@ fm_PR=PR(XX=XXt_trn, Xy=Xyt_trn, b=prior, alpha=0, nLambda=100, convThreshold=1e
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
-#>  $ B        : num [1:2450, 1:100] -0.000234 -0.000301 0.000232 -0.000919 -0.000123 ...
+#>  $ B        : num [1:2450, 1:100] 2.34e-04 1.95e-04 -3.77e-06 2.74e-04 -3.12e-04 ...
 #>   ..- attr(*, "dimnames")=List of 2
 #>   .. ..$ : chr [1:2450] "SNP_1" "SNP_2" "SNP_3" "SNP_4" ...
-#>   .. ..$ : chr [1:100] "lambda_10013023.2585" "lambda_9123493.8693" "lambda_8312987.8193" "lambda_7574484.893" ...
-#>  $ lambda   : num [1:100] 10013023 9123494 8312988 7574485 6901589 ...
+#>   .. ..$ : chr [1:100] "lambda_10079316.6912" "lambda_9183897.9761" "lambda_8368025.7918" "lambda_7624633.4437" ...
+#>  $ lambda   : num [1:100] 10079317 9183898 8368026 7624633 6947282 ...
 #>  $ alpha    : num 0
 #>  $ conv_iter: num [1:100] 2 2 2 2 2 2 2 2 2 2 ...
 ```
@@ -92,33 +92,33 @@ opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
     <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E1_PR.png" alt="Description" width="400">
 </p>
 
-We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+We then re-estimate the PGS effects using both the training and calibrating sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_PR_final=PR(XX=XXt_train, Xy=Xyt_train, b=prior, alpha=0, lambda=opt_lambda, convThreshold=1e-4,
+fm_PR_final=PR(XX=XXt_trn+XXt_cal, Xy=Xyt_trn+Xyt_cal, b=prior, alpha=0, lambda=opt_lambda, convThreshold=1e-4,
             maxIter=1000, returnPath=FALSE)
-getCor(XXt_test, Xyt_test, yyt_test, fm_PR_final$B)
-#> [1] 0.628841
+getCor(XXt_tst, Xyt_tst, yyt_tst, fm_PR_final$B)
+#> [1] 0.2487318
 ```
 
 - #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
 *BMM()* function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
-*BMM()* only requires a single run of the algorithm (when the input **X'X** is dense) because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using the training set, and evaluate the final prediction accuracy in the testing set.
+*BMM()* only requires a single run of the algorithm (when the input **X'X** is dense) because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using both the training and calibrating sets, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_BMM=BMM(XX=XXt_train, Xy=Xyt_train, my=mean(yt_train), vy=var(yt_train), B=cbind(prior,0), n=nrow(Xt_train),
-           nIter=12000, burnIn=2000, thin=5, verbose=FALSE)
+fm_BMM=BMM(XX=XXt_trn+XXt_cal, Xy=Xyt_trn+Xyt_cal, my=mean(c(yt_trn, yt_cal)), vy=var(c(yt_trn, yt_cal)), B=cbind(prior,0),
+           n=nrow(Xt_trn)+nrow(Xt_cal), nIter=6000, burnIn=1000, thin=5, verbose=FALSE)
 str(fm_BMM)
 #> List of 7
-#>  $ b           : Named num [1:1279] -0.00942 0.01315 0.00791 0.00285 0.00434 ...
-#>   ..- attr(*, "names")= chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
-#>  $ POST.PROB   : num [1:1279, 1:2] 0.445 0.497 0.482 0.499 0.493 ...
-#>  $ postMeanVarB: num [1:2] 0.00142 0.00149
-#>  $ postProb    : num [1:2] 0.5 0.5
-#>  $ samplesVarB : num [1:12000, 1:2] 0.000559 0.000546 0.00057 0.000528 0.000522 ...
-#>  $ samplesB    : num [1:12000, 1:1279] 0.04545 0.01208 -0.04309 0.00146 0.01017 ...
-#>  $ samplesVarE : num [1:12000] 0.643 0.623 0.933 0.647 0.693 ...
-getCor(XXt_test, Xyt_test, yyt_test, fm_BMM$b)
-#> [1] 0.6166595
+#>  $ b           : Named num [1:2450] 0.003986 0.000212 -0.000142 -0.003859 -0.000363 ...
+#>   ..- attr(*, "names")= chr [1:2450] "SNP_1" "SNP_2" "SNP_3" "SNP_4" ...
+#>  $ POST.PROB   : num [1:2450, 1:2] 0.5 0.481 0.488 0.498 0.498 0.51 0.522 0.511 0.498 0.525 ...
+#>  $ postMeanVarB: num [1:2] 7.36e-05 7.78e-05
+#>  $ postProb    : num [1:2] 0.505 0.495
+#>  $ samplesVarB : num [1:6000, 1:2] 0.000144 0.000146 0.000146 0.000143 0.000155 ...
+#>  $ samplesB    : num [1:6000, 1:2450] 0.02462 -0.02481 -0.00238 0.01419 0.02125 ...
+#>  $ samplesVarE : num [1:6000] 0.846 0.843 0.847 0.849 0.818 ...
+getCor(XXt_tst, Xyt_tst, yyt_tst, fm_BMM$b)
+#> [1] 0.2637907
