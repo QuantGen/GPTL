@@ -4,11 +4,90 @@ The following script simulates genotype and phenotype data that are used as exam
 
 - **Ind_SimData.RData**, including individual genotype and phenotype data for a source and a target population.
 
-- **Sum_SimData.RData**, including summary statistics for a source and a target population.
+- **Sum_SimData.RData**, including prior effects estimated from a source population, and LD reference panel, GWAS results, and individual calibrating/testing data for a target population.
+
+Setting simulation parameters.
+
+```R
+library(BGLR)
+library(GPTL)
+ 
+nChr=5 # number of chromosomes
+p=500  # number of loci per chromosome
+nSource=10000 # sample size for the source populations
+nTarget=4000 # sample size for the target pouplation
+nQTN=50 # number of causal variants
+h2=0.3
+ 
+set.seed(19502)
+```
+
+Simulating gentoypes for the source population.
+
+```R
+X1=matrix(nrow=nSource,ncol=0)
+for(i in 1:nChr){
+    DPrime=rbeta(shape1=20,shape2=10,n=p) # DPrime parameter to control LD
+    # shape1 and shape2 are used control the distribution of allele frequencies;
+    X1=cbind(X1,sampleGenomes(n=nSource,nLoci=p,Dprime=DPrime,shape1=2,shape2=6))
+}
+```
+
+Simulating gentoypes for the target population. Relative to source, in target we simulate similar LD with a different pattern.
+
+```R
+X2=matrix(nrow=nTarget,ncol=0)
+for(i in 1:nChr){
+    DPrime=rbeta(shape1=20,shape2=10,n=p)
+    X2=cbind(X2,sampleGenomes(n=nTarget,nLoci=p,Dprime=DPrime,shape1=2,shape2=6))
+}
+```
+
+Simulating genetic values and phenotypes.
+
+```R
+bSource=rgamma(nQTN,shape=20,scale=1)
+bTarget=bSource/2+rgamma(nQTN,shape=20,scale=1)/2
+ 
+QTN=as.integer(seq(from=50,to=p*nChr,length=nQTN))
+gSource=X1[,QTN]%*%bSource
+gTarget=X2[,QTN]%*%bTarget
+ 
+SDg=sd(gSource)
+gSource=scale(gSource,center=TRUE,scale=FALSE)*(sqrt(h2)/SDg)
+gTarget=scale(gTarget,center=TRUE,scale=FALSE)*(sqrt(h2)/SDg)
+ 
+ys=gSource+rnorm(n=nSource,sd=sqrt(1-h2))
+yt=gTarget+rnorm(n=nTarget,sd=sqrt(1-h2))
+ 
+# Removing causal variants
+Xs=X1[,-QTN]
+Xt=X2[,-QTN]
+colnames(Xs)=paste0('SNP_', 1:ncol(Xs))
+colnames(Xt)=paste0('SNP_', 1:ncol(Xt))
+```
+
+Splitting the target data into training, calibrating, and testing sets.
+
+```R
+sets=c(rep('trn', 3000), rep('cal', 500), rep('tst', 500))
+Xt_trn=Xt[sets=='trn',];Xt_cal=Xt[sets=='cal',];Xt_tst=Xt[sets=='tst',]
+yt_trn=yt[sets=='trn'];yt_cal=yt[sets=='cal'];yt_tst=yt[sets=='tst']
+```
+
+Saving above-generated data sets.
+
+```R
+save(Xs, ys, Xt_trn, Xt_cal, Xt_tst, yt_trn, yt_cal, yt_tst, file='Ind_SimData.RData')
+```
 
 
 
 
+
+
+
+We use a toy data set wheatSumStats of LD matrix wheat_LD, GWAS results wheat_GWAS, prior effects wheat_PRIOR, and individual validation/testing data wheat_VLD.X, wheat_VLD.y, wheat_TST.X, wheat_TST.y. These statistics were generated based on the wheat data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
 
 
 **1. Data Preparation**
