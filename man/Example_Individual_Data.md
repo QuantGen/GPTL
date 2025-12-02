@@ -46,8 +46,8 @@ We evaluate the prediction accuracy in the calibrating set to select the optimal
 
 ```R
 Cor_GDES=getCor(XXt_cal, Xyt_cal, yyt_cal, fm_GDES)
-plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20, type='o')
 opt_nIter=which.max(Cor_GDES)
+plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20, type='o');abline(v=opt_nIter, lty=2)
 ```
 
 <p align="left">
@@ -59,7 +59,7 @@ We then re-estimate the PGS effects using both the training and calibrating sets
 ```R
 fm_GDES_final=GD(XX=XXt_trn+XXt_cal, Xy=Xyt_trn+Xyt_cal, b=prior, learningRate=1/1000, nIter=opt_nIter, returnPath=F)
 getCor(XXt_tst, Xyt_tst, yyt_tst, fm_GDES_final)
-#> [1] 0.248867
+#> [1] 0.2472281
 ```
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
@@ -71,7 +71,7 @@ fm_PR=PR(XX=XXt_trn, Xy=Xyt_trn, b=prior, alpha=0, nLambda=100, convThreshold=1e
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
-#>  $ B        : num [1:2450, 1:100] 2.34e-04 1.95e-04 -3.77e-06 2.74e-04 -3.12e-04 ...
+#>  $ B        : num [1:2450, 1:100] 8.09e-05 1.21e-04 -8.16e-05 3.76e-04 -3.12e-04 ...
 #>   ..- attr(*, "dimnames")=List of 2
 #>   .. ..$ : chr [1:2450] "SNP_1" "SNP_2" "SNP_3" "SNP_4" ...
 #>   .. ..$ : chr [1:100] "lambda_10079316.6912" "lambda_9183897.9761" "lambda_8368025.7918" "lambda_7624633.4437" ...
@@ -84,8 +84,8 @@ Next, we evaluate the prediction accuracy in the calibrating set to select the o
 
 ```R
 Cor_PR=getCor(XXt_cal, Xyt_cal, yyt_cal, fm_PR$B)
-plot(x=log(fm_PR$lambda), y=Cor_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20, type='o')
 opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
+plot(x=log(fm_PR$lambda), y=Cor_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20, type='o');abline(v=log(opt_lambda), lty=2)
 ```
 
 <p align="left">
@@ -98,7 +98,7 @@ We then re-estimate the PGS effects using both the training and calibrating sets
 fm_PR_final=PR(XX=XXt_trn+XXt_cal, Xy=Xyt_trn+Xyt_cal, b=prior, alpha=0, lambda=opt_lambda, convThreshold=1e-4,
             maxIter=1000, returnPath=FALSE)
 getCor(XXt_tst, Xyt_tst, yyt_tst, fm_PR_final$B)
-#> [1] 0.2487318
+#> [1] 0.2472293
 ```
 
 - #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
