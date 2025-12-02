@@ -37,7 +37,7 @@ names(prior)=colnames(Xs)
 *GD()* function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
-fm_GDES=GD(XX=XXt_trn, Xy=Xyt_trn, b=prior, learningRate=1/100, nIter=100, returnPath=T)
+fm_GDES=GD(XX=XXt_trn, Xy=Xyt_trn, b=prior, learningRate=1/200, nIter=100, returnPath=T)
 dim(fm_GDES)
 #> [1] 2450  100
 ```
@@ -46,7 +46,7 @@ We evaluate the prediction accuracy in the calibrating set to select the optimal
 
 ```R
 Cor_GDES=getCor(XXt_cal, Xyt_cal, yyt_cal, fm_GDES)
-plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20)
+plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20, type='o')
 opt_nIter=which.max(Cor_GDES)
 ```
 
@@ -54,12 +54,12 @@ opt_nIter=which.max(Cor_GDES)
     <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E1_GDES.png" alt="Description" width="400">
 </p>
 
-We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+We then re-estimate the PGS effects using both the training and calibrating sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_GDES_final=GD(XX=XXt_train, Xy=Xyt_train, b=prior, learningRate=1/50, nIter=opt_nIter, returnPath=F)
-getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
-#> [1] 0.6364298
+fm_GDES_final=GD(XX=XXt_trn+XXt_cal, Xy=Xyt_trn+Xyt_cal, b=prior, learningRate=1/200, nIter=opt_nIter, returnPath=F)
+getCor(XXt_tst, Xyt_tst, yyt_tst, fm_GDES_final)
+#> [1] 0.1973647
 ```
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
@@ -67,24 +67,24 @@ getCor(XXt_test, Xyt_test, yyt_test, fm_GDES_final)
 *PR()* function takes as inputs the sufficient statistics derived from the target population and a vector of initial values (prior), plus, potentially, values for $\lambda$ and $\alpha$ (if these are not provided, by default $\alpha$ is set equal to zero, i.e., L2 penalty, and the model is fitted over a grid of values of $\lambda$). The function returns estimates for a grid of values of $\lambda$, enabling users to select the optimal model based on cross-validation.
 
 ```R
-fm_PR=PR(XX=XXt_train, Xy=Xyt_train, b=prior, alpha=0, nLambda=100, convThreshold=1e-4,
+fm_PR=PR(XX=XXt_trn, Xy=Xyt_trn, b=prior, alpha=0, nLambda=100, convThreshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
-#>  $ B        : num [1:1279, 1:100] 0.015507 0.017122 -0.007943 -0.000096 0.003377 ...
+#>  $ B        : num [1:2450, 1:100] -0.000234 -0.000301 0.000232 -0.000919 -0.000123 ...
 #>   ..- attr(*, "dimnames")=List of 2
-#>   .. ..$ : chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
-#>   .. ..$ : chr [1:100] "lambda_256131.6607" "lambda_233377.6299" "lambda_212645.0045" "lambda_193754.2083" ...
-#>  $ lambda   : num [1:100] 256132 233378 212645 193754 176542 ...
+#>   .. ..$ : chr [1:2450] "SNP_1" "SNP_2" "SNP_3" "SNP_4" ...
+#>   .. ..$ : chr [1:100] "lambda_10013023.2585" "lambda_9123493.8693" "lambda_8312987.8193" "lambda_7574484.893" ...
+#>  $ lambda   : num [1:100] 10013023 9123494 8312988 7574485 6901589 ...
 #>  $ alpha    : num 0
-#>  $ conv_iter: num [1:100] 3 3 3 3 3 3 3 3 3 3 ...
+#>  $ conv_iter: num [1:100] 2 2 2 2 2 2 2 2 2 2 ...
 ```
 
-Next, we evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (lambda).
+Next, we evaluate the prediction accuracy in the calibrating set to select the optimal shrinkage parameter (lambda).
 
 ```R
-Cor_PR=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_PR$B)
-plot(x=log(fm_PR$lambda), y=Cor_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20)
+Cor_PR=getCor(XXt_cal, Xyt_cal, yyt_cal, fm_PR$B)
+plot(x=log(fm_PR$lambda), y=Cor_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20, type='o')
 opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
 ```
 
