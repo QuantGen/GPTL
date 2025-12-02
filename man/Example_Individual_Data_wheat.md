@@ -12,7 +12,7 @@ data(wheat)
 y=wheat.Y[,1]
 X=scale(wheat.X, center=TRUE, scale=TRUE)
 
-CLUSTER=kmeans(X,2)
+CLUSTER=kmeans(X,centers=2,nstart=100)
 table(CLUSTER$cluster)
 #>   1   2 
 #> 346 253 
