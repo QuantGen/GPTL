@@ -1,43 +1,44 @@
 ### GPTL using LD reference panels and GWAS results
 
-The following example illustrate how GPTL software works when using an LD reference panel (internal or external) and GWAS results.
+In the following example, we use a demo data set (see this [link](https://github.com/QuantGen/GPTL/blob/main/man/DemoData_Preparation.md) for more details) to illustrate how to construct Polygenic Scores (PGS) using GPTL when using an LD reference panel (internal or external) and GWAS summary statistics.
 
-**1. Data Preparation**
+A complete pipleine may include:
 
-We use a toy data set `wheatSumStats` of LD matrix `wheat_LD`, GWAS results `wheat_GWAS`, prior effects `wheat_PRIOR`, and individual validation/testing data `wheat_VLD.X, wheat_VLD.y, wheat_TST.X, wheat_TST.y`. These statistics were generated based on the wheat data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
+ 1. [Loading the data](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md#1-data-loading).
+ 2. [Deriving sufficient statistics]().
+ 3. [Estimating PGS using GPTL](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md#3-pgs-estimation-using-gptl). This includes calibrating model parameters, which is not strictly needed but it is a useful benchmark.
+ 4. [Evaluating PGS prediction accuracy](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md#4-prediction-accuracy-summary).
 
-```r
-library(GPTL)
-data(wheatSumStats)
-library(Matrix)
-
-wheat_LD[1:3,1:3]
-#> 3 x 3 sparse Matrix of class "dgCMatrix"
-#>            wPt.1171   c.312549   c.306034
-#> wPt.1171 1.00000000 0.34408250 0.06038764
-#> c.312549 0.34408250 1.00000000 0.03293636
-#> c.306034 0.06038764 0.03293636 1.00000000
-
-head(wheat_GWAS, 3)
-#>                 id        beta        se   n allele_freq
-#>  wPt.1171 wPt.1171 -0.03196163 0.2448336 167   0.4461078
-#>  c.312549 c.312549 -0.13563632 0.1825260 167   0.3892216
-#>  c.306034 c.306034 -0.41371141 0.1599184 167   0.3413174
-
-str(wheat_PRIOR)
-#>   Named num [1:1279] 0.01324 0.03401 -0.00575 0.00472 0.00775 ...
-#>   - attr(*, "names")= chr [1:1279] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
-```
-
-- *wheat_LD* is a sparse LD reference matrix in "dgCMatrix" class, with row and column names as variant ID.
-- *wheat_GWAS* is a GWAS result data frame, where columns of **beta** (estimated effects), **n** (sample sizes), **allele_freq** (allele frequency), and variant ID as row names are required.
-- *wheat_PRIOR* is a vector of prior effects estimated in the source population, with names as variant ID.
-
-We use *getSS()* function to compute the sufficient statistics (**X'X** and **X'y**) based on the LD matrix, GWAS results (and prior effects, to algin the variants).
+#### 1. Data Loading
 
 ```R
-SS=getSS(ld=wheat_LD,gwas=wheat_GWAS,B=wheat_PRIOR)
-#>  There were 1279 variant in common between the LD reference panel, the GWAS, and the prior.
+library(GPTL)
+data(Sum_DemoData)
+```
+
+The demo data set has prior effects estimated from a source population, a sparse LD reference matrix, GWAS summary statistics, and genotype and phenotype data (for the calibrating and testing purposes) from the target population. The objects loded are:
+
+ - `PRIOR`,
+ - `LD`,
+ - `GWAS`,
+ - `GENO.Target`,
+ - `PHENO.Target`,
+
+In addition to phenotypic data, `PHENO.Target` includes a variable (`sets`) defining the calibrating, and testing subsets.
+
+```R
+cal=which(PHENO.Target$sets=='cal')
+tst=which(PHENO.Target$sets=='tst')
+```
+
+#### 2. Deriving Sufficient Statistics
+
+We use *getSS()* function to compute the sufficient statistics (**X'X** and **X'y**) based on the LD matrix, GWAS statistics (and prior effects, to algin the variants).
+
+```R
+SS=getSS(ld=LD,gwas=GWAS,B=PRIOR)
+#>  There were 1270 variant in common between the LD reference panel, the GWAS, and the prior.
+
 str(SS)
 #>  List of 4
 #>   $ XX:Formal class 'dgCMatrix' [package "Matrix"] with 6 slots
@@ -57,6 +58,59 @@ str(SS)
 #>   $ B :'data.frame':	1279 obs. of  1 variable:
 #>    ..$ B: num [1:1279] 0.01324 0.03401 -0.00575 0.00472 0.00775 ...
 ```
+
+
+
+#### 3. PGS Estimation Using GPTL
+
+- #### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
+
+*GD()* function takes as input the sufficient statistics (**X'X** and **X'y**) derived from the target population and a vector of initial values (effects estimated from the source population—`B_Cross`). The function returns regression coefficient values over the gradient descent cycles.
+
+```R
+X=scale(GENO.Target[trn,],center=TRUE,scale=FALSE)
+XX=crossprod(X)
+Xy=crossprod(X,PHENO.Target$y[trn])
+
+fm_GDES=GD(XX=XX, Xy=Xy, b=B_Cross, learningRate=1/100, nIter=100, returnPath=T)
+dim(fm_GDES)
+#> [1] 1270  100
+B_GDES=cbind(B_Cross, fm_GDES)
+```
+
+We evaluate the prediction accuracy in the calibrating set to select the optimal number of gradient descent cycles (nIter).
+
+```R
+Cors_GDES=cor(GENO.Target[cal,]%*%B_GDES, PHENO.Target$y[cal])
+opt_nIter=which.max(Cors_GDES)
+plot(Cors_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20, type='o');abline(v=opt_nIter, lty=2)
+```
+
+<p align="left">
+    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E1_GDES.png" alt="Description" width="400">
+</p>
+
+We then re-estimate the PGS effects using both the training and calibrating sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+
+```R
+X=scale(GENO.Target[c(trn,cal),],center=TRUE,scale=FALSE)
+XX=crossprod(X)
+Xy=crossprod(X,PHENO.Target$y[c(trn,cal)])
+
+fm_GDES_final=GD(XX=XX, Xy=Xy, b=B_Cross, learningRate=1/100, nIter=opt_nIter, returnPath=F)
+Cor_GDES=cor(GENO.Target[tst,]%*%fm_GDES_final, PHENO.Target$y[tst])
+Cor_GDES
+#> [1] 0.5258604
+```
+
+
+
+
+
+
+
+
+
 
 **2. PGS Estimation Using GPTL**
 
