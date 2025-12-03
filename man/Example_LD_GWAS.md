@@ -7,7 +7,7 @@ A complete pipleine may include:
  1. [Loading the data](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md#1-data-loading).
  2. [Deriving sufficient statistics](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md#2-deriving-sufficient-statistics).
  3. [Estimating PGS using GPTL](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md#3-pgs-estimation-using-gptl). This includes calibrating model parameters, which is not strictly needed but it is a useful benchmark.
- 4. [Evaluating PGS prediction accuracy]().
+ 4. [Evaluating PGS prediction accuracy](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md#4-prediction-accuracy-summary).
 
 #### 1. Data Loading
 
