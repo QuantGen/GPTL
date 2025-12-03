@@ -62,7 +62,7 @@ table(PHENO.Target$sets)
 The above-generated data sets are saved in `Ind_DemoData.RData`, and can be loaded by `data(Ind_DemoData)` with the `GPTL` package. Example pipeline using this demo data can be found [here](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md)
 
 ```R
-save(GENO.Source, PHENO.Source, GENO.Target, PHENO.Target, file='Ind_SimData.RData')
+save(GENO.Source, PHENO.Source, GENO.Target, PHENO.Target, file='Ind_DemoData.RData')
 ```
 
 We continue to prepare demo data 2. We estimate prior effects from the source population using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package). Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
@@ -115,7 +115,7 @@ PHENO.Target=PHENO.Target[PHENO.Target$sets!='trn',]
 The above-generated data sets are saved in `Sum_DemoData.RData`, and can be loaded by `data(Sum_DemoData)` with the `GPTL` package. Example pipeline using this demo data can be found [here](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md)
 
 ```R
-save(PRIOR, LD, GWAS, GENO.Target, PHENO.Target, file='Sum_SimData.RData')
+save(PRIOR, LD, GWAS, GENO.Target, PHENO.Target, file='Sum_DemoData.RData')
 ```
 
 [Back to Homepage](https://github.com/QuantGen/GPTL/blob/main/README.md)
