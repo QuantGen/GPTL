@@ -52,10 +52,10 @@ We evaluate the prediction accuracy in the testing set.
 ```R
 Cor_Cross=cor(GENO.Target[tst,]%*%B_Cross, PHENO.Target$y[tst])
 Cor_Cross
-#> [1] 0.4684718
+#> [1] 0.4695429
 Cor_Within=cor(GENO.Target[tst,]%*%B_Within, PHENO.Target$y[tst])
 Cor_Within
-#> [1] 0.4336247
+#> [1] 0.4464514
 ```
 
 #### 3. PGS Estimation Using GPTL
@@ -97,7 +97,7 @@ Xy=crossprod(X,PHENO.Target$y[c(trn,cal)])
 fm_GDES_final=GD(XX=XX, Xy=Xy, b=B_Cross, learningRate=1/100, nIter=opt_nIter, returnPath=F)
 Cor_GDES=cor(GENO.Target[tst,]%*%fm_GDES_final, PHENO.Target$y[tst])
 Cor_GDES
-#> [1] 0.5258604
+#> [1] 0.5271522
 ```
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
@@ -113,7 +113,7 @@ fm_PR=PR(XX=XX, Xy=Xy, b=B_Cross, alpha=0, nLambda=100, convThreshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
-#>  $ B        : num [1:1270, 1:100] 0.01604 0.00362 -0.01796 -0.00607 0.02695 ...
+#>  $ B        : num [1:1270, 1:100] 0.01113 0.00301 -0.01733 -0.00546 0.02783 ...
 #>   ..- attr(*, "dimnames")=List of 2
 #>   .. ..$ : chr [1:1270] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
 #>   .. ..$ : chr [1:100] "lambda_76588.9764" "lambda_69785.0228" "lambda_63585.5137" "lambda_57936.7519" ...
@@ -147,7 +147,7 @@ fm_PR_final=PR(XX=XX, Xy=Xy, b=B_Cross, alpha=0, lambda=opt_lambda, convThreshol
                maxIter=1000, returnPath=FALSE)
 Cor_PR=cor(GENO.Target[tst,]%*%fm_PR_final$B, PHENO.Target$y[tst])
 Cor_PR
-#> [1] 0.5194498
+#> [1] 0.5209681
 ```
 
 - #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
@@ -165,28 +165,28 @@ fm_BMM=BMM(XX=XX, Xy=Xy, my=mean(PHENO.Target$y[c(trn,cal)]), vy=var(PHENO.Targe
            n=nrow(GENO.Target[c(trn,cal),]), nIter=12000, burnIn=2000, thin=5, verbose=FALSE)
 str(fm_BMM)
 #> List of 7
-#>  $ b           : Named num [1:1270] 1.15e-02 9.03e-05 -4.27e-03 -6.09e-03 1.29e-02 ...
+#>  $ b           : Named num [1:1270] 0.011573 -0.000167 -0.002741 -0.005757 0.012345 ...
 #>   ..- attr(*, "names")= chr [1:1270] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
-#>  $ POST.PROB   : num [1:1270, 1:2] 0.493 0.51 0.467 0.504 0.496 ...
-#>  $ postMeanVarB: num [1:2] 0.000995 0.001472
-#>  $ postProb    : num [1:2] 0.502 0.498
-#>  $ samplesVarB : num [1:12000, 1:2] 0.00062 0.00066 0.000751 0.000812 0.000799 ...
-#>  $ samplesB    : num [1:12000, 1:1270] 0.0424 -0.0227 0.0133 -0.0088 0.0479 ...
-#>  $ samplesVarE : num [1:12000] 0.577 0.588 0.519 0.526 0.568 ...
+#>  $ POST.PROB   : num [1:1270, 1:2] 0.515 0.506 0.489 0.512 0.491 ...
+#>  $ postMeanVarB: num [1:2] 0.00118 0.00127
+#>  $ postProb    : num [1:2] 0.503 0.497
+#>  $ samplesVarB : num [1:12000, 1:2] 0.000572 0.000613 0.000559 0.000575 0.00056 ...
+#>  $ samplesB    : num [1:12000, 1:1270] 0.05221 0.00285 -0.01069 0.01436 -0.00394 ...
+#>  $ samplesVarE : num [1:12000] 0.517 0.429 0.609 0.753 0.576 ...
 
 Cor_BMM=cor(GENO.Target[tst,]%*%fm_BMM$b, PHENO.Target$y[tst])
 Cor_BMM
-#> [1] 0.529106
+#> [1] 0.5241719
 ```
 
 #### 4. Prediction Accuracy Summary
 
 | Method | Prediction Squared Corr. |
 | :---: | :---: |
-| cross-ancestry | 0.4685 |
-| within-ancestry | 0.4336 |
-| TL-GDES | 0.5259 |
-| TL-PR | 0.5194 |
-| TL-BMM | 0.5291 |
+| cross-ancestry | 0.4695 |
+| within-ancestry | 0.4465 |
+| TL-GDES | 0.5272 |
+| TL-PR | 0.5210 |
+| TL-BMM | 0.5242 |
 
 [Back to Homepage](https://github.com/QuantGen/GPTL/blob/main/README.md)
