@@ -5,7 +5,7 @@ In the following example, we use a demo data set (see this [link](https://github
 A complete pipleine may include:
 
  1. [Loading the data](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md#1-data-loading)
- 2. Calibrating a PGS in the source data set (this may not be needed if one uses a pre-trained PGS as prior information)
+ 2. [Estimating effects in the source population](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md#2-data-loading). This may not be needed if one uses a pre-trained PGS as prior information.
  3. Calibrating a PGS using only training (and calibration) data from the target populations–this is not strictly needed but it is a useful benchmark to have.
 
 #### 1. Data Loading
@@ -30,7 +30,7 @@ cal=which(PHENO.Target$sets=='cal')
 tst=which(PHENO.Target$sets=='tst')
 ```
 
-**2. Single-ancestry PGS**
+### 2. Single-ancestry PGS: Source population
 
 We use the source population data to construct a cross-ancestry PGS, and use the target population tarining and calibrating sets to construct a within-ancestry PGS. We estimated effects using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package).
 
