@@ -6,7 +6,7 @@ A complete pipleine may include:
 
  1. [Loading the data](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md#1-data-loading).
  2. [Deriving sufficient statistics](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md#2-deriving-sufficient-statistics).
- 3. [Estimating PGS using GPTL](). This includes calibrating model parameters, which is not strictly needed but it is a useful benchmark.
+ 3. [Estimating PGS using GPTL](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md#3-pgs-estimation-using-gptl). This includes calibrating model parameters, which is not strictly needed but it is a useful benchmark.
  4. [Evaluating PGS prediction accuracy]().
 
 #### 1. Data Loading
@@ -168,6 +168,13 @@ Cor_BMM
 #> [1] 0.6277782
 ```
 
-[Back to Homepage](https://github.com/QuantGen/GPTL/blob/main/README.md)
+#### 4. Prediction Accuracy Summary
 
+| Method | Prediction Squared Corr. |
+| :---: | :---: |
+| TL-GDES | 0.6372 |
+| TL-PR | 0.6428 |
+| TL-BMM | 0.6278 |
+
+[Back to Homepage](https://github.com/QuantGen/GPTL/blob/main/README.md)
 
