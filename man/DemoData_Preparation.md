@@ -49,12 +49,12 @@ PHENO.Target=wheat.Y[CLUSTER$cluster == 2,1]
 We further split the target data set into (i) a training set (40%), (ii) a calibrating set (30%), and (iii) a testing set (30%).
 
 ```R
-set.seed(10)
+set.seed(1234)
 sets <- cut(runif(nrow(GENO.Target)), breaks = c(0, 0.4, 0.7, 1), labels = c("trn","cal","tst"))
 PHENO.Target=data.frame(y=PHENO.Target, sets=sets)
 table(PHENO.Target$sets)
 #> trn cal tst 
-#> 100  76  77
+#> 102  80  71
 ```
 
 `GENO.Source` and `PHENO.Source` consist of genotype and phenotype data for the source population (346 samples, 1270 variants). `GENO.Target` and `PHENO.Target` consist of genotype and phenotype data for the target population (253 samples, 1270 variants), with samples splitted into 3 sets, marking in `PHENO.Target`.
@@ -110,7 +110,7 @@ GENO.Target=GENO.Target[PHENO.Target$sets!='trn',]
 PHENO.Target=PHENO.Target[PHENO.Target$sets!='trn',]
 ```
 
-`PRIOR`, `LD`, and `GWAS` consist of prior estimates from the source population, LD reference panel and GWAS summary statistics from the target population. `GENO.Target` and `PHENO.Target` consist of genotype and phenotype data for the target population (153 samples, 1270 variants), with samples splitted into calibrating and testing sets, marking in `PHENO.Target`.
+`PRIOR`, `LD`, and `GWAS` consist of prior estimates from the source population, LD reference panel and GWAS summary statistics from the target population. `GENO.Target` and `PHENO.Target` consist of genotype and phenotype data for the target population (151 samples, 1270 variants), with samples splitted into calibrating and testing sets, marking in `PHENO.Target`.
 
 The above-generated data sets are saved in `Sum_DemoData.RData`, and can be loaded by `data(Sum_DemoData)` with the `GPTL` package. Example pipeline using this demo data can be found [here](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md)
 
