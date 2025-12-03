@@ -13,66 +13,31 @@ data(Ind_DemoData)
 
 **2. Single-ancestry PGS**
 
-We use the source population data to construct a cross-ancestry PGS, and use the target population tarining set to construct a within-ancestry PGS. We estimated effects using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package).
+We use the source population data to construct a cross-ancestry PGS, and use the target population tarining and calibrating sets to construct a within-ancestry PGS. We estimated effects using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package).
 
 ```R
+library(BGLR)
 ETA=list(list(X=GENO.Source, model="BRR"))
 fm_Cross=BGLR(y=PHENO.Source, ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
 B_Cross=fm_Cross$ETA[[1]]$b
 
-ETA=list(list(X=GENO.Target[PHENO.Target$sets=='trn',], model="BRR"))
-fm_Within=BGLR(y=PHENO.Target[PHENO.Target$sets=='trn',], ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
+ETA=list(list(X=GENO.Target[PHENO.Target$sets %in% c('trn', 'cal'),], model="BRR"))
+fm_Within=BGLR(y=PHENO.Target$y[PHENO.Target$sets %in% c('trn', 'cal')], ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
 B_Within=fm_Within$ETA[[1]]$b
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). 
+We evaluate the prediction accuracy in the testing set.
 
 ```R
-Xs=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE);ys=y[CLUSTER$cluster == 1]
-Xt=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE);yt=y[CLUSTER$cluster == 2]
+Cor_Cross=cor(GENO.Target[PHENO.Target$sets=='tst',]%*%B_Cross, PHENO.Target$y[PHENO.Target$sets=='tst'])
+Cor_Within=cor(GENO.Target[PHENO.Target$sets=='tst',]%*%B_Within, PHENO.Target$y[PHENO.Target$sets=='tst'])
 ```
 
-We estimated prior effects from the source data set using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package). Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
-
-```R
-ETA=list(list(X=Xs, model="BRR"))
-fm=BGLR(y=ys, ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
-prior=fm$ETA[[1]]$b
-names(prior)=colnames(Xs)
-```
-
-We further split the target data set into (i) a training set (60%), (ii) a calibration set (20%), and (iii) a testing set (20%), and compute the sufficient statistics (**X'X** and **X'y**) for the each of sets.
-
-```R
-set.seed(1234)
-sets=as.integer(as.factor(cut(runif(nrow(Xt)),breaks=c(0,quantile(runif(nrow(Xt)),prob=c(.6,.8)),1.1))))
-Xt_train=Xt[sets==1,];yt_train=yt[sets==1];XXt_train=crossprod(Xt_train);Xyt_train=crossprod(Xt_train, yt_train)
-Xt_cali=Xt[sets==2,];yt_cali=yt[sets==2];XXt_cali=crossprod(Xt_cali);Xyt_cali=crossprod(Xt_cali, yt_cali);yyt_cali=crossprod(yt_cali)
-Xt_test=Xt[sets==3,];yt_test=yt[sets==3];XXt_test=crossprod(Xt_test);Xyt_test=crossprod(Xt_test, yt_test);yyt_test=crossprod(yt_test)
-```
-
-**2. PGS Estimation Using GPTL**
-
-- #### Loading the package
-
-```R
-library(GPTL)
-```
+**3. PGS Estimation Using GPTL**
 
 - #### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
+
+We first compute the sufficient statistics (*X'X* and *X'y*)
 
 *GD()* function takes as input the sufficient statistics derived from the target population and a vector of initial values (prior). The function returns regression coefficient values over the gradient descent cycles.
 
