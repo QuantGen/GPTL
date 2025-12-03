@@ -14,7 +14,7 @@ This data set has two clear clusters, we use this to illustrate how to transfer 
 library(BGLR)
 data(wheat)
 y=wheat.Y[,1]
-X=scale(wheat.X, center=TRUE, scale=TRUE)
+X=scale(wheat.X, center=TRUE, scale=FALSE)
 
 CLUSTER=kmeans(X,centers=2,nstart=100)
 table(CLUSTER$cluster)
@@ -24,19 +24,26 @@ table(CLUSTER$cluster)
 
 We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). 
 
+```R
+GENO.Source=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE)
+GENO.Target=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE)
+PHENO.Source=wheat.Y[CLUSTER$cluster == 1,1]
+PHENO.Target=wheat.Y[CLUSTER$cluster == 2,1]
+```
 
-
-
-
-
-
-
-
+We further split the target data set into (i) a training set (40%), (ii) a calibrating set (30%), and (iii) a testing set (30%).
 
 ```R
-Xs=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE);ys=y[CLUSTER$cluster == 1]
-Xt=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE);yt=y[CLUSTER$cluster == 2]
+set.seed(195021)
+sets=as.integer(as.factor(cut(runif(nrow(GENO.Target)),breaks=c(0,quantile(runif(nrow(GENO.Target)),prob=c(.4,.7)),1))))
+
+Xt_train=Xt[sets==1,];yt_train=yt[sets==1];XXt_train=crossprod(Xt_train);Xyt_train=crossprod(Xt_train, yt_train)
+Xt_cali=Xt[sets==2,];yt_cali=yt[sets==2];XXt_cali=crossprod(Xt_cali);Xyt_cali=crossprod(Xt_cali, yt_cali);yyt_cali=crossprod(yt_cali)
+Xt_test=Xt[sets==3,];yt_test=yt[sets==3];XXt_test=crossprod(Xt_test);Xyt_test=crossprod(Xt_test, yt_test);yyt_test=crossprod(yt_test)
 ```
+
+
+
 
 We estimated prior effects from the source data set using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package). Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
 
@@ -47,7 +54,7 @@ prior=fm$ETA[[1]]$b
 names(prior)=colnames(Xs)
 ```
 
-We further split the target data set into (i) a training set (60%), (ii) a calibration set (20%), and (iii) a testing set (20%), and compute the sufficient statistics (**X'X** and **X'y**) for the each of sets.
+
 
 ```R
 set.seed(1234)
