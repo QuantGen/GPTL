@@ -34,9 +34,27 @@ PHENO.Target=wheat.Y[CLUSTER$cluster == 2,1]
 We further split the target data set into (i) a training set (40%), (ii) a calibrating set (30%), and (iii) a testing set (30%).
 
 ```R
-set.seed(195021)
-sets=as.integer(as.factor(cut(runif(nrow(GENO.Target)),breaks=c(0,quantile(runif(nrow(GENO.Target)),prob=c(.4,.7)),1))))
+set.seed(10)
+sets <- cut(runif(nrow(GENO.Target)), breaks = c(0, 0.4, 0.7, 1), labels = c("trn","cal","tst"))
+PHENO.Target=data.frame(y=PHENO.Target, sets=sets)
+```
 
+`GENO.Source` and `PHENO.Source` consist of genotype and phenotype data for the source population (346 samples, 1279 variants). `GENO.Target` and `PHENO.Target` consist of genotype and phenotype data for the target population (253 samples, 1279 variants), with samples splitted into 3 sets, marking in `PHENO.Target`.
+
+The above-generated data sets are saved in `Ind_DemoData.RData`, and can be loaded by `data(Ind_DemoData)` with the `GPTL` package.
+
+```R
+save(GENO.Source, PHENO.Source, GENO.Target, PHENO.Target, file='Ind_SimData.RData')
+```
+
+
+
+
+
+
+
+
+```R
 Xt_train=Xt[sets==1,];yt_train=yt[sets==1];XXt_train=crossprod(Xt_train);Xyt_train=crossprod(Xt_train, yt_train)
 Xt_cali=Xt[sets==2,];yt_cali=yt[sets==2];XXt_cali=crossprod(Xt_cali);Xyt_cali=crossprod(Xt_cali, yt_cali);yyt_cali=crossprod(yt_cali)
 Xt_test=Xt[sets==3,];yt_test=yt[sets==3];XXt_test=crossprod(Xt_test);Xyt_test=crossprod(Xt_test, yt_test);yyt_test=crossprod(yt_test)
