@@ -1,6 +1,6 @@
 ### GPTL using individual genetype and phenotype data
 
-In the following example, we use demo data generated from [link](https://github.com/QuantGen/GPTL/blob/main/man/DemoData_Preparation.md) to illustrate how GPTL software works when one has access to individual genetype and phenotype data.
+In the following example, we use a demo data set (see this [link](https://github.com/QuantGen/GPTL/blob/main/man/DemoData_Preparation.md) for more details) to illustrate how to calibrate Polygenic Scores (PGS) using GPTL when one has access to individual (genotype and phenotype) data.
 
 **1. Data Loading**
 
@@ -9,9 +9,14 @@ library(GPTL)
 data(Ind_DemoData)
 ```
 
-`GENO.Source` and `PHENO.Source` consist of genotype and phenotype data for the source population (346 samples, 1270 variants). `GENO.Target` and `PHENO.Target` consist of genotype and phenotype data for the target population (253 samples, 1270 variants), with samples splitted into 3 sets, marking in `PHENO.Target`.
+The demo data set has genotype and phenotype data for the source (n=346 samples, 1270 variants) and target (n=253 samples, 1270 variants) populations. The objects loded are:
 
-To simplify the script below, we assign vectors for each of the sets.
+ - `GENO.Source`,
+ - `GENO.Target`,
+ - `PHENO.Source`,
+ - `PHENO.Target`.
+
+In addition to phenotypic data,  `PHENO.Target` includes a variable (`sets`) defining the training, calibration, and testing subsets.
 
 ```R
 trn=which(PHENO.Target$sets=='trn')
