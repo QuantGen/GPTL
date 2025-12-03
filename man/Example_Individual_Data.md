@@ -66,8 +66,8 @@ We evaluate the prediction accuracy in the calibrating set to select the optimal
 
 ```R
 Cors_GDES=cor(GENO.Target[cal,]%*%B_GDES, PHENO.Target$y[cal])
-plot(Cors_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20, type='o')
 opt_nIter=which.max(Cors_GDES)-1
+plot(Cors_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20, type='o');abline(v=opt_nIter, lty=2)
 ```
 
 <p align="left">
@@ -114,8 +114,8 @@ Next, we evaluate the prediction accuracy in the calibrating set to select the o
 
 ```R
 Cors_PR=cor(GENO.Target[cal,]%*%B_PR, PHENO.Target$y[cal])
-plot(x=log(fm_PR$lambda), y=Cors_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20, type='o')
 opt_lambda=fm_PR$lambda[which.max(Cors_PR)]
+plot(x=log(fm_PR$lambda), y=Cors_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20, type='o');abline(v=log(opt_lambda), lty=2)
 ```
 
 <p align="left">
