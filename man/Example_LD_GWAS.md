@@ -5,9 +5,9 @@ In the following example, we use a demo data set (see this [link](https://github
 A complete pipleine may include:
 
  1. [Loading the data](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md#1-data-loading).
- 2. [Deriving sufficient statistics]().
- 3. [Estimating PGS using GPTL](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md#3-pgs-estimation-using-gptl). This includes calibrating model parameters, which is not strictly needed but it is a useful benchmark.
- 4. [Evaluating PGS prediction accuracy](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md#4-prediction-accuracy-summary).
+ 2. [Deriving sufficient statistics](https://github.com/QuantGen/GPTL/blob/main/man/Example_LD_GWAS.md#2-deriving-sufficient-statistics).
+ 3. [Estimating PGS using GPTL](). This includes calibrating model parameters, which is not strictly needed but it is a useful benchmark.
+ 4. [Evaluating PGS prediction accuracy]().
 
 #### 1. Data Loading
 
@@ -40,40 +40,36 @@ SS=getSS(ld=LD,gwas=GWAS,B=PRIOR)
 #>  There were 1270 variant in common between the LD reference panel, the GWAS, and the prior.
 
 str(SS)
-#>  List of 4
-#>   $ XX:Formal class 'dgCMatrix' [package "Matrix"] with 6 slots
-#>    .. ..@ i       : int [1:15960] 0 1 2 3 0 1 2 3 0 1 ...
-#>    .. ..@ p       : int [1:1271] 0 4 8 12 16 20 24 28 32 38 ...
-#>    .. ..@ Dim     : int [1:2] 1270 1270
-#>    .. ..@ Dimnames:List of 2
-#>    .. .. ..$ : chr [1:1270] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
-#>    .. .. ..$ : chr [1:1270] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
-#>    .. ..@ x       : num [1:15960] 124.95 45.5 5.02 1.68 45.5 ...
-#>    .. ..@ factors : list()
-#>   $ Xy: num [1:1270, 1] 37.97 -4.02 18.18 23.76 19.76 ...
-#>    ..- attr(*, "dimnames")=List of 2
-#>    .. ..$ : chr [1:1270] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
-#>    .. ..$ : NULL
-#>   $ n : num 253
-#>   $ B :'data.frame':	1270 obs. of  1 variable:
-#>    ..$ B: num [1:1270] 0.01417 0.00519 -0.0164 -0.00537 0.02633 ...
+#> List of 4
+#>  $ XX:Formal class 'dgCMatrix' [package "Matrix"] with 6 slots
+#>   .. ..@ i       : int [1:15960] 0 1 2 3 0 1 2 3 0 1 ...
+#>   .. ..@ p       : int [1:1271] 0 4 8 12 16 20 24 28 32 38 ...
+#>   .. ..@ Dim     : int [1:2] 1270 1270
+#>   .. ..@ Dimnames:List of 2
+#>   .. .. ..$ : chr [1:1270] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
+#>   .. .. ..$ : chr [1:1270] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
+#>   .. ..@ x       : num [1:15960] 124.95 45.5 5.02 1.68 45.5 ...
+#>   .. ..@ factors : list()
+#>  $ Xy: num [1:1270, 1] 37.97 -4.02 18.18 23.76 19.76 ...
+#>   ..- attr(*, "dimnames")=List of 2
+#>   .. ..$ : chr [1:1270] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
+#>   .. ..$ : NULL
+#>  $ n : num 253
+#>  $ B :'data.frame':	1270 obs. of  1 variable:
+#>   ..$ B: num [1:1270] 0.01417 0.00519 -0.0164 -0.00537 0.02633 ...
 ```
 
 #### 3. PGS Estimation Using GPTL
 
 - #### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
-*GD()* function takes as input the sufficient statistics (**X'X** and **X'y**) derived from the target population and a vector of initial values (effects estimated from the source population—`B_Cross`). The function returns regression coefficient values over the gradient descent cycles.
+*GD()* function takes as input the above derived sufficient statistics and prior effects. The function returns regression coefficient values over the gradient descent cycles.
 
 ```R
-X=scale(GENO.Target[trn,],center=TRUE,scale=FALSE)
-XX=crossprod(X)
-Xy=crossprod(X,PHENO.Target$y[trn])
-
-fm_GDES=GD(XX=XX, Xy=Xy, b=B_Cross, learningRate=1/100, nIter=100, returnPath=T)
+fm_GDES=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learningRate=1/100, nIter=100, returnPath=T)
 dim(fm_GDES)
 #> [1] 1270  100
-B_GDES=cbind(B_Cross, fm_GDES)
+B_GDES=as.matrix(cbind(SS$B, fm_GDES))
 ```
 
 We evaluate the prediction accuracy in the calibrating set to select the optimal number of gradient descent cycles (nIter).
@@ -88,58 +84,12 @@ plot(Cors_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20, type='o');abl
     <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E1_GDES.png" alt="Description" width="400">
 </p>
 
-We then re-estimate the PGS effects using both the training and calibrating sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+We then evaluate the final prediction accuracy in the testing set, with the PGS effects estimated using the optimal iteration parameter.
 
 ```R
-X=scale(GENO.Target[c(trn,cal),],center=TRUE,scale=FALSE)
-XX=crossprod(X)
-Xy=crossprod(X,PHENO.Target$y[c(trn,cal)])
-
-fm_GDES_final=GD(XX=XX, Xy=Xy, b=B_Cross, learningRate=1/100, nIter=opt_nIter, returnPath=F)
-Cor_GDES=cor(GENO.Target[tst,]%*%fm_GDES_final, PHENO.Target$y[tst])
+Cor_GDES=cor(GENO.Target[tst,]%*%B_GDES[,opt_nIter], PHENO.Target$y[tst])
 Cor_GDES
-#> [1] 0.5258604
-```
-
-
-
-
-
-
-
-
-
-
-**2. PGS Estimation Using GPTL**
-
-- #### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
-
-*GD()* function takes as input the above derived sufficient statistics and prior effects. The function returns regression coefficient values over the gradient descent cycles.
-
-```R
-fm_GDES=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learningRate=1/100, nIter=100, returnPath=T)
-dim(fm_GDES)
-#> [1] 1279  100
-```
-
-We evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (nIter).
-
-```R
-Cor_GDES=cor(wheat_VLD.X %*% fm_GDES, wheat_VLD.y)
-plot(Cor_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20)
-opt_nIter=which.max(Cor_GDES)
-```
-
-<p align="left">
-    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E2_GDES.png" alt="Description" width="400">
-</p>
-
-We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
-
-```R
-fm_GDES_final=GD(XX=SS$XX, Xy=SS$Xy, b=SS$B, learningRate=1/100, nIter=opt_nIter, returnPath=F)
-cor(wheat_TST.X %*% fm_GDES_final, wheat_TST.y)
-#> [1] 0.606333
+#> [1] 0.6372282
 ```
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
@@ -151,34 +101,35 @@ fm_PR=PR(XX=SS$XX, Xy=SS$Xy, b=SS$B, alpha=0, nLambda=100, convThreshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
-#>  $ B        : num [1:1279, 1:100] 0.01322 0.03397 -0.00585 0.00464 0.00775 ...
+#>  $ B        : num [1:1270, 1:100] 0.01425 0.00518 -0.01635 -0.00532 0.02637 ...
 #>   ..- attr(*, "dimnames")=List of 2
-#>   .. ..$ : chr [1:1279] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
-#>   .. ..$ : chr [1:100] "lambda_617943.6592" "lambda_563047.2476" "lambda_513027.682" "lambda_467451.7167" ...
-#>  $ lambda   : num [1:100] 617944 563047 513028 467452 425925 ...
+#>   .. ..$ : chr [1:1270] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
+#>   .. ..$ : chr [1:100] "lambda_933935.2028" "lambda_850966.9734" "lambda_775369.4128" "lambda_706487.7312" ...
+#>  $ lambda   : num [1:100] 933935 850967 775369 706488 643725 ...
 #>  $ alpha    : num 0
 #>  $ conv_iter: num [1:100] 3 3 3 3 3 3 3 3 3 3 ...
+
+B_PR=fm_PR$B
 ```
 
-We evaluate the prediction accuracy in the calibration set to select the optimal shrinkage parameter (lambda).
+We evaluate the prediction accuracy in the calibrating set to select the optimal shrinkage parameter (lambda).
 
 ```R
-Cor_PR=cor(wheat_VLD.X %*% fm_PR$B, wheat_VLD.y)
-plot(x=log(fm_PR$lambda), y=Cor_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20)
-opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
+Cors_PR=cor(GENO.Target[cal,]%*%B_PR, PHENO.Target$y[cal])
+opt_lambda=fm_PR$lambda[which.max(Cors_PR)]
+plot(x=log(fm_PR$lambda), y=Cors_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20, type='o');abline(v=log(opt_lambda), lty=2)
 ```
 
 <p align="left">
     <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E2_PR.png" alt="Description" width="400">
 </p>
 
-We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+We then evaluate the final prediction accuracy in the testing set, with the PGS effects estimated using the optimal shrinkage parameter.
 
 ```R
-fm_PR_final=PR(XX=SS$XX, Xy=SS$Xy, b=SS$B, alpha=0, lambda=opt_lambda, convThreshold=1e-4,
-            maxIter=1000, returnPath=FALSE)
-cor(wheat_TST.X %*% fm_PR_final$B, wheat_TST.y)
-#> [1] 0.5645487
+Cor_PR=cor(GENO.Target[tst,]%*%B_PR[,which.max(Cors_PR)], PHENO.Target$y[tst])
+Cor_PR
+#> [1] 0.6427939
 ```
 
 - #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
@@ -191,7 +142,7 @@ When using sparse **X'X** as inputs for *BMM()*, variance parameters cannot be p
 R2s=c(0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5)
 B_BMM=matrix(nrow=nrow(SS$XX), ncol=length(R2s))
 for (i in 1:length(R2s)) {
-    fm_BMM=BMM(XX=SS$XX, Xy=SS$Xy, B=cbind(SS$B,0), n=SS$n, R2=R2s[i],
+    fm_BMM=BMM(XX=SS$XX, Xy=SS$Xy, B=cbind(SS$B,0), n=SS$n, R2=R2s[i], my=mean(PHENO.Target$y), vy=var(PHENO.Target$y),
            nIter=12000, burnIn=2000, thin=5, fixVarE=TRUE, fixVarB=rep(TRUE,2), verbose=FALSE)
     B_BMM[,i]=fm_BMM$b
 }
@@ -200,22 +151,21 @@ for (i in 1:length(R2s)) {
 We evaluate the prediction accuracy in the calibration set to select the optimal *R2* parameter.
 
 ```R
-Cor_BMM=cor(wheat_VLD.X %*% B_BMM, wheat_VLD.y)
-plot(x=R2s, y=Cor_BMM, xlab='R2', ylab='Prediction Corr.', pch=20)
-opt_R2=R2s[which.max(Cor_BMM)]
+Cors_BMM=cor(GENO.Target[cal,]%*%B_BMM, PHENO.Target$y[cal])
+opt_R2=R2s[which.max(Cors_BMM)]
+plot(x=R2s, y=Cors_BMM, xlab='R2', ylab='Prediction Corr.', pch=20, type='o');abline(v=opt_R2, lty=2)
 ```
 
 <p align="left">
     <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E2_BMM.png" alt="Description" width="400">
 </p>
 
-We then re-estimate the PGS effects using the training set, with the optimal *R2* parameter, and evaluate the final prediction accuracy in the testing set.
+We then evaluate the final prediction accuracy in the testing set, with the PGS effects estimated using the optimal *R2* parameter.
 
 ```R
-fm_BMM_final=BMM(XX=SS$XX, Xy=SS$Xy, B=cbind(SS$B,0), n=SS$n, R2=opt_R2,
-           nIter=12000, burnIn=2000, thin=5, fixVarE=TRUE, fixVarB=rep(TRUE,2), verbose=FALSE)
-cor(wheat_TST.X %*% fm_BMM_final$b, wheat_TST.y)
-#> [1] 0.5363532
+Cor_BMM=cor(GENO.Target[tst,]%*%B_BMM[,which.max(Cors_BMM)], PHENO.Target$y[tst])
+Cor_BMM
+#> [1] 0.6277782
 ```
 
 [Back to Homepage](https://github.com/QuantGen/GPTL/blob/main/README.md)
