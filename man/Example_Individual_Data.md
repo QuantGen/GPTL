@@ -1,12 +1,13 @@
 ### GPTL using individual genetype and phenotype data
 
-In the following example, we use a demo data set (see this [link](https://github.com/QuantGen/GPTL/blob/main/man/DemoData_Preparation.md) for more details) to illustrate how to calibrate Polygenic Scores (PGS) using GPTL when one has access to individual (genotype and phenotype) data.
+In the following example, we use a demo data set (see this [link](https://github.com/QuantGen/GPTL/blob/main/man/DemoData_Preparation.md) for more details) to illustrate how to construct Polygenic Scores (PGS) using GPTL when one has access to individual (genotype and phenotype) data.
 
 A complete pipleine may include:
 
- 1. [Loading the data](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md#1-data-loading)
+ 1. [Loading the data](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md#1-data-loading).
  2. [Estimating effects in the source population](https://github.com/QuantGen/GPTL/blob/main/man/Example_Individual_Data.md#2-single-ancestry-pgs-source-population). This may not be needed if one uses a pre-trained PGS as prior information.
- 3. Calibrating a PGS using only training (and calibration) data from the target populations–this is not strictly needed but it is a useful benchmark to have.
+ 3. [Estimating PGS using GPTL](). This includes calibrating model parameters, which is not strictly needed but it is a useful benchmark to have.
+ 4. [Evaluating PGS prediction accuracy] ().
 
 #### 1. Data Loading
 
