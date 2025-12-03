@@ -38,7 +38,11 @@ We evaluate the prediction accuracy in the testing set.
 
 ```R
 Cor_Cross=cor(GENO.Target[tst,]%*%B_Cross, PHENO.Target$y[tst])
+Cor_Cross
+#> [1] 0.2374011
 Cor_Within=cor(GENO.Target[tst,]%*%B_Within, PHENO.Target$y[tst])
+Cor_Within
+#> [1] 0.633442
 ```
 
 **3. PGS Estimation Using GPTL**
@@ -159,5 +163,17 @@ Cor_BMM=cor(GENO.Target[tst,]%*%fm_BMM$b, PHENO.Target$y[tst])
 Cor_BMM
 #> [1] 0.6385827
 ```
+
+**4. Prediction Accuracy Summary**
+
+| Method | Prediction Squared Corr. |
+| --- | --- |
+| cross-ancestry | 0.0564 |
+| within-ancestry | 0.4012 |
+| TL-GDES | 0.3269 |
+| TL-PR | 0.3962 |
+| TL-BMM | 0.4078 |
+
+
 
 [Back to Homepage](https://github.com/QuantGen/GPTL/blob/main/README.md)
