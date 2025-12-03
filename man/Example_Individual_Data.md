@@ -30,7 +30,7 @@ cal=which(PHENO.Target$sets=='cal')
 tst=which(PHENO.Target$sets=='tst')
 ```
 
-### 2. Single-ancestry PGS: Source population
+#### 2. Single-ancestry PGS: Source population
 
 We use the source population data to construct a cross-ancestry PGS, and use the target population tarining and calibrating sets to construct a within-ancestry PGS. We estimated effects using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package).
 
@@ -56,7 +56,7 @@ Cor_Within
 #> [1] 0.633442
 ```
 
-**3. PGS Estimation Using GPTL**
+#### 3. PGS Estimation Using GPTL
 
 - #### Transfer Learning using Gradient Descent with Early Stopping (*TL-GDES*)
 
@@ -175,7 +175,7 @@ Cor_BMM
 #> [1] 0.6385827
 ```
 
-**4. Prediction Accuracy Summary**
+#### 4. Prediction Accuracy Summary
 
 | Method | Prediction Squared Corr. |
 | --- | --- |
