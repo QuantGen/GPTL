@@ -35,8 +35,8 @@ table(CLUSTER$cluster)
 We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). We also remove the monomorphic variants.
 
 ```R
-GENO.Source=scale(X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE)
-GENO.Target=scale(X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE)
+GENO.Source=X[CLUSTER$cluster == 1,]
+GENO.Target=X[CLUSTER$cluster == 2,]
 
 monomorphic=which(matrixStats::colVars(GENO.Source)==0 | matrixStats::colVars(GENO.Target)==0)
 GENO.Source=GENO.Source[,-monomorphic]
