@@ -1,6 +1,9 @@
 ### GPTL using individual genetype and phenotype data
 
-The following example illustrate how GPTL software works when one has access to individual genetype and phenotype data. Here we use the [wheat](https://doi.org/10.1104/pp.105.063438) data set collected from CIMMYT's Global Wheat Program, including 599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
+The following example illustrate how GPTL software works when one has access to individual genetype and phenotype data. We use demo data generated from [link](https://github.com/QuantGen/GPTL/blob/main/man/DemoData_Preparation.md), which includs
+
+
+599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
 
 This data set has two clear clusters, we use this to illustrate how to transfer learning from one population to improve prediction accuracy in another population.
 
