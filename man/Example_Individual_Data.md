@@ -36,12 +36,10 @@ We use the source population data to construct a cross-ancestry PGS, and use the
 
 ```R
 library(BGLR)
-ETA=list(list(X=GENO.Source, model="BRR"))
-fm_Cross=BGLR(y=PHENO.Source, ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
+fm_Cross=BGLR(y=PHENO.Source$y, ETA=list(list(X=GENO.Source, model="BRR")), nIter = 6000, burnIn = 1000, verbose = FALSE)
 B_Cross=fm_Cross$ETA[[1]]$b
 
-ETA=list(list(X=GENO.Target[c(trn, cal),], model="BRR"))
-fm_Within=BGLR(y=PHENO.Target$y[c(trn, cal)], ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
+fm_Within=BGLR(y=PHENO.Target$y[c(trn, cal)], ETA=list(list(X=GENO.Target[c(trn, cal),], model="BRR")), nIter = 6000, burnIn = 1000, verbose = FALSE)
 B_Within=fm_Within$ETA[[1]]$b
 ```
 
@@ -50,10 +48,10 @@ We evaluate the prediction accuracy in the testing set.
 ```R
 Cor_Cross=cor(GENO.Target[tst,]%*%B_Cross, PHENO.Target$y[tst])
 Cor_Cross
-#> [1] 0.2374011
+#> [1] 0.4656199
 Cor_Within=cor(GENO.Target[tst,]%*%B_Within, PHENO.Target$y[tst])
 Cor_Within
-#> [1] 0.633442
+#> [1] 0.4411236
 ```
 
 #### 3. PGS Estimation Using GPTL
@@ -67,7 +65,7 @@ X=scale(GENO.Target[trn,],center=TRUE,scale=FALSE)
 XX=crossprod(X)
 Xy=crossprod(X,PHENO.Target$y[trn])
 
-fm_GDES=GD(XX=XX, Xy=Xy, b=B_Cross, learningRate=1/50, nIter=100, returnPath=T)
+fm_GDES=GD(XX=XX, Xy=Xy, b=B_Cross, learningRate=1/200, nIter=100, returnPath=T)
 dim(fm_GDES)
 #> [1] 1270  100
 B_GDES=cbind(B_Cross, fm_GDES)
@@ -92,7 +90,7 @@ X=scale(GENO.Target[c(trn,cal),],center=TRUE,scale=FALSE)
 XX=crossprod(X)
 Xy=crossprod(X,PHENO.Target$y[c(trn,cal)])
 
-fm_GDES_final=GD(XX=XX, Xy=Xy, b=B_Cross, learningRate=1/500, nIter=opt_nIter, returnPath=F)
+fm_GDES_final=GD(XX=XX, Xy=Xy, b=B_Cross, learningRate=1/100, nIter=opt_nIter, returnPath=F)
 Cor_GDES=cor(GENO.Target[tst,]%*%fm_GDES_final, PHENO.Target$y[tst])
 Cor_GDES
 #> [1] 0.5717656
