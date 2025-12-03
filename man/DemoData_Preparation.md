@@ -35,26 +35,30 @@ table(CLUSTER$cluster)
 We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). We also remove the monomorphic variants.
 
 ```R
-GENO.Source=scale(wheat.X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE)
-GENO.Target=scale(wheat.X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE)
+GENO.Source=scale(X[CLUSTER$cluster == 1,], center=TRUE, scale=FALSE)
+GENO.Target=scale(X[CLUSTER$cluster == 2,], center=TRUE, scale=FALSE)
 
 monomorphic=which(matrixStats::colVars(GENO.Source)==0 | matrixStats::colVars(GENO.Target)==0)
 GENO.Source=GENO.Source[,-monomorphic]
 GENO.Target=GENO.Target[,-monomorphic]
 
-PHENO.Source=wheat.Y[CLUSTER$cluster == 1,1]
-PHENO.Target=wheat.Y[CLUSTER$cluster == 2,1]
+PHENO.Source=data.frame(y=wheat.Y[CLUSTER$cluster == 1,2])
+PHENO.Target=data.frame(y=wheat.Y[CLUSTER$cluster == 2,2])
 ```
 
 We further split the target data set into (i) a training set (40%), (ii) a calibrating set (30%), and (iii) a testing set (30%).
 
 ```R
-set.seed(1234)
-sets <- cut(runif(nrow(GENO.Target)), breaks = c(0, 0.4, 0.7, 1), labels = c("trn","cal","tst"))
-PHENO.Target=data.frame(y=PHENO.Target, sets=sets)
+sets=rep(NA, nrow(PHENO.Target))
+set.seed(195021)
+sets[sample(1:length(sets),size=150)]='tst'
+sets[sample(which(is.na(sets)),size=50)]='trn'
+sets[which(is.na(sets))]='cal'
+
+PHENO.Target=cbind(PHENO.Target, sets=sets)
 table(PHENO.Target$sets)
 #> trn cal tst 
-#> 102  80  71
+#>  53  50 150
 ```
 
 `GENO.Source` and `PHENO.Source` consist of genotype and phenotype data for the source population (346 samples, 1270 variants). `GENO.Target` and `PHENO.Target` consist of genotype and phenotype data for the target population (253 samples, 1270 variants), with samples splitted into 3 sets, marking in `PHENO.Target`.
@@ -68,8 +72,8 @@ save(GENO.Source, PHENO.Source, GENO.Target, PHENO.Target, file='Ind_DemoData.RD
 We continue to prepare demo data 2. We estimate prior effects from the source population using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package). Alternatively, if only sufficient statistics (**X'X** and **X'y**) for the source data set are provided, one can use *BLRCross()* function in the **BGLR** R-package.
 
 ```R
-ETA=list(list(X=GENO.Source, model="BRR"))
-fm=BGLR(y=PHENO.Source, ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
+fm=BGLR(y=PHENO.Source$y, ETA=list(list(X=GENO.Source, model="BRR")), response_type = "gaussian",
+        nIter = 12000, burnIn = 2000, verbose = FALSE)
 PRIOR=fm$ETA[[1]]$b
 ```
 
