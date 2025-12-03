@@ -9,6 +9,35 @@ library(GPTL)
 data(Ind_DemoData)
 ```
 
+`GENO.Source` and `PHENO.Source` consist of genotype and phenotype data for the source population (346 samples, 1270 variants). `GENO.Target` and `PHENO.Target` consist of genotype and phenotype data for the target population (253 samples, 1270 variants), with samples splitted into 3 sets, marking in `PHENO.Target`.
+
+**2. Single-ancestry PGS**
+
+We use the source population data to construct a cross-ancestry PGS, and use the target population tarining set to construct a within-ancestry PGS. We estimated effects using a Bayesian shrinkage estimation method (a Bayesian model with a Gaussian prior centered at zero, model ‘BRR’ in the **BGLR** R-package).
+
+```R
+ETA=list(list(X=GENO.Source, model="BRR"))
+fm_Cross=BGLR(y=PHENO.Source, ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
+B_Cross=fm_Cross$ETA[[1]]$b
+
+ETA=list(list(X=GENO.Target[PHENO.Target$sets=='trn',], model="BRR"))
+fm_Within=BGLR(y=PHENO.Target[PHENO.Target$sets=='trn',], ETA = ETA, response_type = "gaussian", nIter = 12000, burnIn = 2000, verbose = FALSE)
+B_Within=fm_Within$ETA[[1]]$b
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). 
 
 ```R
