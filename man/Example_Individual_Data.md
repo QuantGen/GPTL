@@ -1,24 +1,12 @@
 ### GPTL using individual genetype and phenotype data
 
-The following example illustrate how GPTL software works when one has access to individual genetype and phenotype data. We use demo data generated from [link](https://github.com/QuantGen/GPTL/blob/main/man/DemoData_Preparation.md), which includs
+In the following example, we use demo data generated from [link](https://github.com/QuantGen/GPTL/blob/main/man/DemoData_Preparation.md) to illustrate how GPTL software works when one has access to individual genetype and phenotype data.
 
-
-599 wheat lines genotype (1279 variants) and phenotype (average grain yield).
-
-This data set has two clear clusters, we use this to illustrate how to transfer learning from one population to improve prediction accuracy in another population.
-
-**1. Data Preparation**
+**1. Data Loading**
 
 ```R
-library(BGLR)
-data(wheat)
-y=wheat.Y[,1]
-X=scale(wheat.X, center=TRUE, scale=TRUE)
-
-CLUSTER=kmeans(X,centers=2,nstart=100)
-table(CLUSTER$cluster)
-#>   1   2 
-#> 346 253 
+library(GPTL)
+data(Ind_DemoData)
 ```
 
 We use samples in cluster 1 as the source data set (where information is transferred) and samples in cluster 2 as the target data set (where the PGS will be used). 
