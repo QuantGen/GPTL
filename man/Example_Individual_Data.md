@@ -67,7 +67,7 @@ opt_nIter=which.max(Cors_GDES)-1
 ```
 
 <p align="left">
-    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E1_GDES_wheat.png" alt="Description" width="400">
+    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E1_GDES.png" alt="Description" width="400">
 </p>
 
 We then re-estimate the PGS effects using both the training and calibrating sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
@@ -80,7 +80,7 @@ Xy=crossprod(X,PHENO.Target$y[c(trn,cal)])
 fm_GDES_final=GD(XX=XX, Xy=Xy, b=B_Cross, learningRate=1/500, nIter=opt_nIter, returnPath=F)
 Cor_GDES=cor(GENO.Target[tst,]%*%fm_GDES_final, PHENO.Target$y[tst])
 Cor_GDES
-#> [1] 0.5955236
+#> [1] 0.5717656
 ```
 
 - #### Transfer Learning using penalized regressions (*TL-PR*)
@@ -96,11 +96,11 @@ fm_PR=PR(XX=XX, Xy=Xy, b=B_Cross, alpha=0, nLambda=100, convThreshold=1e-4,
          maxIter=1000, returnPath=FALSE)
 str(fm_PR)
 #> List of 4
-#>  $ B        : num [1:1270, 1:100] 0.01348 0.03301 -0.00341 0.00475 0.00989 ...
+#>  $ B        : num [1:1270, 1:100] 0.0155 0.03296 -0.0029 0.00448 0.01094 ...
 #>   ..- attr(*, "dimnames")=List of 2
 #>   .. ..$ : chr [1:1270] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
-#>   .. ..$ : chr [1:100] "lambda_155558.9764" "lambda_141739.5457" "lambda_129147.7951" "lambda_117674.6609" ...
-#>  $ lambda   : num [1:100] 155559 141740 129148 117675 107221 ...
+#>   .. ..$ : chr [1:100] "lambda_156552.6478" "lambda_142644.9421" "lambda_129972.7586" "lambda_118426.3369" ...
+#>  $ lambda   : num [1:100] 156553 142645 129973 118426 107906 ...
 #>  $ alpha    : num 0
 #>  $ conv_iter: num [1:100] 3 3 3 3 3 3 3 3 3 3 ...
 B_PR=fm_PR$B
@@ -109,49 +109,55 @@ B_PR=fm_PR$B
 Next, we evaluate the prediction accuracy in the calibrating set to select the optimal shrinkage parameter (lambda).
 
 ```R
-Cors_PR=getCor(XXt_cali, Xyt_cali, yyt_cali, fm_PR$B)
-plot(x=log(fm_PR$lambda), y=Cor_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20)
-opt_lambda=fm_PR$lambda[which.max(Cor_PR)]
-
-Cors_GDES=cor(GENO.Target[tst,]%*%B_GDES, PHENO.Target$y[tst])
-plot(Cors_GDES, xlab='iteration', ylab='Prediction Corr.', pch=20, type='o')
-opt_nIter=which.max(Cors_GDES)-1
+Cors_PR=cor(GENO.Target[cal,]%*%B_PR, PHENO.Target$y[cal])
+plot(x=log(fm_PR$lambda), y=Cors_PR, xlab='log(lambda)', ylab='Prediction Corr.', pch=20, type='o')
+opt_lambda=fm_PR$lambda[which.max(Cors_PR)]
 ```
 
 <p align="left">
-    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E1_PR_wheat.png" alt="Description" width="400">
+    <img src="https://github.com/QuantGen/GPTL/blob/main/man/plots/E1_PR.png" alt="Description" width="400">
 </p>
 
-We then re-estimate the PGS effects using the training set, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
+We then re-estimate the PGS effects using both the training and calibrating sets, with the optimal shrinkage parameter, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_PR_final=PR(XX=XXt_train, Xy=Xyt_train, b=prior, alpha=0, lambda=opt_lambda, convThreshold=1e-4,
-            maxIter=1000, returnPath=FALSE)
-getCor(XXt_test, Xyt_test, yyt_test, fm_PR_final$B)
-#> [1] 0.628841
+X=scale(GENO.Target[c(trn,cal),],center=TRUE,scale=FALSE)
+XX=crossprod(X)
+Xy=crossprod(X,PHENO.Target$y[c(trn,cal)])
+
+fm_PR_final=PR(XX=XX, Xy=Xy, b=B_Cross, alpha=0, lambda=opt_lambda, convThreshold=1e-4,
+               maxIter=1000, returnPath=FALSE)
+Cor_PR=cor(GENO.Target[tst,]%*%fm_PR_final$B, PHENO.Target$y[tst])
+Cor_PR
+#> [1] 0.629457
 ```
 
 - #### Transfer Learning using Bayesian model with an informative finite mixture prior (*TL-BMM*)
 
-*BMM()* function takes as inputs the sufficient statistics derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
+*BMM()* function takes as inputs the sufficient statistics (**X'X** and **X'y**) derived from the target population, a matrix (B) whose columns contain the priors (one row per variant, one column per prior source of information), and parameters that control the algorithm. The function returns posterior means and posterior SDs for variant effects and other unknown parameters (including posterior ‘inclusion’ probabilities that link each variant effect to each of the components of the mixture).
 
-*BMM()* only requires a single run of the algorithm (when the input **X'X** is dense) because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using the training set, and evaluate the final prediction accuracy in the testing set.
+*BMM()* only requires a single run of the algorithm (when the input **X'X** is dense) because regularization parameters and variant effects are jointly inferred from the posterior distribution. Thus, this method does not require calibrating regularization parameters. We estimate the PGS effects using the training and calibrating sets, and evaluate the final prediction accuracy in the testing set.
 
 ```R
-fm_BMM=BMM(XX=XXt_train, Xy=Xyt_train, my=mean(yt_train), vy=var(yt_train), B=cbind(prior,0), n=nrow(Xt_train),
-           nIter=12000, burnIn=2000, thin=5, verbose=FALSE)
+X=scale(GENO.Target[c(trn,cal),],center=TRUE,scale=FALSE)
+XX=crossprod(X)
+Xy=crossprod(X,PHENO.Target$y[c(trn,cal)])
+
+fm_BMM=BMM(XX=XX, Xy=Xy, my=mean(PHENO.Target$y[c(trn,cal)]), vy=var(PHENO.Target$y[c(trn,cal)]), B=cbind(B_Cross,0),
+           n=nrow(GENO.Target[c(trn,cal),]), nIter=12000, burnIn=2000, thin=5, verbose=FALSE)
 str(fm_BMM)
 #> List of 7
-#>  $ b           : Named num [1:1279] -0.00942 0.01315 0.00791 0.00285 0.00434 ...
-#>   ..- attr(*, "names")= chr [1:1279] "wPt.0538" "wPt.8463" "wPt.6348" "wPt.9992" ...
-#>  $ POST.PROB   : num [1:1279, 1:2] 0.445 0.497 0.482 0.499 0.493 ...
-#>  $ postMeanVarB: num [1:2] 0.00142 0.00149
+#>  $ b           : Named num [1:1270] 5.70e-03 -5.89e-04 -2.80e-02 -6.81e-03 -7.02e-05 ...
+#>   ..- attr(*, "names")= chr [1:1270] "wPt.1171" "c.312549" "c.306034" "c.346957" ...
+#>  $ POST.PROB   : num [1:1270, 1:2] 0.484 0.435 0.498 0.494 0.494 ...
+#>  $ postMeanVarB: num [1:2] 0.00194 0.00196
 #>  $ postProb    : num [1:2] 0.5 0.5
-#>  $ samplesVarB : num [1:12000, 1:2] 0.000559 0.000546 0.00057 0.000528 0.000522 ...
-#>  $ samplesB    : num [1:12000, 1:1279] 0.04545 0.01208 -0.04309 0.00146 0.01017 ...
-#>  $ samplesVarE : num [1:12000] 0.643 0.623 0.933 0.647 0.693 ...
-getCor(XXt_test, Xyt_test, yyt_test, fm_BMM$b)
-#> [1] 0.6166595
+#>  $ samplesVarB : num [1:12000, 1:2] 0.000531 0.000548 0.000556 0.000595 0.000679 ...
+#>  $ samplesB    : num [1:12000, 1:1270] 0.013872 -0.011184 0.022909 -0.042009 -0.000111 ...
+#>  $ samplesVarE : num [1:12000] 0.587 0.588 0.53 0.612 0.62 ...
+Cor_BMM=cor(GENO.Target[tst,]%*%fm_BMM$b, PHENO.Target$y[tst])
+Cor_BMM
+#> [1] 0.6385827
 ```
 
 [Back to Homepage](https://github.com/QuantGen/GPTL/blob/main/README.md)
