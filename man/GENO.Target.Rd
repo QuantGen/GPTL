@@ -3,7 +3,7 @@
 \title{Demo genotype data for the target population}
 \description{
 
- Is a matrix ( 253 x 1270) with SNP markers.
+ Is a matrix with SNP markers.
 
 }
 
