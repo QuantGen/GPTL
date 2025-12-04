@@ -1,4 +1,4 @@
-GD<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, lambda0=1, returnPath=FALSE, verbose=TRUE){
+GD<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, returnPath=FALSE, verbose=TRUE){
 
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix") | (nrow(XX)==ncol(XX)))) stop("XX must be a square matrix or dgCMatrix\n")
     if(!(is(Xy,"vector") | is(Xy,"matrix") | is(Xy,"data.frame"))) stop("Xy must be in one of these formats: vector, matrix or data.frame with single column\n")
@@ -61,9 +61,9 @@ GD<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, lambda0=1, 
         	LR=learningRate/mean(diag(XX))
         }
   
-        if( lambda0>0 ){    
-            Xy=Xy+(lambda[h]-previous_lambda)*lambda0*b0 
-        }
+        #if( lambda0>0 ){    
+        #    Xy=Xy+(lambda[h]-previous_lambda)*lambda0*b0 
+        #}
         previous_lambda=lambda[h]
 
         if(returnPath)
