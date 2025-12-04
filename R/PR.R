@@ -1,4 +1,4 @@
-PR <- function(XX, Xy, b=NULL, lambda=NULL, nLambda=30, alpha=0, convThreshold=1e-4, maxIter=500, returnPath=FALSE, verbose=TRUE) {
+PR <- function(XX, Xy, b=NULL, lambda=NULL, nLambda=30, alpha=0, convThreshold=1e-4, maxIter=500, returnPath=TRUE, verbose=TRUE) {
   #alpha=0 -> Ridge; alpha=1 -> Lasso
 
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix") | (nrow(XX)==ncol(XX)))) stop("XX must be a square matrix or dgCMatrix\n")
