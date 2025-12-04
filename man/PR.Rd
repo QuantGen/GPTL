@@ -5,7 +5,8 @@
     Performs penalized regressions that shrinkage estimates towards prior value, taking sufficient statistics as inputs.
 }
 \usage{
-PR(XX, Xy, b=NULL, lambda = NULL, nLambda = 30, alpha = 0, convThreshold= 1e-04, maxIter = 500, returnPath = TRUE, verbose=TRUE)
+PR(XX, Xy, b=NULL, lambda = NULL, nLambda = 30, alpha = 0, convThreshold= 1e-04,
+   maxIter = 500, returnPath = TRUE, verbose=TRUE)
 }
 \arguments{
     \item{XX}{A (p x p) matrix, with row and column names being variant IDs. XX=crossprod(X), with X an genotype matrix of dimension n times p.}
