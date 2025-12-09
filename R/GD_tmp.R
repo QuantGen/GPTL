@@ -120,12 +120,6 @@ GD_tmp<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, returnP
 }
 
 
-fm=GD(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, returnPath=TRUE, verbose=TRUE)
-
-
-
-
-
 
 
 
