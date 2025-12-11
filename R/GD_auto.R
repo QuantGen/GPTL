@@ -46,7 +46,7 @@ GD_auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verb
     b0=rep(0,p)
   	
     previous_lambda=0
-    B=array(dim=c(p,ifelse(returnPath,maxIter+1,1),length(lambda)))
+    B=array(dim=c(p,maxIter+1,length(lambda)))
     RSS=numeric(maxIter+1)
     RSS[1]=-2*t(b)%*%Xy+t(b)%*%XX%*%b
     Threshold=learningRate*2
