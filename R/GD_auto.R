@@ -102,6 +102,6 @@ GD_auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verb
     #B=B[,i,,drop=TRUE]
 
     #return(B)
-    return(list(B=B[,i,,drop=TRUE], B_path=B[,,,drop=TRUE], RSS=RSS))
+    return(list(B=B[,i,,drop=TRUE], B_path=B[,2:i,,drop=TRUE], RSS=RSS[2:i], stopIter=i))
 }
 
