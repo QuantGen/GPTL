@@ -12,6 +12,6 @@ export(fitLSYS)
 export(GDXy)
 export(sample_effects)
 export(rMultinom)
-export(GD_tmp)
+export(GD_auto)
 
 useDynLib(GPTL, .registration = TRUE, .fixes = "C_")
