@@ -100,10 +100,8 @@ GD_auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verb
     dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
 
     B=B[,i,,drop=TRUE]
-    B_path=B[,,,drop=TRUE]
 
-    
-
-    return(B)
+    #return(B)
+    return(list(B=B[,i,,drop=TRUE], B_path=B[,,,drop=TRUE], RSS=RSS))
 }
 
