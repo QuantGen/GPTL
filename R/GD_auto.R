@@ -1,4 +1,4 @@
-GD_tmp<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, returnPath=FALSE, verbose=TRUE){
+GD_auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE){
 
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix") | (nrow(XX)==ncol(XX)))) stop("XX must be a square matrix or dgCMatrix\n")
     if(!(is(Xy,"vector") | is(Xy,"matrix") | is(Xy,"data.frame"))) stop("Xy must be in one of these formats: vector, matrix or data.frame with single column\n")
@@ -46,9 +46,10 @@ GD_tmp<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, returnP
     b0=rep(0,p)
   	
     previous_lambda=0
-    B=array(dim=c(p,ifelse(returnPath,nIter+1,1),length(lambda)))
-    RSS=numeric(nIter+1)
+    B=array(dim=c(p,ifelse(returnPath,maxIter+1,1),length(lambda)))
+    RSS=numeric(maxIter+1)
     RSS[1]=-2*t(b)%*%Xy+t(b)%*%XX%*%b
+    Threshold=learningRate*2
 
     for(h in 1:length(lambda))
     {
@@ -68,64 +69,38 @@ GD_tmp<- function(XX, Xy, b=NULL, nIter=10, learningRate=1/50, lambda=0, returnP
         #}
         previous_lambda=lambda[h]
 
-        if(returnPath)
-        {
-            B[,1,h]=b
+        B[,1,h]=b
             
-            if(is(XX,"dgCMatrix"))
+        if(is(XX,"dgCMatrix"))
+        {
+            #Sparse matrix
+            for(i in 2:ncol(B))
             {
-            	#Sparse matrix
-            	for(i in 2:ncol(B))
-            	{
-            		B[,i,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, B[,i-1,h],p, 1, LR)
-            	}
-            }else{
-            	#Dense matrix
-            	for(i in 2:ncol(B))
-            	{
-            		B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
-                    RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
-            	}
+            	B[,i,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, B[,i-1,h],p, 1, LR)
+                RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
+                if (RSS_pct<Threshold) {break}
             }
-         }else{
-         	if(is(XX,"dgCMatrix"))
-         	{
-         		#Sparse matrix
-             	B[,1,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, b+0,p, nIter+1, LR)
-            }else{
-            	#Dense matrix
-            	B[,1,h]=.Call("GRAD_DESC",XX, Xy, b+0,p, nIter+1, LR)
+        }else{
+            #Dense matrix
+            for(i in 2:ncol(B))
+            {
+            	B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
+                RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
+                if (RSS_pct<Threshold) {break}
             }
         }
     }
     
     
-    if(returnPath){
-      iterations=paste0('iter_',0:nIter)
-    }else{
-      iterations=paste0('iter_',nIter)
-    }
+
+    iterations=paste0('iter_',0:maxIter)
     
     dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
 
-    if(returnPath){
-      B=B[,-1,,drop=TRUE]
-      RSS=RSS[-1]
-    }else{
-      B=B[,,,drop=TRUE]
-    }
-    
-    return(list(B=B,RSS=RSS))
+    B=B[,i,,drop=TRUE]
+
     return(B)
 }
-
-
-
-
-
-
-
-
-
-
 
