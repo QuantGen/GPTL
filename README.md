@@ -1,4 +1,4 @@
-# GPTL: Genomic Prediction Using Transfer Learning
+# GPTL: Genomic Prediction Through Transfer Learning
 
 GPTL is an R package that implements several methods for Genomic Prediction using Transfer Learning, including
 -  *TL-GDES*: A Gradient Descent Algorithm with Early Stopping.
