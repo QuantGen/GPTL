@@ -79,6 +79,9 @@ GD_auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verb
             {
             	B[,i,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, B[,i-1,h],p, 1, LR)
                 RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                if (is.na(RSS[i])) {
+                    stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
+                }
                 if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
                 RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
                 if (RSS_pct<Threshold) {break}
@@ -89,6 +92,9 @@ GD_auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verb
             {
             	B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
                 RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                if (is.na(RSS[i])) {
+                    stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
+                }
                 if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
                 RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
                 if (RSS_pct<Threshold) {break}
