@@ -50,6 +50,7 @@ GD_auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verb
     RSS=numeric(maxIter+1)
     RSS[1]=-2*t(b)%*%Xy+t(b)%*%XX%*%b
     Threshold=learningRate*2
+    RSSWarningFlag=0
 
     for(h in 1:length(lambda))
     {
@@ -78,6 +79,7 @@ GD_auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verb
             {
             	B[,i,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, B[,i-1,h],p, 1, LR)
                 RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
                 RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
                 if (RSS_pct<Threshold) {break}
             }
@@ -87,6 +89,7 @@ GD_auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verb
             {
             	B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
                 RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
                 RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
                 if (RSS_pct<Threshold) {break}
             }
@@ -101,6 +104,10 @@ GD_auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verb
 
     #B=B[,i,,drop=TRUE]
 
+    if (RSSWarningFlag==1) {
+        warning('The specified learningRate may be too large and could lead to unstable or divergent updates. Consider using a smaller learningRate.\n')
+    }
+    
     #return(B)
     return(list(B=B[,i,,drop=TRUE], B_path=B[,2:i,,drop=TRUE], RSS=RSS[2:i], stopIter=i-1))
 }
