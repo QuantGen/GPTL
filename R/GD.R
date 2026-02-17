@@ -47,6 +47,9 @@ GD<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, returnPath
   	
     previous_lambda=0
     B=array(dim=c(p,ifelse(returnPath,nIter+1,1),length(lambda)))
+    RSS=numeric(ifelse(returnPath,nIter+1,2))
+    RSS[1]=-2*t(b)%*%Xy+t(b)%*%XX%*%b
+    RSSWarningFlag=0
 
     for(h in 1:length(lambda))
     {
@@ -76,12 +79,16 @@ GD<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, returnPath
             	for(i in 2:ncol(B))
             	{
             		B[,i,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, B[,i-1,h],p, 1, LR)
+                    RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                    if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
             	}
             }else{
             	#Dense matrix
             	for(i in 2:ncol(B))
             	{
             		B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
+                    RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                    if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
             	}
             }
          }else{
@@ -89,9 +96,13 @@ GD<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, returnPath
          	{
          		#Sparse matrix
              	B[,1,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, b+0,p, nIter+1, LR)
+                RSS[2]=-2*t(B[,1,h])%*%Xy+t(B[,1,h])%*%XX%*%B[,1,h]
+                if (RSS[2]>RSS[1]) {RSSWarningFlag=1}
             }else{
             	#Dense matrix
             	B[,1,h]=.Call("GRAD_DESC",XX, Xy, b+0,p, nIter+1, LR)
+                RSS[2]=-2*t(B[,1,h])%*%Xy+t(B[,1,h])%*%XX%*%B[,1,h]
+                if (RSS[2]>RSS[1]) {RSSWarningFlag=1}
             }
         }
     }
@@ -109,6 +120,10 @@ GD<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, returnPath
       B=B[,-1,,drop=TRUE]
     }else{
       B=B[,,,drop=TRUE]
+    }
+
+    if (RSSWarningFlag==1) {
+        warning('The specified learningRate may be too large and could lead to unstable or divergent updates. Consider using a smaller learningRate.\n')
     }
     
     return(B)
