@@ -103,12 +103,18 @@ GD<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, returnPath
          		#Sparse matrix
              	B[,1,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, b+0,p, nIter+1, LR)
                 RSS[2]=-2*t(B[,1,h])%*%Xy+t(B[,1,h])%*%XX%*%B[,1,h]
-                if ((RSS[2]>RSS[1]) | (is.na(RSS[i]))) {RSSWarningFlag=1}
+                if (is.na(RSS[2])) {
+                    stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
+                }
+                if (RSS[2]>RSS[1]) {RSSWarningFlag=1}
             }else{
             	#Dense matrix
             	B[,1,h]=.Call("GRAD_DESC",XX, Xy, b+0,p, nIter+1, LR)
                 RSS[2]=-2*t(B[,1,h])%*%Xy+t(B[,1,h])%*%XX%*%B[,1,h]
-                if ((RSS[2]>RSS[1]) | (is.na(RSS[i]))) {RSSWarningFlag=1}
+                if (is.na(RSS[2])) {
+                    stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
+                }
+                if (RSS[2]>RSS[1]) {RSSWarningFlag=1}
             }
         }
     }
