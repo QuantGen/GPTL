@@ -22,7 +22,7 @@ GD.CV=function(X,y,nTst=round(nrow(X)*0.2),nRep=10,nIter=100,seed=NULL,b=rep(0,n
 		}
 	}
 	
-	COR=data.frame(Partition=1:nIter,Cor=colMeans(COR),SD=apply(FUN=sd,X=COR,MARGIN=2))
+	COR=data.frame(nIter=1:nIter,Cor=colMeans(COR),SD=apply(FUN=sd,X=COR,MARGIN=2))
 	nOptim=which.max(COR$Cor)
 	b=GDXy(X=X,y=y,nIter=nOptim+1,b=b,...)
 	
