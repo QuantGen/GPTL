@@ -129,7 +129,7 @@ if(fixVarE){
 	 ## Sampling mixture components 
 	timeIn=proc.time()[3]
 	 for(k in 1:nComp){
-	 PROBS[k,]=dnorm(b,mean=B[,k],sd=sqrt(varB[k]))#*compProb[k]	
+	 PROBS[k,]=dnorm(b,mean=B[,k],sd=sqrt(varB[k]))*compProb[k]	
 	 }
  	timeProb=timeProb+(proc.time()[3]-timeIn)
 	timeIn=proc.time()[3] 
