@@ -13,5 +13,6 @@ export(GDXy)
 export(sample_effects)
 export(rMultinom)
 export(GD_auto)
+export(GD.CV.ES)
 
 useDynLib(GPTL, .registration = TRUE, .fixes = "C_")
