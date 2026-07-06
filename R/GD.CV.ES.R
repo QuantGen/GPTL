@@ -2,10 +2,14 @@
 # prediction correlation each iteration; and stop the algorithm once the prediction correlation
 # starts to drop. GD.CV.ES() is more time efficient as it does not require running the full path.
 
+GD.CV.ES<- function(X_trn, y_trn, X_tst, y_tst, centerX=TRUE,scaleX=FALSE, b=NULL, maxIter=1000, learningRate=1/50, lambda=0, verbose=TRUE, ...){
 GD.CV.ES<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE){
 
-    if(!(is(XX,"matrix") | is(XX,"dgCMatrix") | (nrow(XX)==ncol(XX)))) stop("XX must be a square matrix or dgCMatrix\n")
-    if(!(is(Xy,"vector") | is(Xy,"matrix") | is(Xy,"data.frame"))) stop("Xy must be in one of these formats: vector, matrix or data.frame with single column\n")
+    X_trn=scale(X_trn,center=centerX,scale=scaleX)
+    y_trn=scale(y_trn,center=TRUE)
+
+    XX=crossprod(X_trn)
+    Xy=crossprod(X_trn,y_trn)
     
     if(is.null(b)){
         b=rep(0, nrow(XX))
@@ -51,10 +55,8 @@ GD.CV.ES<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, ver
   	
     previous_lambda=0
     B=array(dim=c(p,maxIter+1,length(lambda)))
-    RSS=numeric(maxIter+1)
-    RSS[1]=-2*t(b)%*%Xy+t(b)%*%XX%*%b
-    Threshold=learningRate*2
-    RSSWarningFlag=0
+    Cor=numeric(maxIter+1)
+    Cor[1]=cor(X_tst%*%b, y_tst)
 
     for(h in 1:length(lambda))
     {
@@ -82,26 +84,16 @@ GD.CV.ES<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, ver
             for(i in 2:ncol(B))
             {
             	B[,i,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, B[,i-1,h],p, 1, LR)
-                RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
-                if (is.na(RSS[i])) {
-                    stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
-                }
-                if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
-                RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
-                if (RSS_pct<Threshold) {break}
+                Cor[i]=cor(X_tst%*%B[,i,h], y_tst)
+                if (Cor[i]<Cor[i-1]) {break}
             }
         }else{
             #Dense matrix
             for(i in 2:ncol(B))
             {
             	B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
-                RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
-                if (is.na(RSS[i])) {
-                    stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
-                }
-                if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
-                RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
-                if (RSS_pct<Threshold) {break}
+                Cor[i]=cor(X_tst%*%B[,i,h], y_tst)
+                if (Cor[i]<Cor[i-1]) {break}
             }
         }
     }
@@ -113,11 +105,7 @@ GD.CV.ES<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, ver
     dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
 
     #B=B[,i,,drop=TRUE]
-
-    if (RSSWarningFlag==1) {
-        warning('The specified learningRate may be too large and could lead to unstable or divergent updates. Consider using a smaller learningRate.\n')
-    }
     
     #return(B)
-    return(list(B=B[,i,,drop=TRUE], B_path=B[,2:i,,drop=TRUE], RSS=RSS[2:i], stopIter=i-1))
+    return(list(B=B[,i,,drop=TRUE], B_path=B[,2:i,,drop=TRUE], Cor=Cor[2:i], stopIter=i-1))
 }
