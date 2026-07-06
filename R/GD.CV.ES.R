@@ -3,7 +3,6 @@
 # starts to drop. GD.CV.ES() is more time efficient as it does not require running the full path.
 
 GD.CV.ES<- function(X_trn, y_trn, X_tst, y_tst, centerX=TRUE,scaleX=FALSE, b=NULL, maxIter=1000, learningRate=1/50, lambda=0, verbose=TRUE, ...){
-GD.CV.ES<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE){
 
     X_trn=scale(X_trn,center=centerX,scale=scaleX)
     y_trn=scale(y_trn,center=TRUE)
