@@ -106,5 +106,5 @@ GD.CV.ES<- function(X_trn, y_trn, X_tst, y_tst, centerX=TRUE,scaleX=FALSE, b=NUL
     #B=B[,i,,drop=TRUE]
     
     #return(B)
-    return(list(B=B[,i,,drop=TRUE], B_path=B[,2:i,,drop=TRUE], Cor=Cor[2:i], stopIter=i-1))
+    return(list(B=B[,(i-1),,drop=TRUE], B_path=B[,2:i,,drop=TRUE], Cor=Cor[2:i], stopIter=i-2))
 }
