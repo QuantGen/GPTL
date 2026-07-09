@@ -100,7 +100,7 @@ GD.Auto.ErrVar<- function(XX, Xy, n, b=NULL, maxIter=10, learningRate=1/50, lamb
                 #if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
                 #RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
                 ErrVar_pct[i]=abs(diff(ErrVar[(i-1):i])/ErrVar[i-1])
-                ErrVar_cg[i]=abs(diff(ErrVar[(i-1):i])
+                ErrVar_cg[i]=abs(diff(ErrVar[(i-1):i]))
                 #if (RSS_pct<Threshold) {break}
             }
         }else{
@@ -117,7 +117,7 @@ GD.Auto.ErrVar<- function(XX, Xy, n, b=NULL, maxIter=10, learningRate=1/50, lamb
                 #if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
                 #RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
                 ErrVar_pct[i]=abs(diff(ErrVar[(i-1):i])/ErrVar[i-1])
-                ErrVar_cg[i]=abs(diff(ErrVar[(i-1):i])
+                ErrVar_cg[i]=abs(diff(ErrVar[(i-1):i]))
                 #if (RSS_pct<Threshold) {break}
             }
         }
