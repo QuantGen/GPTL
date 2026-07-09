@@ -1,5 +1,7 @@
+## !!! In Developing !!! ##
+
 # This is a cross-validation-free version of GD(). The stopping iteration of the GD algorithm is determined by
-# the changing percentage of RSS, i.e., when abs(diff(RSS[(i-1):i])/RSS[i-1])<learningRate*2
+# the error variance, i.e., when RSS/(n-df) ...
 
 GD.Auto.ErrVar<- function(XX, Xy, n, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE){
 
@@ -134,5 +136,5 @@ GD.Auto.ErrVar<- function(XX, Xy, n, b=NULL, maxIter=10, learningRate=1/50, lamb
     }
     
     #return(B)
-    return(list(B=B[,i,,drop=TRUE], B_path=B[,2:i,,drop=TRUE], ErrVar=ErrVar[1:i], ErrVar_pct=ErrVar_pct[1:i], ErrVar_cg=ErrVar_cg[1:i], stopIter=i-1))
+    return(list(B=B[,i,,drop=TRUE], B_path=B[,2:i,,drop=TRUE], ErrVar=ErrVar[2:i], ErrVar_pct=ErrVar_pct[2:i], ErrVar_cg=ErrVar_cg[2:i], stopIter=i-1))
 }
