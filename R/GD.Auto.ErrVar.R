@@ -134,5 +134,5 @@ GD.Auto.ErrVar<- function(XX, Xy, n, b=NULL, maxIter=10, learningRate=1/50, lamb
     }
     
     #return(B)
-    return(list(B=B[,i,,drop=TRUE], B_path=B[,2:i,,drop=TRUE], ErrVar=ErrVar[2:i], ErrVar_pct=ErrVar_pct[2:i], ErrVar_cg=ErrVar_cg[2:i], stopIter=i-1))
+    return(list(B=B[,i,,drop=TRUE], B_path=B[,2:i,,drop=TRUE], ErrVar=ErrVar[1:i], ErrVar_pct=ErrVar_pct[1:i], ErrVar_cg=ErrVar_cg[1:i], stopIter=i-1))
 }
