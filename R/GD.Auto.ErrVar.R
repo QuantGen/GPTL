@@ -1,7 +1,7 @@
 # This is a cross-validation-free version of GD(). The stopping iteration of the GD algorithm is determined by
 # the changing percentage of RSS, i.e., when abs(diff(RSS[(i-1):i])/RSS[i-1])<learningRate*2
 
-GD.Auto.ErrVar<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE){
+GD.Auto.ErrVar<- function(XX, Xy, n, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE){
 
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix") | (nrow(XX)==ncol(XX)))) stop("XX must be a square matrix or dgCMatrix\n")
     if(!(is(Xy,"vector") | is(Xy,"matrix") | is(Xy,"data.frame"))) stop("Xy must be in one of these formats: vector, matrix or data.frame with single column\n")
@@ -50,11 +50,12 @@ GD.Auto.ErrVar<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=
   	
     previous_lambda=0
     B=array(dim=c(p,maxIter+1,length(lambda)))
-    RSS=numeric(maxIter+1)
-    RSS[1]=-2*t(b)%*%Xy+t(b)%*%XX%*%b
-    Threshold=learningRate*2
-    RSSWarningFlag=0
-
+    ErrVar=numeric(maxIter+1)
+    ErrVar_pct=numeric(maxIter+1)
+    ErrVar_cg=numeric(maxIter+1)
+    ErrVar_pct[1]=NA
+    ErrVar_cg[1]=NA
+    
     for(h in 1:length(lambda))
     {
     	if(is(XX,"dgCMatrix"))
@@ -62,10 +63,12 @@ GD.Auto.ErrVar<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=
     	    #Sparse matrix
         	Matrix::diag(XX)<-Matrix::diag(XX) + (lambda[h]- previous_lambda)
         	LR=learningRate/mean(Matrix::diag(XX))
+            diagXX=Matrix::diag(XX)
         }else{
         	#Dense matrix
         	diag(XX)=diag(XX)+(lambda[h]- previous_lambda)
         	LR=learningRate/mean(diag(XX))
+            diagXX=diag(XX)
         }
   
         #if( lambda0>0 ){    
@@ -73,6 +76,13 @@ GD.Auto.ErrVar<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=
         #}
         previous_lambda=lambda[h]
 
+        RSS1=-2*t(b)%*%Xy+t(b)%*%XX%*%b
+        df1=sum(1-(1-(learningRate*diagXX))^1)
+        ErrVar[1]=RSS1/(n-df1)
+
+        Threshold=learningRate*2
+        RSSWarningFlag=0
+        
         B[,1,h]=b
             
         if(is(XX,"dgCMatrix"))
@@ -81,32 +91,38 @@ GD.Auto.ErrVar<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=
             for(i in 2:ncol(B))
             {
             	B[,i,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, B[,i-1,h],p, 1, LR)
-                RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
-                if (is.na(RSS[i])) {
+                RSSi=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                dfi=sum(1-(1-(learningRate*diagXX))^i)
+                ErrVar[i]=RSSi/(n-dfi)
+                if (is.na(ErrVar[i])) {
                     stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
                 }
-                if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
-                RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
-                if (RSS_pct<Threshold) {break}
+                #if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
+                #RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
+                ErrVar_pct[i]=abs(diff(ErrVar[(i-1):i])/ErrVar[i-1])
+                ErrVar_cg[i]=abs(diff(ErrVar[(i-1):i])
+                #if (RSS_pct<Threshold) {break}
             }
         }else{
             #Dense matrix
             for(i in 2:ncol(B))
             {
             	B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
-                RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
-                if (is.na(RSS[i])) {
+                RSSi=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                dfi=sum(1-(1-(learningRate*diagXX))^i)
+                ErrVar[i]=RSSi/(n-dfi)
+                if (is.na(ErrVar[i])) {
                     stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
                 }
-                if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
-                RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
-                if (RSS_pct<Threshold) {break}
+                #if (RSS[i]>RSS[i-1]) {RSSWarningFlag=1}
+                #RSS_pct=abs(diff(RSS[(i-1):i])/RSS[i-1])
+                ErrVar_pct[i]=abs(diff(ErrVar[(i-1):i])/ErrVar[i-1])
+                ErrVar_cg[i]=abs(diff(ErrVar[(i-1):i])
+                #if (RSS_pct<Threshold) {break}
             }
         }
     }
     
-    
-
     iterations=paste0('iter_',0:maxIter)
     
     dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
@@ -118,5 +134,5 @@ GD.Auto.ErrVar<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=
     }
     
     #return(B)
-    return(list(B=B[,i,,drop=TRUE], B_path=B[,2:i,,drop=TRUE], RSS=RSS[2:i], stopIter=i-1))
+    return(list(B=B[,i,,drop=TRUE], B_path=B[,2:i,,drop=TRUE], ErrVar=ErrVar[2:i], ErrVar_pct=ErrVar_pct[2:i], ErrVar_cg=ErrVar_cg[2:i], stopIter=i-1))
 }
