@@ -1,4 +1,7 @@
-GD_auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE){
+# This is a cross-validation-free version of GD(). The stopping iteration of the GD algorithm is determined by
+# the changing percentage of RSS, i.e., when abs(diff(RSS[(i-1):i])/RSS[i-1])<learningRate*2
+
+GD.Auto<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE){
 
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix") | (nrow(XX)==ncol(XX)))) stop("XX must be a square matrix or dgCMatrix\n")
     if(!(is(Xy,"vector") | is(Xy,"matrix") | is(Xy,"data.frame"))) stop("Xy must be in one of these formats: vector, matrix or data.frame with single column\n")
