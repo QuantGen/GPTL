@@ -1,5 +1,5 @@
 # This is a cross-validation-free version of GD(). The stopping iteration of the GD algorithm is determined by
-# the changing percentage of RSS, i.e., when abs(diff(RSS[(i-1):i])/RSS[i-1])<learningRate*2
+# the change in the percentage of RSS, i.e., when abs(diff(RSS[(i-1):i])/RSS[i-1])<learningRate*2
 
 GD.Auto.RSS<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE){
 
