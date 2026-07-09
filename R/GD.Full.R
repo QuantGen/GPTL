@@ -79,7 +79,7 @@ GD.Full<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, verbo
             	for(i in 2:ncol(B))
             	{
             		B[,i,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, B[,i-1,h],p, 1, LR)
-                B_Full[,i,h]=B_Full[,i-1,h]-LR*(XX%*%B_Full[,i-1,h] - Xy)
+                    B_Full[,i,h]=B_Full[,i-1,h]-LR*(XX%*%B_Full[,i-1,h] - Xy)
                     RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
                     if (is.na(RSS[i])) {
                         stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
@@ -91,7 +91,7 @@ GD.Full<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, verbo
             	for(i in 2:ncol(B))
             	{
             		B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
-                B_Full[,i,h]=B_Full[,i-1,h]-LR*(XX%*%B_Full[,i-1,h] - Xy)
+                    B_Full[,i,h]=B_Full[,i-1,h]-LR*(XX%*%B_Full[,i-1,h] - Xy)
                     RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
                     if (is.na(RSS[i])) {
                         stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
@@ -104,14 +104,16 @@ GD.Full<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, verbo
       iterations=paste0('iter_',0:nIter)
     
     
-    dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
+      dimnames(B)=list(colnames(XX),iterations,paste0('lambda_',lambda))
+      dimnames(B_Full)=list(colnames(XX),iterations,paste0('lambda_',lambda))
 
       B=B[,-1,,drop=TRUE]
+      B_Full=B_Full[,-1,,drop=TRUE]
 
 
     if (RSSWarningFlag==1) {
         warning('The specified learningRate may be too large and could lead to unstable or divergent updates. Consider using a smaller learningRate.\n')
     }
     
-    return(B)
+    return(list(B=B, B_Full=B_Full))
 }
