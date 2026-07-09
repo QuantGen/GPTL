@@ -46,9 +46,9 @@ GD.Full<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, verbo
     b0=rep(0,p)
   	
     previous_lambda=0
-    B=array(dim=c(p,ifelse(returnPath,nIter+1,1),length(lambda)))
-    B_Full=array(dim=c(p,ifelse(returnPath,nIter+1,1),length(lambda)))
-    RSS=numeric(ifelse(returnPath,nIter+1,2))
+    B=array(dim=c(p,nIter+1,length(lambda)))
+    B_Full=array(dim=c(p,nIter+1,length(lambda)))
+    RSS=numeric(nIter+1)
     RSS[1]=-2*t(b)%*%Xy+t(b)%*%XX%*%b
     RSSWarningFlag=0
 
