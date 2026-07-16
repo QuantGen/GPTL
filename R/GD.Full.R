@@ -49,7 +49,9 @@ GD.Full<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, verbo
     B=array(dim=c(p,nIter+1,length(lambda)))
     B_Full=array(dim=c(p,nIter+1,length(lambda)))
     RSS=numeric(nIter+1)
+    RSS_Full=numeric(nIter+1)
     RSS[1]=-2*t(b)%*%Xy+t(b)%*%XX%*%b
+    RSS_Full[1]=-2*t(b)%*%Xy+t(b)%*%XX%*%b
     RSSWarningFlag=0
 
     for(h in 1:length(lambda))
@@ -81,6 +83,7 @@ GD.Full<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, verbo
             		B[,i,h]=.Call("GRAD_DESC_sparse",XX@x,XX@p,XX@i,Xy, B[,i-1,h],p, 1, LR)
                     B_Full[,i,h]=B_Full[,i-1,h]-LR*(XX%*%B_Full[,i-1,h] - Xy)
                     RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                    RSS_Full[i]=-2*t(B_Full[,i,h])%*%Xy+t(B_Full[,i,h])%*%XX%*%B_Full[,i,h]
                     if (is.na(RSS[i])) {
                         stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
                     }
@@ -93,6 +96,7 @@ GD.Full<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, verbo
             		B[,i,h]=.Call("GRAD_DESC",XX, Xy, B[,i-1,h],p, 1, LR)
                     B_Full[,i,h]=B_Full[,i-1,h]-LR*(XX%*%B_Full[,i-1,h] - Xy)
                     RSS[i]=-2*t(B[,i,h])%*%Xy+t(B[,i,h])%*%XX%*%B[,i,h]
+                    RSS_Full[i]=-2*t(B_Full[,i,h])%*%Xy+t(B_Full[,i,h])%*%XX%*%B_Full[,i,h]
                     if (is.na(RSS[i])) {
                         stop('The specified learningRate is too large and led to unstable or divergent updates. Consider using a smaller learningRate.\n')
                     }
@@ -115,5 +119,5 @@ GD.Full<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, verbo
         warning('The specified learningRate may be too large and could lead to unstable or divergent updates. Consider using a smaller learningRate.\n')
     }
     
-    return(list(B=B, B_Full=B_Full))
+    return(list(B=B, B_Full=B_Full, RSS=RSS, RSS_Full=RSS_Full))
 }
