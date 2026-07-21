@@ -15,6 +15,5 @@ export(rMultinom)
 export(GD.Auto.RSS)
 export(GD.Auto.ErrVar)
 export(GD.CV.ES)
-export(GD.Full)
 
 useDynLib(GPTL, .registration = TRUE, .fixes = "C_")
