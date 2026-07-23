@@ -1,7 +1,11 @@
-## !!! In Developing !!! ##
+## !!! In Development !!! ##
+
+## The key idea here is to stop the algorithm when either a) the absolute change of error variance (ErrVar_cg) ##
+## or b) the absolute changing rate of error variance (ErrVar_pct), is less than a pre-defined threshold.      ##
+## Further work is needed to find out a good threshold.                                                        ##
 
 # This is a cross-validation-free version of GD(). The stopping iteration of the GD algorithm is determined by
-# the error variance, i.e., when RSS/(n-df) ...
+# the error variance RSS/(n-df), where df was computed by sum(1-(1-(learningRate*diagXX))^iter). 
 
 GD.Auto.ErrVar<- function(XX, Xy, n, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE){
 
