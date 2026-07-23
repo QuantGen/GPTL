@@ -1,7 +1,7 @@
 ## !!! In Development !!! ##
 
 ## The key idea here is to stop the algorithm when either a) the absolute change of error variance (ErrVar_cg) ##
-## or b) the absolute changing rate of error variance (ErrVar_pct), is less than a pre-defined threshold.      ##
+## or b) the absolute change rate of error variance (ErrVar_pct), is less than a pre-defined threshold.      ##
 ## Further work is needed to find out a good threshold.                                                        ##
 
 # This is a cross-validation-free version of GD(). The stopping iteration of the GD algorithm is determined by
