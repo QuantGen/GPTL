@@ -12,6 +12,7 @@ extern SEXP ElasticNet(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP ElasticNet_sparse(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP GRAD_DESC(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP GRAD_DESC_sparse(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP GRAD_DESC_Xy(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP LASSO_CD(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP RIDGE_CD(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP fitLSYS(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -25,6 +26,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"ElasticNet_sparse",         (DL_FUNC) &ElasticNet_sparse,         11},
     {"GRAD_DESC",                 (DL_FUNC) &GRAD_DESC,                  6},
     {"GRAD_DESC_sparse",          (DL_FUNC) &GRAD_DESC_sparse,           8},
+    {"GRAD_DESC_Xy",              (DL_FUNC) &GRAD_DESC_Xy,               8},
     {"LASSO_CD",                  (DL_FUNC) &LASSO_CD,                   7},
     {"RIDGE_CD",                  (DL_FUNC) &RIDGE_CD,                   7},
     {"fitLSYS",                   (DL_FUNC) &fitLSYS,                    7},
