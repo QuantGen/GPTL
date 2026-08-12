@@ -114,3 +114,57 @@ SEXP GRAD_DESC_sparse(SEXP C, SEXP cOffset, SEXP rIndex, SEXP rhs, SEXP b, SEXP 
    
 }
 
+SEXP GRAD_DESC_Xy(SEXP X, SEXP x2, SEXP b, SEXP e, SEXP nRow, SEXP nCol, SEXP nIter, SEXP learning_rate) 
+{
+	int j, n, p, niter, iter;
+	int inc=1;
+    double  gradient, LR, rhs;
+    double *pX, *pb, *pe, *px2;
+    double *xj;
+    double bj;
+
+    n=INTEGER_VALUE(nRow);
+    p=INTEGER_VALUE(nCol);
+    niter=INTEGER_VALUE(nIter);
+    
+    LR=NUMERIC_VALUE(learning_rate);
+    
+    PROTECT(X=AS_NUMERIC(X));
+    pX=NUMERIC_POINTER(X);
+    
+    PROTECT(x2=AS_NUMERIC(x2));
+    px2=NUMERIC_POINTER(x2);
+    
+    PROTECT(b=AS_NUMERIC(b));
+    pb=NUMERIC_POINTER(b);
+    
+    PROTECT(e=AS_NUMERIC(e));
+    pe=NUMERIC_POINTER(e);
+    
+    //loop over iterations
+    for(iter = 0; iter < niter; iter++) 
+    {
+    	//loop over predictors
+    	for(j=0; j<p; j++)
+    	{
+    		xj=pX+(long long)j*n;
+    		bj=pb[j];
+    		
+    		F77_NAME(daxpy)(&n, &bj, xj, &inc, pe, &inc);
+    		
+    		rhs=F77_NAME(ddot)(&n,xj,&inc,pe,&inc);
+    		
+    		gradient=(px2[j]*bj-rhs);
+    		pb[j]=pb[j]-LR*gradient;
+    		
+    		bj=-1*pb[j];
+    		
+    		F77_NAME(daxpy)(&n, &bj, xj, &inc, pe, &inc);
+    	}
+    }
+    
+    UNPROTECT(4);  
+    
+	return b;   
+}
+
