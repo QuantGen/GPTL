@@ -11,7 +11,7 @@ GD.CV.ES<- function(X_trn, y_trn, X_tst, y_tst, centerX=TRUE,scaleX=FALSE, b=NUL
     Xy=crossprod(X_trn,y_trn)
     
     if(is.null(b)){
-        b=rep(rnorm(nrow(XX)/1000)
+        b=rep(rnorm(nrow(XX))/1000)
         names(b)=rownames(XX)
     }
 
