@@ -1,6 +1,6 @@
 # A function to perform Grad. Desc. that takes X and y, instead of XX and Xy
 
-GDXy2<-function(X,y,b=NULL,learningRate=1/50,nIter=100,minPropChange=1/10,earlyStop=FALSE,returnPath=FALSE){
+GDXy2<-function(X,y,b=NULL,learningRate=1/50,nIter=100,minPropChange=1/10,earlyStop=FALSE,returnPath=FALSE,verbose=FALSE){
    
    p=ncol(X)
    X=scale(X,center=TRUE,scale=FALSE)
@@ -30,7 +30,7 @@ GDXy2<-function(X,y,b=NULL,learningRate=1/50,nIter=100,minPropChange=1/10,earlyS
         if(earlyStop){
             RSS[i]=sum((y-X%*%b)^2)
             propChange=(1-(RSS[i]/RSS[i-1]))
-            print(RSS[i])
+            if(verbose) print(RSS[i])
             if( propChange<minPropChange){ 
                 B=B[,1:i]
                 RSS=RSS[1:i]
