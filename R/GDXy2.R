@@ -33,7 +33,9 @@ GDXy2<-function(X,y,b=NULL,learningRate=1/100,nIter=100,minChange=1,earlyStop=FA
         B[,i]=b
         if(earlyStop){
             RSS[i]=sum((y-X%*%b)^2)
-            if( (1-(RSS[i]/RSS[i-1]))<minChange){ 
+            propChange=(1-(RSS[i]/RSS[i-1])
+            print(propChange)
+            if( propChange)<minChange){ 
                 B=B[,1:i]
                 RSS=RSS[1:i]
                 print(RSS)
