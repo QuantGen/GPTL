@@ -2,7 +2,7 @@
 
 GDXy2<-function(X,y,b=NULL,learningRate=1/100,nIter=100,minChange=Inf){
    
-   earlyStop<=minChange=Inf
+   earlyStop=(minChange<Inf)
 
    p=ncol(X)
    X=scale(X,center=TRUE,scale=FALSE)
