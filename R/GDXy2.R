@@ -1,7 +1,7 @@
 # A function to perform Grad. Desc. that takes X and y, instead of XX and Xy
 
-GDXy2<-function(X,y,b=NULL,learningRate=1/100,nIter=100,minChange=1,earlyStop=FALSE){
-
+GDXy2<-function(X,y,b=NULL,learningRate=1/50,nIter=100,minChange=10,earlyStop=FALSE){
+   
    p=ncol(X)
    X=scale(X,center=TRUE,scale=FALSE)
    y=scale(y,center=TRUE)
