@@ -1,6 +1,6 @@
 # A function to perform Grad. Desc. that takes X and y, instead of XX and Xy
 
-GDXy2<-function(X,y,b=NULL,learningRate=1/50,nIter=100,minChange=10,earlyStop=FALSE){
+GDXy2<-function(X,y,b=NULL,learningRate=1/50,nIter=100,minChange=1/20,earlyStop=FALSE){
    
    p=ncol(X)
    X=scale(X,center=TRUE,scale=FALSE)
@@ -13,11 +13,7 @@ GDXy2<-function(X,y,b=NULL,learningRate=1/50,nIter=100,minChange=10,earlyStop=FA
    x2=colSums(X^2)
 
    learningRate=learningRate/mean(x2)
-
-   if(earlyStop){
-      minChange=learningRate*minChange
-   }
-
+   
    e=y-X%*%b
    
    B=matrix(nrow=p,ncol=nIter+1,NA)
