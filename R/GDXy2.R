@@ -43,5 +43,5 @@ GDXy2<-function(X,y,b=NULL,learningRate=1/100,nIter=100,minChange=1,earlyStop=FA
             }
          }
     }
-   return(B)
+   return(B[,-1])
 }
