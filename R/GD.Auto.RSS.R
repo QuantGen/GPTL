@@ -1,7 +1,7 @@
 # This is a cross-validation-free version of GD(). The stopping iteration of the GD algorithm is determined by
 # the change in the percentage of RSS, i.e., when abs(diff(RSS[(i-1):i])/RSS[i-1])<learningRate*2
 
-GD.Auto.RSS<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE){
+GD.Auto.RSS<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, verbose=TRUE,pctChangeRSS=learningRate*2){
 
     if(!(is(XX,"matrix") | is(XX,"dgCMatrix") | (nrow(XX)==ncol(XX)))) stop("XX must be a square matrix or dgCMatrix\n")
     if(!(is(Xy,"vector") | is(Xy,"matrix") | is(Xy,"data.frame"))) stop("Xy must be in one of these formats: vector, matrix or data.frame with single column\n")
@@ -52,7 +52,7 @@ GD.Auto.RSS<- function(XX, Xy, b=NULL, maxIter=10, learningRate=1/50, lambda=0, 
     B=array(dim=c(p,maxIter+1,length(lambda)))
     RSS=numeric(maxIter+1)
     RSS[1]=-2*t(b)%*%Xy+t(b)%*%XX%*%b
-    Threshold=learningRate*2
+    Threshold=pctChangeRSS
     RSSWarningFlag=0
 
     for(h in 1:length(lambda))
