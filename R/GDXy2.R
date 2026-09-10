@@ -24,7 +24,7 @@ GDXy2<-function(X,y,b=NULL,learningRate=1/100,nIter=100,minChange=1,earlyStop=FA
    B[,1]=b
 
    if(earlyStop){ 
-      RSS=rep(NA_numeric_,nIter+1) 
+      RSS=rep(NA_real_,nIter+1) 
       RSS[1]=sum(e^2)
    }
    
@@ -35,6 +35,8 @@ GDXy2<-function(X,y,b=NULL,learningRate=1/100,nIter=100,minChange=1,earlyStop=FA
             RSS[i]=sum((y-X%*%b)^2)
             if( (1-(RSS[i]/RSS[i-1]))<minChange){ 
                 B=B[,1:i]
+                RSS=RSS[1:i]
+                print(RSS)
                 break() 
             }
          }
