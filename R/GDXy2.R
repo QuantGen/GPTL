@@ -21,8 +21,8 @@ GDXy2<-function(X,y,b=NULL,learningRate=1/50,nIter=100,pctVar=1/100,earlyStop=FA
 
    if(earlyStop){ 
       RSS=rep(NA_real_,nIter+1)
-      threshold=RSS*pctVar
       RSS[1]=sum(e^2)
+      threshold=RSS[1]*pctVar
    }
    
    for(i in 2:(nIter+1)){
