@@ -39,7 +39,7 @@ GDXy2<-function(X,y,b=NULL,learningRate=1/50,nIter=100,minPropChange=1/10,earlyS
          }
    }
    if(returnPath){
-      B=B[,-1]
+      B=B[,-1,drop=FALSE]
    }else{
       B=B[,ncol(B)]
    }
