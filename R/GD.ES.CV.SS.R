@@ -96,6 +96,6 @@ GD.ES.CV.SS<- function( X,y, trn,  centerX=TRUE,scaleX=FALSE, b=NULL, maxIter=30
     	message('...computing final estimates.')
     }
 
-    b=GD(XX=XX,Xy=Xy,lambda=lambda,learningRate=1/30,nIter=stopIter)
+    b=GD(XX=XX,Xy=Xy,lambda=lambda,learningRate=learningRate,nIter=stopIter)
     return(list(b=b,stopIter=stopIter))
 }
