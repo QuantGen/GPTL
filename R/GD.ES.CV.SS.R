@@ -82,7 +82,7 @@ GD.ES.CV.SS<- function( X,y, trn,  centerX=TRUE,scaleX=FALSE, b=NULL, maxIter=30
     
     for(i in 2:ncol(B)){
         B[,i]=.Call("GRAD_DESC",XX, Xy, B[,i-1],p, 1, LR)
-        Cor[i]=cor(X_tst%*%B[,i], y_tst)
+        Cor[i]=corBootstrap(X_tst%*%B[,i], y_tst,100)#cor(X_tst%*%B[,i], y_tst)
         if (Cor[i]<Cor[i-1]) {break}
     }
         
