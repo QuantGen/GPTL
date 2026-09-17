@@ -3,6 +3,7 @@ corBootstrap=function(x,y,times=100){
     tmp=sample(1:n,size=n, replace=TRUE)
     cor(x[tmp],y[tmp])
   }
+  n=length(x)
   mean(replicate(100,fn(x,y,n)))
 }
 
