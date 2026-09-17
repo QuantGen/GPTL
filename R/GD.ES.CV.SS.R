@@ -14,20 +14,21 @@ GD.ES.CV.SS<- function( X,y, trn,  centerX=TRUE,scaleX=FALSE, b=NULL, maxIter=30
     }
 
     if(!is.integer(trn) | max(trn)>nrow(X) | min(trn)<1){stop('trn must be an integer vector with values between 1 and nrow(X)')}
-
+    X=scale(X,,center=centerX,scale=scaleX)
+    y=y-mean(y)
+  
     # Training/Testing data
-    X_trn=scale(X[trn,,drop=FALSE],center=centerX,scale=scaleX)
-    X_tst=scale(X[-trn,,drop=FALSE],center=centerX,scale=scaleX)
-
-
-    y_trn=y[trn]-mean(y[trn])
-    y_tst=y[-trn]-mean(y[-trn])
+    X_trn=X[trn,,drop=FALSE]
+    X_tst=X[-trn,,drop=FALSE]
+    y_trn=y[trn]
+    y_tst=y[-trn]
 
 
     XX=crossprod(X_trn)
     Xy=crossprod(X_trn,y_trn)
     
-
+    meanX2=mean(apply(FUN=function(x){sum(x^2)},X=X,MARGIN=2))
+  
     if(is.null(b)){
         b=rep(rnorm(nrow(XX))/100000)
         names(b)=rownames(XX)
@@ -68,15 +69,14 @@ GD.ES.CV.SS<- function( X,y, trn,  centerX=TRUE,scaleX=FALSE, b=NULL, maxIter=30
     }
 
     p=nrow(XX)
-    b0=rep(0,p)
+    b0=rnorm(p)/10000
   	
-   
     B=matrix(nrow=p,ncol=maxIter+1)
     Cor=numeric(maxIter+1)
     Cor[1]=cor(X_tst%*%b, y_tst)#corBootstrap(X_tst%*%b, y_tst,100)#
     
     diag(XX)=diag(XX)+(lambda)
-    LR=learningRate/mean(diag(XX))
+    LR=learningRate/meanX2
 
     B[,1]=b
     
@@ -86,7 +86,7 @@ GD.ES.CV.SS<- function( X,y, trn,  centerX=TRUE,scaleX=FALSE, b=NULL, maxIter=30
         if (Cor[i]<Cor[i-1]) {break}
     }
         
-    stopIter=i+1
+    stopIter=i-1
 
     XX=XX+crossprod(X_tst)
     Xy=Xy+crossprod(X_tst,y_tst)
