@@ -73,7 +73,7 @@ GD.ES.CV.SS<- function( X,y, trn,  centerX=TRUE,scaleX=FALSE, b=NULL, maxIter=30
    
     B=matrix(nrow=p,ncol=maxIter+1)
     Cor=numeric(maxIter+1)
-    Cor[1]=cor(X_tst%*%b, y_tst)
+    Cor[1]=corBootstrap(X_tst%*%b, y_tst,100)#cor(X_tst%*%b, y_tst)
     
     diag(XX)=diag(XX)+(lambda)
     LR=learningRate/mean(diag(XX))
