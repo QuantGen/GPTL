@@ -14,7 +14,7 @@ GD.ES.CV.SS<- function( X,y, trn,  centerX=TRUE,scaleX=FALSE, b=NULL, maxIter=30
     }
 
     if(!is.integer(trn) | max(trn)>nrow(X) | min(trn)<1){stop('trn must be an integer vector with values between 1 and nrow(X)')}
-    X=scale(X,,center=centerX,scale=scaleX)
+    X=scale(X,center=centerX,scale=scaleX)
     y=y-mean(y)
   
     # Training/Testing data
