@@ -86,7 +86,7 @@ GD.ES.CV.SS<- function( X,y, trn,  centerX=TRUE,scaleX=FALSE, b=NULL, maxIter=30
         if (Cor[i]<Cor[i-1]) {break}
     }
         
-    stopIter=i-1
+    stopIter=i+1
 
     XX=XX+crossprod(X_tst)
     Xy=Xy+crossprod(X_tst,y_tst)
