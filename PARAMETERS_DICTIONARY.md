@@ -33,10 +33,6 @@ Do not introduce alternate spellings such as `niter`, `learning_rate`,
 | `yy` | Phenotype cross-product `y'y`. | Numeric scalar | `getCor` |
 | `B` | Matrix of prior effect estimates. Each row is a variant and each column is a prior source or mixture component. | `p` × `k` matrix | `BMM`, `BMM_Block`, `getSS`, `getCor` |
 | `b` | Current or initial target-population effect estimates. | Numeric vector or one-column matrix of length `p` | `GD`, `PR`, gradient-descent helpers |
-| `ld` | Linkage-disequilibrium reference matrix. | `p` × `p` matrix with variant IDs as row and column names | `getSS` |
-| `gwas` | GWAS summary-statistics table. Required columns are `beta`, `n`, and `allele_freq`. | Data frame with variants as row names | `getSS` |
-| `beta` | Variant effect estimate in a GWAS summary-statistics table. | Numeric vector | `gwas` input to `getSS` |
-| `allele_freq` | Variant allele frequency in the GWAS population. | Numeric vector in `[0, 1]` | `gwas` input to `getSS` |
 
 Variant IDs should be stored as row names and column names where applicable.
 `XX`, `Xy`, and `B` are aligned by these IDs before fitting.
