@@ -45,42 +45,29 @@ GD<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, returnPath
     p=nrow(XX)
     b0=rep(0,p)
   	
-    #previous_lambda=0
+    previous_lambda=0
     B=array(dim=c(p,ifelse(returnPath,nIter+1,1),length(lambda)))
     RSS=numeric(ifelse(returnPath,nIter+1,2))
     RSS[1]=-2*t(b)%*%Xy+t(b)%*%XX%*%b
     RSSWarningFlag=0
 
-    XX0=XX
-    Xy0=Xy
-
     for(h in 1:length(lambda))
     {
-    	XX=XX0
-        Xy=Xy0
-        if(is(XX,"dgCMatrix"))
+    	if(is(XX,"dgCMatrix"))
     	{	
     	    #Sparse matrix
-        	Matrix::diag(XX)<-Matrix::diag(XX) + lambda[h]
-        	#LR=learningRate/mean(Matrix::diag(XX))
-            LR=learningRate
-            K=mean(Matrix::diag(XX))
-            XX=XX/K
-            Xy=Xy/K
+        	Matrix::diag(XX)<-Matrix::diag(XX) + (lambda[h]- previous_lambda)
+        	LR=learningRate/mean(Matrix::diag(XX))
         }else{
         	#Dense matrix
-        	diag(XX)=diag(XX)+lambda[h]
-        	#LR=learningRate/mean(diag(XX))
-            LR=learningRate
-            K=mean(diag(XX))
-            XX=XX/K
-            Xy=Xy/K
+        	diag(XX)=diag(XX)+(lambda[h]- previous_lambda)
+        	LR=learningRate/mean(diag(XX))
         }
   
         #if( lambda0>0 ){    
         #    Xy=Xy+(lambda[h]-previous_lambda)*lambda0*b0 
         #}
-        #previous_lambda=lambda[h]
+        previous_lambda=lambda[h]
 
         if(returnPath)
         {
@@ -153,4 +140,3 @@ GD<- function(XX, Xy, b=NULL, nIter=100, learningRate=1/50, lambda=0, returnPath
     
     return(B)
 }
-
