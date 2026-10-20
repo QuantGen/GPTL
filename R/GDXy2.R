@@ -11,6 +11,7 @@ GDXy2<-function(X,y,b=NULL,learningRate=1/50,nIter=100,centerX=TRUE,scaleX=FALSE
         b=rep(0, p)
         names(b)=colnames(X)
    }
+   b=b+0.0 # generetes a true copy
    x2=colSums(X^2)
 
    learningRate=learningRate/mean(x2)
