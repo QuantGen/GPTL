@@ -11,12 +11,40 @@ Please cite [Wu et. al](https://doi.org/10.1038/s41467-026-68696-7) for the GPTL
 
 ## Installation
 
-- Install the package from GitHub
+The latest version of GPTL can be installed from GitHub using:
 
-```R
-# install.packages("remotes")
+```r
 remotes::install_github("QuantGen/GPTL")
 ```
+
+## Previous Versions and Reproducibility
+
+To ensure the reproducibility of published research, previous versions of GPTL are preserved through GitHub releases and archived on Zenodo.
+
+### Version 1.0.1 (Published Paper Version)
+
+This version corresponds to the version of GPTL used in our published paper and is preserved to ensure reproducibility of the reported analyses and results.
+
+- [GitHub Release (v1.0.1)](https://github.com/QuantGen/GPTL/releases/tag/v1.0.1)
+- [Zenodo Archive](https://doi.org/10.5281/zenodo.24591039)
+
+To install this specific version, use:
+
+```r
+remotes::install_github("QuantGen/GPTL@v1.0.1")
+```
+
+## Development Version
+
+Ongoing development, including new features, improvements, bug fixes, and documentation updates, takes place in the [development branch](https://github.com/QuantGen/GPTL/tree/development).
+
+To install the development version, use:
+
+```r
+remotes::install_github("QuantGen/GPTL@development")
+```
+
+Please note that the development version is under active development and may contain experimental features or changes that are not backward compatible with previous releases.
 
 ## Using GPTL   
    
