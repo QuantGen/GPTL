@@ -8,7 +8,8 @@
 SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_rate) {
 
     int inc=1, j, p, niter;
-    double  Cjj, Cjb, gradient, LR;
+    //double Cjj;
+    double Cjb, gradient, LR;
     double *pC, *prhs, *pb;
     
     p=INTEGER_VALUE(nCol);
@@ -29,7 +30,7 @@ SEXP GRAD_DESC(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_ra
     
     for (int iter = 0; iter < niter; iter++) { 
         for (j = 0; j < p; j++) { // loop over predictors
-            Cjj = pC[j * (p + 1)]; // I was using this for LR but it gave me numerical problems
+            //Cjj = pC[j * (p + 1)]; // I was using this for LR but it gave me numerical problems
             Cjb=F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc); //C[,j]'b
             gradient= - (prhs[j]-Cjb);   
             // dividing by Cjj (the 2nd derivative) makes step smaller when the function has more curvature
@@ -55,8 +56,10 @@ rIndex: row index of each element in C,
 SEXP GRAD_DESC_sparse(SEXP C, SEXP cOffset, SEXP rIndex, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP learning_rate) 
 {
 
-    int inc=1, j, p, niter;
-    double  Cjj, Cjb, gradient, LR;
+    //int inc;
+    int j, p, niter;
+    //double Cjj;
+    double Cjb, gradient, LR;
     double *pC, *prhs, *pb;
     
     int *pcOffset, *prIndex;
@@ -83,7 +86,7 @@ SEXP GRAD_DESC_sparse(SEXP C, SEXP cOffset, SEXP rIndex, SEXP rhs, SEXP b, SEXP 
     PROTECT(b=AS_NUMERIC(b));
     pb=NUMERIC_POINTER(b);
     
-    inc=1;
+    //inc=1;
     
     for (int iter = 0; iter < niter; iter++) 
     { 
@@ -93,16 +96,16 @@ SEXP GRAD_DESC_sparse(SEXP C, SEXP cOffset, SEXP rIndex, SEXP rhs, SEXP b, SEXP 
             //Cjb=F77_NAME(ddot)(&p, pC+j*p, &inc, pb, &inc); //C[,j]'b
               
             /*index the elements of C using the column offset*/
-	  		low=pcOffset[j];
-          	up=pcOffset[j+1]-1;
+	    low=pcOffset[j];
+            up=pcOffset[j+1]-1;
           	
-          	Cjb=0;
+            Cjb=0;
           	
-          	/*equivalent to ddot*/
-          	for(m=low;m<=up;m++)
-          	{
+            /*equivalent to ddot*/
+            for(m=low;m<=up;m++)
+            {
               Cjb=Cjb+pC[m]*pb[prIndex[m]];
-	  		}
+	    }
             
             gradient= - (prhs[j]-Cjb);   
             pb[j]-=LR*gradient ; 
@@ -116,8 +119,8 @@ SEXP GRAD_DESC_sparse(SEXP C, SEXP cOffset, SEXP rIndex, SEXP rhs, SEXP b, SEXP 
 
 SEXP GRAD_DESC_Xy(SEXP X, SEXP x2, SEXP b, SEXP e, SEXP nRow, SEXP nCol, SEXP nIter, SEXP learning_rate) 
 {
-	int j, n, p, niter, iter;
-	int inc=1;
+    int j, n, p, niter, iter;
+    int inc=1;
     double  gradient, LR, rhs;
     double *pX, *pb, *pe, *px2;
     double *xj;

@@ -7,8 +7,8 @@
 
 SEXP ElasticNet(SEXP C, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda1, SEXP lambda2, SEXP b0) {
 
-    int inc=1, j, p, niter;
-    double  Cjj, Cjb, offset, r_tilde, bOLS, Lambda1, Lambda2, sign_bOLS;
+    int inc, j, p, niter;
+    double  Cjj, Cjb, offset, r_tilde, bOLS, Lambda1, Lambda2;
     double *pC, *prhs, *pb, *pb0;
     
     p=INTEGER_VALUE(nCol);
@@ -67,8 +67,9 @@ rIndex: row index of each element in C,
 
 SEXP ElasticNet_sparse(SEXP C, SEXP cOffset, SEXP rIndex, SEXP diagC, SEXP rhs, SEXP b, SEXP nCol, SEXP nIter, SEXP lambda1, SEXP lambda2, SEXP b0) {
 
-    int inc=1, j, p, niter;
-    double  Cjj, Cjb, offset, r_tilde, bOLS, Lambda1, Lambda2, sign_bOLS;
+    //int inc; 
+    int j, p, niter;
+    double  Cjj, Cjb, offset, r_tilde, bOLS, Lambda1, Lambda2;
     double *pC, *prhs, *pb, *pb0;
     
     double *pdiagC;
@@ -105,7 +106,7 @@ SEXP ElasticNet_sparse(SEXP C, SEXP cOffset, SEXP rIndex, SEXP diagC, SEXP rhs, 
     PROTECT(diagC=AS_NUMERIC(diagC));
     pdiagC=NUMERIC_POINTER(diagC);
 
-    inc=1;
+    //inc=1;
     
     for (int iter = 0; iter < niter; iter++) { 
         // loop over predictors
@@ -117,16 +118,16 @@ SEXP ElasticNet_sparse(SEXP C, SEXP cOffset, SEXP rIndex, SEXP diagC, SEXP rhs, 
             Cjj=pdiagC[j];
             
             /*index the elements of C using the column offset*/
-	  		low=pcOffset[j];
-          	up=pcOffset[j+1]-1;
+	    low=pcOffset[j];
+            up=pcOffset[j+1]-1;
           	
-          	Cjb=0;
+            Cjb=0;
           	
-          	/*equivalent to ddot*/
-          	for(m=low;m<=up;m++)
-          	{
-              Cjb=Cjb+pC[m]*pb[prIndex[m]];
-	  		}
+            /*equivalent to ddot*/
+            for(m=low;m<=up;m++)
+            {
+              	Cjb=Cjb+pC[m]*pb[prIndex[m]];
+	    }
 
             offset=Cjb-Cjj*pb[j];
             r_tilde=prhs[j]-offset;

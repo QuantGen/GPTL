@@ -176,8 +176,8 @@ SEXP sample_effects_new_sparse(SEXP C, SEXP cOffset, SEXP rIndex, SEXP diagC, SE
        
        for(m=low;m<=up;m++)
        {
-        	offset=offset+pC[m]*pb[prIndex[m]];
-	   }
+       	  offset=offset+pC[m]*pb[prIndex[m]];
+       }
        
        offset -= Cjj * pb[j];
        rhs_offset = prhs[j] - offset;
